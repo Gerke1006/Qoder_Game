@@ -1,0 +1,19 @@
+{
+  "name": "qoder-roguelite-defense",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "description": "2D Roguelite wave-defense game built with TypeScript, Phaser 3 and Vite.",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc --noEmit && vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "phaser": "^3.90.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.9.3",
+    "vite": "^8.3.8"
+  }
+}

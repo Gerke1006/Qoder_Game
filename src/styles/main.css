@@ -1,0 +1,37 @@
+/* 全局基础样式：只负责把画布居中并铺满视口，游戏内 UI 全部由 Phaser 绘制。 */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  background: #10141c;
+  color: #e6e9ef;
+  font-family: system-ui, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+  overflow: hidden;
+}
+
+#game-root {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Phaser 以该元素为父容器；Scale FIT 会按 16:9 在其中等比缩放并居中。 */
+#game-container {
+  width: 100%;
+  height: 100%;
+}
+
+#game-container canvas {
+  display: block;
+}
