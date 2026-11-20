@@ -8,7 +8,7 @@ import { WAVE_CONFIGS } from '../data/WaveConfig';
  * 真正的定时生成（timeline / timer）由 BattleScene 调用本模块的结果来执行。
  */
 
-/** 把某一波的 spawns 展开成按间隔依次生成的敌人类型序列。 */
+/** 把某一波的 spawns 展开成生成序列：小怪混编打散，首领压轴。 */
 export function buildSpawnQueue(waveIndex: number): EnemyType[] {
   const wave = WAVE_CONFIGS[waveIndex];
   if (!wave) {
@@ -16,10 +16,25 @@ export function buildSpawnQueue(waveIndex: number): EnemyType[] {
   }
 
   const queue: EnemyType[] = [];
+  let bossCount = 0;
   for (const [type, count] of Object.entries(wave.spawns)) {
-    for (let i = 0; i < (count ?? 0); i++) {
-      queue.push(type as EnemyType);
+    const enemyType = type as EnemyType;
+    const total = count ?? 0;
+    if (enemyType === 'boss') {
+      bossCount = total;
+      continue;
     }
+    for (let i = 0; i < total; i++) {
+      queue.push(enemyType);
+    }
+  }
+
+  for (let i = queue.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [queue[i], queue[j]] = [queue[j], queue[i]];
+  }
+  for (let i = 0; i < bossCount; i++) {
+    queue.push('boss');
   }
   return queue;
 }

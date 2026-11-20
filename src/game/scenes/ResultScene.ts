@@ -1,49 +1,96 @@
 import * as Phaser from 'phaser';
-import { DESIGN_SIZE, SceneKeys } from '../types';
+import { DESIGN_SIZE, SceneKeys, UiKeys, type RunSummary } from '../types';
+import { DIFFICULTY_CONFIGS } from '../data/DifficultyConfig';
 import { getRunState, resetRun, setPhase } from '../state/GameState';
-import { createTextButton, createTitleText } from '../ui/Button';
-import { UpgradePanel } from '../ui/UpgradePanel';
+import { audio } from '../systems/AudioSystem';
+import { formatTime, submitWin } from '../utils/BestRecord';
+import { createForestBackground } from '../ui/ForestBackground';
+import { createArtButton } from '../ui/Button';
+import { createPanel, inkStyle, Palette } from '../ui/Theme';
+import { createUpgradeSummary } from '../ui/UpgradePanel';
 
 /**
- * 结算场景：展示本局结果与已获得的强化，并提供返回主菜单。
- *
- * 当前只有基础占位：胜负原因、时长、评分等留待玩法成型后补充。
- * 本场景只读 GameState，不产生任何玩法副作用；返回主菜单时才重置状态。
+ * 结算场景：胜负横幅 + 图标统计 + 本局强化 + 重开 / 回菜单。
+ * 只消费 BattleScene 传来的 RunSummary 快照，不依赖战斗场景存活对象。
  */
 export class ResultScene extends Phaser.Scene {
+  private summary!: RunSummary;
+
   constructor() {
     super(SceneKeys.Result);
   }
 
+  init(summary: RunSummary): void {
+    this.summary = summary;
+  }
+
   create(): void {
-    const { width, height } = DESIGN_SIZE;
-    const state = getRunState();
+    this.events.once(Phaser.Scenes.Events.SHUTDOWN, () => this.cleanUp());
+    createForestBackground(this);
 
-    createTitleText(this, width / 2, height * 0.2, '本局结束', '44px');
-
-    const waveSummary =
-      state.currentWave < 0 ? '未进入波次' : `坚守至 ${state.currentWave + 1}/${state.totalWaves} 波`;
-
+    const cx = DESIGN_SIZE.width / 2;
+    createPanel(this, cx, 238, 720, 400);
+    const title = this.add
+      .text(cx, 92, this.summary.win ? '守卫成功！' : '基地陷落…', inkStyle(40, true))
+      .setOrigin(0.5);
+    title.setColor(this.summary.win ? Palette.leaf : Palette.danger);
     this.add
-      .text(
-        width / 2,
-        height * 0.2 + 56,
-        `${waveSummary} · 剩余金币 ${state.gold} · 基地 ${state.baseHp}/${state.baseMaxHp}`,
-        {
-          fontFamily: 'system-ui, "Microsoft YaHei", sans-serif',
-          fontSize: '20px',
-          color: '#c9d3e4'
-        }
-      )
+      .text(cx, 132, `${DIFFICULTY_CONFIGS[getRunState().difficulty].label}难度 · ${this.summary.win ? '五波全清' : `止步第 ${Math.max(1, this.summary.wave + 1)} 波`}`, {
+        ...inkStyle(15),
+        color: Palette.inkSoft
+      })
       .setOrigin(0.5);
 
-    const upgradePanel = new UpgradePanel(this, width / 2, height * 0.46);
-    upgradePanel.render(state.takenRewardIds);
-
-    createTextButton(this, width / 2, height * 0.82, '返回主菜单', () => {
-      resetRun();
-      setPhase('idle');
-      this.scene.start(SceneKeys.MainMenu);
+    const stats: Array<[string, string, string]> = [
+      [UiKeys.IconWave, '抵达波次', `${Math.max(0, this.summary.wave + 1)} / ${this.summary.totalWaves}`],
+      [UiKeys.IconDamage, '击杀敌人', `${this.summary.kills}`],
+      [UiKeys.IconGold, '累计金币', `${this.summary.gold}`],
+      [UiKeys.IconTime, '守卫用时', formatTime(this.summary.elapsedMs)]
+    ];
+    stats.forEach(([icon, label, value], i) => {
+      const x = cx - 190 + (i % 2) * 250;
+      const y = 182 + Math.floor(i / 2) * 44;
+      this.add.image(x, y, icon).setDisplaySize(30, 30);
+      this.add.text(x + 24, y, label, { ...inkStyle(14), color: Palette.inkSoft }).setOrigin(0, 0.5);
+      this.add.text(x + 150, y, value, inkStyle(17, true)).setOrigin(0, 0.5);
     });
+
+    const summary = createUpgradeSummary(this, cx - 250, 286, 500, this.summary.takenRewardIds);
+    summary.setDepth(2);
+
+    if (this.summary.win) {
+      const isRecord = submitWin(this.summary, getRunState().difficulty);
+      if (isRecord) {
+        const badge = this.add
+          .text(cx + 250, 92, '新纪录！', { ...inkStyle(20, true), color: Palette.gold })
+          .setOrigin(0.5)
+          .setAngle(-8);
+        this.tweens.add({ targets: badge, scale: 1.15, duration: 600, yoyo: true, repeat: -1, ease: 'Sine.easeInOut' });
+      }
+    }
+
+    createArtButton(this, cx - 130, 486, '再来一局', () => this.restart(), { width: 240, fontSize: 20 });
+    createArtButton(this, cx + 130, 486, '返回主菜单', () => this.toMenu(), { width: 240, fontSize: 20 });
+
+    this.input.keyboard?.on('keydown-ESC', this.toMenu, this);
+    this.input.keyboard?.on('keydown-ENTER', this.restart, this);
+  }
+
+  private restart(): void {
+    audio.play('click');
+    resetRun(getRunState().difficulty);
+    setPhase('battle');
+    this.scene.start(SceneKeys.Battle);
+  }
+
+  private toMenu(): void {
+    audio.play('click');
+    setPhase('idle');
+    this.scene.start(SceneKeys.MainMenu);
+  }
+
+  private cleanUp(): void {
+    this.input.keyboard?.off('keydown-ESC', this.toMenu, this);
+    this.input.keyboard?.off('keydown-ENTER', this.restart, this);
   }
 }

@@ -17,7 +17,10 @@ import { ResultScene } from '../scenes/ResultScene';
 export const gameConfig: Phaser.Types.Core.GameConfig = {
   type: Phaser.AUTO,
   parent: 'game-container',
-  backgroundColor: '#10141c',
+  backgroundColor: '#141f10',
+
+  // 音效全部由 systems/AudioSystem 用 WebAudio 合成，Phaser 音频管理器关闭以免重复占用上下文。
+  audio: { noAudio: true },
 
   width: DESIGN_SIZE.width,
   height: DESIGN_SIZE.height,

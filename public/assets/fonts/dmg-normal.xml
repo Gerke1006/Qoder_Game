@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<font>
+<info face="dmg-normal" size="142"/>
+<common lineHeight="142" base="136" scaleW="1346" scaleH="142" pages="1"/>
+<pages><page id="0" file="dmg-normal.png"/></pages>
+<chars count="12">
+<char id="48" x="0" y="0" width="119" height="142" xoffset="0" yoffset="0" xadvance="119" page="0"/>
+<char id="49" x="119" y="0" width="114" height="142" xoffset="0" yoffset="0" xadvance="114" page="0"/>
+<char id="50" x="233" y="0" width="113" height="142" xoffset="0" yoffset="0" xadvance="113" page="0"/>
+<char id="51" x="346" y="0" width="127" height="142" xoffset="0" yoffset="0" xadvance="127" page="0"/>
+<char id="52" x="473" y="0" width="116" height="142" xoffset="0" yoffset="0" xadvance="116" page="0"/>
+<char id="53" x="589" y="0" width="113" height="142" xoffset="0" yoffset="0" xadvance="113" page="0"/>
+<char id="54" x="702" y="0" width="112" height="142" xoffset="0" yoffset="0" xadvance="112" page="0"/>
+<char id="55" x="814" y="0" width="111" height="142" xoffset="0" yoffset="0" xadvance="111" page="0"/>
+<char id="56" x="925" y="0" width="112" height="142" xoffset="0" yoffset="0" xadvance="112" page="0"/>
+<char id="57" x="1037" y="0" width="52" height="142" xoffset="0" yoffset="0" xadvance="52" page="0"/>
+<char id="45" x="1089" y="0" width="172" height="142" xoffset="0" yoffset="0" xadvance="172" page="0"/>
+<char id="33" x="1261" y="0" width="85" height="142" xoffset="0" yoffset="0" xadvance="85" page="0"/>
+</chars>
+</font>

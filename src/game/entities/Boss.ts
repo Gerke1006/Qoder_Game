@@ -3,13 +3,31 @@ import { AssetKeys, type EnemyStats } from '../types';
 import { Enemy } from './Enemy';
 
 /**
- * 首领敌人。
- *
- * 与 Enemy 的差异只有纹理与（后续的）阶段行为；数值仍然来自 data/EnemyConfig，
- * 因此这里不重复定义任何属性。首领技能请写在新增方法里，不要扩散到 BattleScene。
+ * 首领敌人：体型与数值来自配置，额外行为是周期性召唤小怪压线。
+ * 召唤只通过回调通知场景生成实体，本类不直接 new Enemy，避免实体互相耦合。
  */
 export class Boss extends Enemy {
-  constructor(scene: Phaser.Scene, stats: EnemyStats, x: number, y: number) {
-    super(scene, stats, x, y, AssetKeys.Boss);
+  onSummon: ((x: number, y: number) => void) | null = null;
+  private summonClock = 0;
+
+  constructor(scene: Phaser.Scene, stats: EnemyStats, x: number, y: number, speedMult = 1) {
+    super(scene, stats, x, y, AssetKeys.Boss, speedMult);
+    this.setDepth(22);
+    this.setScale(0.4);
+    scene.tweens.add({ targets: this, scale: 1, duration: 420, ease: 'Back.easeOut' });
+  }
+
+  override step(deltaMs: number, timeMs: number): void {
+    super.step(deltaMs, timeMs);
+    if (!this.alive || !this.onSummon) {
+      return;
+    }
+    this.summonClock += deltaMs;
+    if (this.summonClock >= 6500) {
+      this.summonClock = 0;
+      this.onSummon(this.x - 30, this.y - 46);
+      this.onSummon(this.x - 30, this.y + 46);
+      this.scene.tweens.add({ targets: this, scale: 1.12, duration: 140, yoyo: true, ease: 'Quad.easeOut' });
+    }
   }
 }

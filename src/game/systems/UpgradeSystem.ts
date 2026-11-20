@@ -1,6 +1,7 @@
 import type { RewardOption } from '../types';
 import {
   addAttackDamageBonus,
+  addFireRateBonus,
   addGold,
   getRunState,
   healBase,
@@ -30,6 +31,10 @@ export function applyReward(reward: RewardOption): void {
     }
     case 'damage': {
       addAttackDamageBonus(effect.value);
+      break;
+    }
+    case 'speed': {
+      addFireRateBonus(effect.value);
       break;
     }
   }

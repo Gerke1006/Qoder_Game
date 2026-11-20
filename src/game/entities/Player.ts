@@ -1,38 +1,41 @@
 import * as Phaser from 'phaser';
 import { AssetKeys } from '../types';
-import type { Damageable } from '../types';
 
 /**
- * 玩家实体占位。
+ * 玩家实体：林地弓手。
  *
- * 职责：只负责"玩家形象 + 玩家自身生命"。
- * 不负责：开火与命中判定（CombatSystem）、波次推进（WaveSystem）、
- * 奖励结算（RewardSystem / UpgradeSystem）。
- *
- * 后续把移动输入与射击行为加在这个类上即可，场景代码不需要改动。
+ * 只负责形象与瞄准/后坐表现；开火时机、命中与伤害由 BattleScene + CombatSystem 决定。
+ * 玩家本身不承伤——防守目标是基地，血量在 GameState.baseHp。
  */
-export class Player extends Phaser.GameObjects.Container implements Damageable {
-  hp: number;
-  readonly maxHp: number;
-  alive = true;
+export class Player extends Phaser.GameObjects.Container {
+  private sprite: Phaser.GameObjects.Image;
+  private baseY: number;
 
-  constructor(scene: Phaser.Scene, x: number, y: number, maxHp = 100) {
+  constructor(scene: Phaser.Scene, x: number, y: number) {
     super(scene, x, y);
-    this.maxHp = maxHp;
-    this.hp = maxHp;
-
-    this.add(scene.add.image(0, 0, AssetKeys.Player));
+    this.baseY = y;
+    this.sprite = scene.add.image(0, 0, AssetKeys.Player);
+    this.add(this.sprite);
     scene.add.existing(this);
+    this.setDepth(24);
   }
 
-  takeDamage(amount: number): void {
-    if (!this.alive) {
-      return;
-    }
-    this.hp = Math.max(0, this.hp - amount);
-    if (this.hp === 0) {
-      this.alive = false;
-      this.destroy();
-    }
+  aimAt(x: number, y: number): void {
+    const angle = Phaser.Math.Angle.Between(this.x, this.y, x, y);
+    this.sprite.setRotation(Phaser.Math.Clamp(angle, -0.7, 0.7) * 0.55);
+  }
+
+  recoil(): void {
+    this.scene.tweens.add({
+      targets: this.sprite,
+      x: -5,
+      duration: 60,
+      yoyo: true,
+      ease: 'Quad.easeOut'
+    });
+  }
+
+  idle(timeMs: number): void {
+    this.y = this.baseY + Math.sin(timeMs * 0.0022) * 2.5;
   }
 }

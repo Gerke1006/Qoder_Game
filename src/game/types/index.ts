@@ -16,22 +16,63 @@ export const SceneKeys = {
 
 export type SceneKey = (typeof SceneKeys)[keyof typeof SceneKeys];
 
-/** 运行时占位纹理 key（由 utils/PlaceholderTextures 用 Graphics 生成，无外部图片）。 */
+/** 世界实体占位纹理 key（由 utils/GeneratedTextures 用 Graphics 生成）。 */
 export const AssetKeys = {
   Player: 'tex-player',
-  Enemy: 'tex-enemy',
+  EnemyGrunt: 'tex-enemy-grunt',
+  EnemyRunner: 'tex-enemy-runner',
   Boss: 'tex-boss',
   Projectile: 'tex-projectile',
-  Base: 'tex-base'
+  Ground: 'tex-ground',
+  CardFill: 'tex-card-fill',
+  Leaf: 'tex-leaf',
+  Spark: 'tex-spark'
 } as const;
 
 export type AssetKey = (typeof AssetKeys)[keyof typeof AssetKeys];
+
+/** 交付美术切图后的 UI 资源 key（public/assets/images/ui）。 */
+export const UiKeys = {
+  PanelLarge: 'ui-panel-large',
+  PanelSmall: 'ui-panel-small',
+  BarTrough: 'ui-bar-trough',
+  BarFrame: 'ui-bar-frame',
+  BarFill: 'ui-bar-fill',
+  IconGold: 'ui-icon-gold',
+  IconBase: 'ui-icon-base',
+  IconHeart: 'ui-icon-heart',
+  IconDamage: 'ui-icon-damage',
+  IconSpeed: 'ui-icon-speed',
+  IconTime: 'ui-icon-time',
+  IconWave: 'ui-icon-wave',
+  FrameCommon: 'ui-frame-common',
+  FrameRare: 'ui-frame-rare',
+  FrameEpic: 'ui-frame-epic',
+  Crosshair: 'ui-crosshair',
+  AimLine: 'ui-aimline',
+  Cooldown: 'ui-cooldown'
+} as const;
+
+export type UiKey = (typeof UiKeys)[keyof typeof UiKeys];
+
+/** 伤害飘字 BMFont key（public/assets/fonts）。 */
+export const FontKeys = {
+  Normal: 'font-dmg-normal',
+  Crit: 'font-dmg-crit',
+  Hit: 'font-dmg-hit'
+} as const;
+
+export type FontKey = (typeof FontKeys)[keyof typeof FontKeys];
 
 /** 设计分辨率：所有场景坐标与 UI 布局都基于此尺寸，缩放交给 Phaser Scale FIT。 */
 export const DESIGN_SIZE = { width: 960, height: 540 } as const;
 
 /** 一局游戏所处的阶段，GameState 用它表示当前游戏阶段。 */
 export type GamePhase = 'idle' | 'battle' | 'reward' | 'finished';
+
+export type Difficulty = 'easy' | 'normal' | 'hard';
+
+export type Rarity = 'common' | 'rare' | 'epic';
 
 export interface Vec2 {
   x: number;
@@ -43,7 +84,6 @@ export interface Damageable {
   hp: number;
   maxHp: number;
   alive: boolean;
-  /** 承受一次伤害，内部负责扣血与死亡判定。 */
   takeDamage(amount: number): void;
 }
 
@@ -55,13 +95,13 @@ export interface EnemyStats {
   type: EnemyType;
   name: string;
   maxHp: number;
-  /** 每秒移动像素，用于后续移动系统。 */
+  /** 每秒移动像素。 */
   speed: number;
   /** 撞击基地时造成的伤害。 */
   damage: number;
   /** 击杀后获得的金币。 */
   goldReward: number;
-  /** 占位纹理尺寸。 */
+  /** 实体显示尺寸（像素）。 */
   size: number;
 }
 
@@ -69,40 +109,52 @@ export interface EnemyStats {
 export interface WaveDefinition {
   index: number;
   label: string;
-  /** 本波各类型敌人的数量。 */
   spawns: Partial<Record<EnemyType, number>>;
-  /** 同波内相邻敌人的生成间隔（毫秒）。 */
   spawnIntervalMs: number;
-  /** 本波结束到下一波开始的准备时间（毫秒）。 */
   breakMs: number;
 }
 
 export type UpgradeEffect =
   | { kind: 'baseHp'; value: number }
   | { kind: 'gold'; value: number }
-  | { kind: 'damage'; value: number };
+  | { kind: 'damage'; value: number }
+  | { kind: 'speed'; value: number };
 
 /** 一项可选奖励。 */
 export interface RewardOption {
   id: string;
   title: string;
   description: string;
-  /** 该奖励的稀有度权重，数值越大越稀有。 */
-  rarity: number;
+  rarity: Rarity;
   effect: UpgradeEffect;
 }
 
 /** 一局游戏的共享运行状态（由 state/GameState 持有）。 */
 export interface RunState {
   phase: GamePhase;
+  difficulty: Difficulty;
   /** 当前波次序号，从 0 开始；-1 表示尚未进入战斗。 */
   currentWave: number;
   totalWaves: number;
   baseHp: number;
   baseMaxHp: number;
   gold: number;
-  /** 本局累计的攻击伤害加成，由 UpgradeSystem 写入、射击逻辑读取。 */
+  kills: number;
+  elapsedMs: number;
+  /** 本局累计的攻击伤害加成。 */
   attackDamageBonus: number;
-  /** 本局已选奖励 id，用于结算展示与后续去重。 */
+  /** 本局累计的射速加成（发/秒）。 */
+  fireRateBonus: number;
+  takenRewardIds: string[];
+}
+
+/** 结算统计快照。 */
+export interface RunSummary {
+  win: boolean;
+  wave: number;
+  totalWaves: number;
+  kills: number;
+  gold: number;
+  elapsedMs: number;
   takenRewardIds: string[];
 }

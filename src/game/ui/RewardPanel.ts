@@ -1,77 +1,173 @@
 import * as Phaser from 'phaser';
-import type { RewardOption } from '../types';
-import { DESIGN_SIZE } from '../types';
+import { DESIGN_SIZE, type RewardOption } from '../types';
+import { RARITY_LABEL, rarityFrame, rewardIcon } from '../data/RewardConfig';
+import { audio } from '../systems/AudioSystem';
+import { inkStyle, Palette, RARITY_COLOR } from './Theme';
 
 /**
- * 奖励选择面板：展示 RewardSystem 给出的候选，并把玩家的选择回调出去。
+ * 波次结算奖励面板：遮罩 + 三张稀有度卡框。
  *
- * 职责边界：面板不做挑选逻辑（RewardSystem）、不写状态（UpgradeSystem），
- * 只知道"有哪些候选、用户点了哪个"。
- *
- * 尚未接入战斗流程：等战斗与波次跑通后，由 BattleScene 在波次结束处
- * `panel.show(rollRewards(), (reward) => { applyReward(reward); panel.hide(); })`。
+ * 卡框 / 内衬 / 效果图标全部来自交付美术；悬停抬升 + 稀有度光晕，
+ * 支持鼠标点选与键盘 1/2/3 快选。hide 时解绑键盘并销毁全部对象。
  */
 export class RewardPanel {
-  private readonly container: Phaser.GameObjects.Container;
-  private readonly optionTexts: Phaser.GameObjects.Text[] = [];
+  private scene: Phaser.Scene;
+  private root: Phaser.GameObjects.Container | null = null;
+  private keyHandler: ((event: KeyboardEvent) => void) | null = null;
+  private locked = false;
 
-  constructor(private readonly scene: Phaser.Scene) {
-    this.container = scene.add.container(0, 0).setVisible(false);
-
-    const dim = scene.add
-      .rectangle(DESIGN_SIZE.width / 2, DESIGN_SIZE.height / 2, DESIGN_SIZE.width, DESIGN_SIZE.height, 0x000000, 0.65)
-      .setInteractive();
-    this.container.add(dim);
-    this.container.add(
-      scene.add.text(DESIGN_SIZE.width / 2, 110, '选择一项强化', {
-        fontFamily: 'system-ui, "Microsoft YaHei", sans-serif',
-        fontSize: '32px',
-        color: '#e6e9ef'
-      }).setOrigin(0.5)
-    );
+  constructor(scene: Phaser.Scene) {
+    this.scene = scene;
   }
 
   get visible(): boolean {
-    return this.container.visible;
+    return this.root !== null;
   }
 
-  /** 渲染候选并开启交互；onPick 在玩家点击某一项后触发。 */
-  show(options: RewardOption[], onPick: (reward: RewardOption) => void): void {
-    this.clearOptions();
+  show(rewards: RewardOption[], onPick: (reward: RewardOption) => void): void {
+    this.hide();
+    this.locked = false;
+    const root = this.scene.add.container(0, 0).setDepth(80);
+    this.root = root;
 
-    const step = 72;
-    const startY = 190;
+    const scrim = this.scene.add
+      .rectangle(DESIGN_SIZE.width / 2, DESIGN_SIZE.height / 2, DESIGN_SIZE.width, DESIGN_SIZE.height, 0x0c1206, 0)
+      .setInteractive();
+    root.add(scrim);
+    this.scene.tweens.add({ targets: scrim, fillAlpha: 0.66, duration: 240 });
 
-    options.forEach((reward, index) => {
-      const text = this.scene.add
-        .text(DESIGN_SIZE.width / 2, startY + index * step, `${reward.title} — ${reward.description}`, {
-          fontFamily: 'system-ui, "Microsoft YaHei", sans-serif',
-          fontSize: '20px',
-          color: '#e6e9ef',
-          backgroundColor: '#2b3446',
-          padding: { x: 18, y: 10 }
-        })
-        .setOrigin(0.5)
-        .setInteractive({ useHandCursor: true });
+    const title = this.scene.add
+      .text(DESIGN_SIZE.width / 2, 74, '波次告捷 · 选择一项强化', {
+        fontFamily: '"Microsoft YaHei", "PingFang SC", system-ui, sans-serif',
+        fontSize: '32px',
+        fontStyle: 'bold',
+        color: Palette.cream,
+        stroke: Palette.forestDeep,
+        strokeThickness: 5
+      })
+      .setOrigin(0.5)
+      .setAlpha(0);
+    const hint = this.scene.add
+      .text(DESIGN_SIZE.width / 2, 108, '点击卡片或按 1 / 2 / 3 选择', {
+        fontFamily: '"Microsoft YaHei", "PingFang SC", system-ui, sans-serif',
+        fontSize: '14px',
+        color: Palette.parchmentDark
+      })
+      .setOrigin(0.5)
+      .setAlpha(0);
+    root.add([title, hint]);
+    this.scene.tweens.add({ targets: [title, hint], alpha: 1, duration: 300, delay: 120 });
 
-      text.on('pointerdown', () => onPick(reward));
-      this.optionTexts.push(text);
-      this.container.add(text);
+    const cardW = 202;
+    const cardH = 292;
+    const gap = 252;
+    rewards.forEach((reward, i) => {
+      const x = DESIGN_SIZE.width / 2 + (i - (rewards.length - 1) / 2) * gap;
+      const card = this.buildCard(reward, cardW, cardH);
+      card.setPosition(x, 306);
+      card.setAlpha(0).setScale(0.7);
+      root.add(card);
+      this.scene.tweens.add({
+        targets: card,
+        alpha: 1,
+        scale: 1,
+        duration: 320,
+        delay: 140 + i * 110,
+        ease: 'Back.easeOut'
+      });
+
+      let picked = false;
+      const choose = (): void => {
+        if (picked || this.locked || !this.root) {
+          return;
+        }
+        picked = true;
+        this.locked = true;
+        audio.play('reward');
+        this.scene.tweens.add({
+          targets: card,
+          scale: 1.16,
+          alpha: 0,
+          duration: 220,
+          ease: 'Quad.easeIn'
+        });
+        this.scene.time.delayedCall(180, () => onPick(reward));
+      };
+
+      card.setInteractive({ useHandCursor: true });
+      card.on(Phaser.Input.Events.POINTER_OVER, () => {
+        if (picked || this.locked) {
+          return;
+        }
+        this.scene.tweens.add({ targets: card, y: 296, scale: 1.06, duration: 140, ease: 'Quad.easeOut' });
+        const glow = card.getByName('glow') as Phaser.GameObjects.Image;
+        this.scene.tweens.add({ targets: glow, alpha: 0.5, duration: 140 });
+      });
+      card.on(Phaser.Input.Events.POINTER_OUT, () => {
+        if (picked || this.locked) {
+          return;
+        }
+        this.scene.tweens.add({ targets: card, y: 306, scale: 1, duration: 140, ease: 'Quad.easeOut' });
+        const glow = card.getByName('glow') as Phaser.GameObjects.Image;
+        this.scene.tweens.add({ targets: glow, alpha: 0, duration: 140 });
+      });
+      card.on(Phaser.Input.Events.POINTER_DOWN, () => {
+        if (!picked && !this.locked) {
+          card.setScale(0.98);
+        }
+      });
+      card.on(Phaser.Input.Events.POINTER_UP, choose);
+      card.setData('choose', choose);
     });
 
-    this.container.setVisible(true);
-    this.container.setDepth(100);
+    this.keyHandler = (event: KeyboardEvent): void => {
+      const index = ['1', '2', '3'].indexOf(event.key);
+      if (index >= 0 && index < rewards.length && this.root && !this.locked) {
+        const card = root.list.filter((obj) => obj.getData('choose'))[index] as Phaser.GameObjects.Container;
+        (card.getData('choose') as () => void)();
+      }
+    };
+    window.addEventListener('keydown', this.keyHandler);
+  }
+
+  private buildCard(reward: RewardOption, w: number, h: number): Phaser.GameObjects.Container {
+    const color = Phaser.Display.Color.HexStringToColor(RARITY_COLOR[reward.rarity]).color;
+    const glow = this.scene.add
+      .image(0, 0, 'tex-spark')
+      .setDisplaySize(w * 1.7, h * 1.4)
+      .setTint(color)
+      .setAlpha(0)
+      .setName('glow');
+    const insetX = w * 0.085;
+    const insetY = reward.rarity === 'epic' ? h * 0.1 : h * 0.06;
+    const fill = this.scene.add.image(0, 0, 'tex-card-fill').setDisplaySize(w - insetX * 2, h - insetY * 2);
+    const frame = this.scene.add.image(0, 0, rarityFrame(reward.rarity)).setDisplaySize(w, h);
+    const icon = this.scene.add.image(0, -96, rewardIcon(reward.effect)).setDisplaySize(64, 64);
+    const title = this.scene.add.text(0, -46, reward.title, inkStyle(19, true)).setOrigin(0.5);
+    const desc = this.scene.add
+      .text(0, -22, reward.description, { ...inkStyle(13), color: Palette.inkSoft, align: 'center', wordWrap: { width: w - 56 } })
+      .setOrigin(0.5, 0);
+    const rarity = this.scene.add
+      .text(0, h / 2 - 30, RARITY_LABEL[reward.rarity], {
+        ...inkStyle(13, true),
+        color: RARITY_COLOR[reward.rarity]
+      })
+      .setOrigin(0.5);
+    const container = this.scene.add.container(0, 0, [glow, fill, frame, icon, title, desc, rarity]);
+    container.setSize(w, h);
+    return container;
   }
 
   hide(): void {
-    this.clearOptions();
-    this.container.setVisible(false);
+    if (this.keyHandler) {
+      window.removeEventListener('keydown', this.keyHandler);
+      this.keyHandler = null;
+    }
+    this.root?.destroy();
+    this.root = null;
   }
 
-  private clearOptions(): void {
-    for (const text of this.optionTexts) {
-      text.destroy();
-    }
-    this.optionTexts.length = 0;
+  destroy(): void {
+    this.hide();
   }
 }

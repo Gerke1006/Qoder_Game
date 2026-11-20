@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<font>
+<info face="dmg-crit" size="220"/>
+<common lineHeight="220" base="214" scaleW="1414" scaleH="220" pages="1"/>
+<pages><page id="0" file="dmg-crit.png"/></pages>
+<chars count="12">
+<char id="48" x="0" y="0" width="149" height="220" xoffset="0" yoffset="0" xadvance="149" page="0"/>
+<char id="49" x="149" y="0" width="117" height="220" xoffset="0" yoffset="0" xadvance="117" page="0"/>
+<char id="50" x="266" y="0" width="118" height="220" xoffset="0" yoffset="0" xadvance="118" page="0"/>
+<char id="51" x="384" y="0" width="117" height="220" xoffset="0" yoffset="0" xadvance="117" page="0"/>
+<char id="52" x="501" y="0" width="118" height="220" xoffset="0" yoffset="0" xadvance="118" page="0"/>
+<char id="53" x="619" y="0" width="117" height="220" xoffset="0" yoffset="0" xadvance="117" page="0"/>
+<char id="54" x="736" y="0" width="118" height="220" xoffset="0" yoffset="0" xadvance="118" page="0"/>
+<char id="55" x="854" y="0" width="117" height="220" xoffset="0" yoffset="0" xadvance="117" page="0"/>
+<char id="56" x="971" y="0" width="69" height="220" xoffset="0" yoffset="0" xadvance="69" page="0"/>
+<char id="57" x="1040" y="0" width="166" height="220" xoffset="0" yoffset="0" xadvance="166" page="0"/>
+<char id="45" x="1206" y="0" width="112" height="220" xoffset="0" yoffset="0" xadvance="112" page="0"/>
+<char id="33" x="1318" y="0" width="96" height="220" xoffset="0" yoffset="0" xadvance="96" page="0"/>
+</chars>
+</font>

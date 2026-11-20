@@ -13,7 +13,7 @@ export class BootScene extends Phaser.Scene {
   }
 
   create(): void {
-    this.cameras.main.setBackgroundColor('#10141c');
+    this.cameras.main.setBackgroundColor('#141f10');
 
     // 启动阶段不依赖任何资源，直接交给预加载场景。
     this.scene.start(SceneKeys.Preload);

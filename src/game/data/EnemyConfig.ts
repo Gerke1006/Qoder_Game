@@ -4,34 +4,35 @@ import type { EnemyStats, EnemyType } from '../types';
  * 敌人属性表。
  *
  * 后续所有敌人数值只在这里维护，实体与系统只读取、不写死数字。
+ * 数值按 960 宽战场调过：从右侧出生到左侧基地约 820px。
  */
 export const ENEMY_CONFIGS: Record<EnemyType, EnemyStats> = {
   grunt: {
     type: 'grunt',
-    name: '小兵',
+    name: '史莱姆',
     maxHp: 30,
-    speed: 40,
-    damage: 5,
+    speed: 42,
+    damage: 6,
     goldReward: 3,
-    size: 28
+    size: 40
   },
   runner: {
     type: 'runner',
-    name: '疾行者',
+    name: '疾行史莱姆',
     maxHp: 18,
-    speed: 90,
-    damage: 3,
+    speed: 88,
+    damage: 5,
     goldReward: 4,
-    size: 22
+    size: 32
   },
   boss: {
     type: 'boss',
-    name: '首领',
-    maxHp: 400,
-    speed: 25,
-    damage: 20,
-    goldReward: 50,
-    size: 64
+    name: '史莱姆王',
+    maxHp: 380,
+    speed: 22,
+    damage: 22,
+    goldReward: 60,
+    size: 92
   }
 };
 
