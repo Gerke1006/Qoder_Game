@@ -26,7 +26,11 @@ export const AssetKeys = {
   Ground: 'tex-ground',
   CardFill: 'tex-card-fill',
   Leaf: 'tex-leaf',
-  Spark: 'tex-spark'
+  Spark: 'tex-spark',
+  PreloadBarTrack: 'preload-bar-track',
+  PreloadBarFill: 'preload-bar-fill',
+  PreloadBarFrame: 'preload-bar-frame',
+  PreloadIcon: 'preload-icon'
 } as const;
 
 export type AssetKey = (typeof AssetKeys)[keyof typeof AssetKeys];
@@ -49,8 +53,12 @@ export const UiKeys = {
   FrameRare: 'ui-frame-rare',
   FrameEpic: 'ui-frame-epic',
   Crosshair: 'ui-crosshair',
-  AimLine: 'ui-aimline',
-  Cooldown: 'ui-cooldown'
+  AimDash: 'ui-aim-dash',
+  AimTip: 'ui-aim-tip',
+  Cooldown: 'ui-cooldown',
+  IconDefense: 'ui-icon-defense',
+  DmgCritBurst: 'ui-dmg-crit-burst',
+  DmgTakenArrow: 'ui-dmg-taken-arrow'
 } as const;
 
 export type UiKey = (typeof UiKeys)[keyof typeof UiKeys];

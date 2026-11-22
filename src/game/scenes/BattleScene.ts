@@ -28,7 +28,8 @@ import { RewardPanel } from '../ui/RewardPanel';
 import { PausePanel } from '../ui/PausePanel';
 import { createForestBackground } from '../ui/ForestBackground';
 import { spawnBaseHitFloat, spawnDamageFloat, spawnGoldFloat } from '../ui/FloatingText';
-import { Palette } from '../ui/Theme';
+import { Crosshair } from '../ui/Crosshair';
+import { Palette, prefersReducedMotion } from '../ui/Theme';
 
 type BattleMode = 'break' | 'fight' | 'reward' | 'over';
 
@@ -44,8 +45,7 @@ export class BattleScene extends Phaser.Scene {
   private rewardPanel!: RewardPanel;
   private pausePanel!: PausePanel;
   private player!: Player;
-  private crosshair!: Phaser.GameObjects.Image;
-  private aimLine!: Phaser.GameObjects.Image;
+  private crosshair!: Crosshair;
   private breakText!: Phaser.GameObjects.Text;
   private dangerGlow!: Phaser.GameObjects.Image;
 
@@ -83,12 +83,9 @@ export class BattleScene extends Phaser.Scene {
     this.drawBase();
     this.player = new Player(this, PLAYER_CONFIG.x, PLAYER_CONFIG.y);
 
-    this.aimLine = this.add
-      .image(this.player.x, this.player.y, UiKeys.AimLine)
-      .setOrigin(0, 0.5)
-      .setAlpha(0.3)
-      .setDepth(19);
-    this.crosshair = this.add.image(DESIGN_SIZE.width / 2, DESIGN_SIZE.height / 2, UiKeys.Crosshair).setScale(0.22).setDepth(60);
+    this.crosshair = new Crosshair(this, {
+      getOrigin: () => ({ x: this.player.x + 18, y: this.player.y - 6 })
+    });
     this.dangerGlow = this.add
       .image(DESIGN_SIZE.width / 2, DESIGN_SIZE.height / 2, 'tex-vignette')
       .setTint(0xe04a3a)
@@ -136,12 +133,7 @@ export class BattleScene extends Phaser.Scene {
     const pointer = this.input.activePointer;
     this.player.idle(time);
     this.player.aimAt(pointer.worldX, pointer.worldY);
-    this.crosshair.setPosition(pointer.worldX, pointer.worldY);
-    const aimAngle = Phaser.Math.Angle.Between(this.player.x, this.player.y, pointer.worldX, pointer.worldY);
-    const aimDist = Phaser.Math.Clamp(Phaser.Math.Distance.Between(this.player.x, this.player.y, pointer.worldX, pointer.worldY), 60, 460);
-    this.aimLine.setPosition(this.player.x + 18, this.player.y - 6);
-    this.aimLine.setRotation(aimAngle);
-    this.aimLine.setDisplaySize(aimDist, 14);
+    this.crosshair.update();
 
     if (this.mode === 'break') {
       this.breakRemaining -= step;
@@ -183,7 +175,9 @@ export class BattleScene extends Phaser.Scene {
     this.hud.refresh();
 
     const hpRatio = getRunState().baseHp / getRunState().baseMaxHp;
-    this.dangerGlow.setAlpha(hpRatio < 0.3 ? 0.3 + Math.sin(time * 0.006) * 0.16 : 0);
+    this.dangerGlow.setAlpha(
+      hpRatio < 0.3 ? (prefersReducedMotion() ? 0.3 : 0.3 + Math.sin(time * 0.006) * 0.16) : 0
+    );
 
     if (this.mode === 'fight' && this.spawnQueue.length === 0 && this.enemies.length === 0) {
       this.waveCleared();
@@ -192,7 +186,9 @@ export class BattleScene extends Phaser.Scene {
 
   private drawBase(): void {
     const glow = this.add.image(BASE_POSITION.x, BASE_POSITION.y, AssetKeys.Spark).setDisplaySize(190, 190).setTint(0x6fae4e).setAlpha(0.3).setDepth(17);
-    this.tweens.add({ targets: glow, alpha: 0.18, duration: 1800, yoyo: true, repeat: -1, ease: 'Sine.easeInOut' });
+    if (!prefersReducedMotion()) {
+      this.tweens.add({ targets: glow, alpha: 0.18, duration: 1800, yoyo: true, repeat: -1, ease: 'Sine.easeInOut' });
+    }
     this.add.image(BASE_POSITION.x, BASE_POSITION.y, UiKeys.IconBase).setDisplaySize(96, 108).setDepth(18);
   }
 
@@ -350,15 +346,17 @@ export class BattleScene extends Phaser.Scene {
     this.mode = 'reward';
     setPhase('reward');
     this.pointerHeld = false;
-    this.rewardPanel.show(rollRewards(), (reward) => this.pickReward(reward));
+    this.setAimVisible(false);
+    this.rewardPanel.show(rollRewards(), (reward) => this.pickReward(reward), () => this.pickReward());
   }
 
-  private pickReward(reward: RewardOption): void {
+  private pickReward(reward?: RewardOption): void {
     if (this.mode !== 'reward') {
       return;
     }
-    applyReward(reward);
+    if (reward) applyReward(reward);
     this.rewardPanel.hide();
+    this.setAimVisible(true);
     this.hud.refresh();
     setPhase('battle');
     this.waveIndex += 1;
@@ -372,6 +370,7 @@ export class BattleScene extends Phaser.Scene {
     }
     this.mode = 'over';
     this.pointerHeld = false;
+    this.setAimVisible(false);
     setPhase('finished');
     this.breakText.setText('');
     audio.play(win ? 'win' : 'lose');
@@ -395,12 +394,17 @@ export class BattleScene extends Phaser.Scene {
   }
 
   private togglePause(): void {
-    if (this.mode === 'over' || this.rewardPanel.visible) {
+    if (this.mode === 'over') {
+      return;
+    }
+    if (this.mode === 'reward') {
+      this.rewardPanel.dismiss();
       return;
     }
     this.paused = !this.paused;
     this.pointerHeld = false;
     audio.play('pause');
+    this.setAimVisible(!this.paused);
     if (this.paused) {
       this.pausePanel.show({
         onResume: () => this.togglePause(),
@@ -425,6 +429,12 @@ export class BattleScene extends Phaser.Scene {
     this.pausePanel.syncMute();
   }
 
+  /** 模态面板（奖励 / 暂停）与结算过场期间收起准星和瞄准线，把光标交还给系统。 */
+  private setAimVisible(shown: boolean): void {
+    this.crosshair.setVisible(shown);
+    this.input.setDefaultCursor(shown ? 'none' : 'default');
+  }
+
   private onPointerDown(): void {
     this.pointerHeld = true;
   }
@@ -440,6 +450,7 @@ export class BattleScene extends Phaser.Scene {
     this.input.keyboard?.off('keydown-SPACE', this.castSkill, this);
     this.input.keyboard?.off('keydown-ESC', this.togglePause, this);
     this.input.setDefaultCursor('default');
+    this.crosshair?.destroy();
     this.hud.destroy();
     this.rewardPanel.destroy();
     this.pausePanel.destroy();

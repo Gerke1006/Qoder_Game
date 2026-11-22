@@ -26,8 +26,8 @@ export function createUpgradeSummary(
     if (!reward) {
       return;
     }
-    const rowY = 30 + i * 32;
-    const icon = scene.add.image(14, rowY, rewardIcon(reward.effect)).setDisplaySize(26, 26);
+    const rowY = 24 + i * 22;
+    const icon = scene.add.image(14, rowY, rewardIcon(reward.effect)).setDisplaySize(22, 22);
     const title = scene.add.text(34, rowY, reward.title, inkStyle(15, true)).setOrigin(0, 0.5);
     const rarity = scene.add
       .text(width, rowY, RARITY_LABEL[reward.rarity], { ...inkStyle(13, true), color: RARITY_COLOR[reward.rarity] })

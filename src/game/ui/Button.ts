@@ -1,16 +1,17 @@
 import * as Phaser from 'phaser';
 import type { UiKey } from '../types';
 import { audio } from '../systems/AudioSystem';
-import { createPlaque, inkStyle, Palette } from './Theme';
+import { createPlaque, creamStyle, inkStyle, Palette } from './Theme';
 
 /**
- * 美术按钮：木框羊皮纸 plaque + 墨色文字。
+ * 美术按钮：交付素材的深色木底 plaque + 羊皮纸亮字（木底用亮字、纸底用墨字）。
  *
  * 四态反馈：常态 / 悬停放大提亮 / 按下收缩 / 禁用半透明；
  * 监听挂在容器上，随场景显示列表一起销毁，不需要手动解绑。
  */
 export interface ArtButtonOptions {
   width?: number;
+  height?: number;
   fontSize?: number;
   icon?: UiKey;
   disabled?: boolean;
@@ -33,15 +34,15 @@ export function createArtButton(
   options: ArtButtonOptions = {}
 ): ArtButton {
   const width = options.width ?? 240;
+  const height = options.height ?? Math.round(Math.min(64, Math.max(40, width * 0.22)));
   const fontSize = options.fontSize ?? 20;
-  const plaque = createPlaque(scene, 0, 0, width);
-  const height = plaque.displayHeight;
+  const plaque = createPlaque(scene, 0, 0, width, height);
 
   const container = scene.add.container(x, y, [plaque]);
   container.setSize(width, height);
 
   const text = scene.add
-    .text(options.icon ? 12 : 0, 1, label, inkStyle(fontSize, true))
+    .text(options.icon ? 12 : 0, 1, label, creamStyle(fontSize, true))
     .setOrigin(0.5);
   container.add(text);
 
@@ -54,6 +55,7 @@ export function createArtButton(
   let disabled = options.disabled ?? false;
   let hovering = false;
   let selected = false;
+  let pressed = false;
 
   const applyState = (): void => {
     container.setAlpha(disabled ? 0.55 : 1);
@@ -69,21 +71,28 @@ export function createArtButton(
   });
   container.on(Phaser.Input.Events.POINTER_OUT, () => {
     hovering = false;
+    pressed = false;
     applyState();
   });
   container.on(Phaser.Input.Events.POINTER_DOWN, () => {
     if (disabled) {
       return;
     }
+    pressed = true;
     container.setScale(0.97);
     audio.play('click');
   });
   container.on(Phaser.Input.Events.POINTER_UP, () => {
-    if (disabled) {
+    if (disabled || !pressed) {
       return;
     }
+    pressed = false;
     applyState();
     onClick();
+  });
+  container.on(Phaser.Input.Events.POINTER_UP_OUTSIDE, () => {
+    pressed = false;
+    applyState();
   });
 
   applyState();
@@ -116,7 +125,7 @@ export function createTopButton(
   onClick: () => void,
   width = 116
 ): ArtButton {
-  return createArtButton(scene, x, y, label, onClick, { width, fontSize: 15 });
+  return createArtButton(scene, x, y, label, onClick, { width, height: 34, fontSize: 15 });
 }
 
 /** 标题文字：羊皮纸上的大号墨字，带轻微投影。 */

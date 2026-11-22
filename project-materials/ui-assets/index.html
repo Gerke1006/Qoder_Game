@@ -1,0 +1,680 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>守卫前哨 · UI 素材库</title>
+<style>
+:root{
+  --ink:#3b2416; --ink-soft:#5a3a22;
+  --wood:#8a5a33; --wood-hi:#b07a44; --wood-lo:#5f3c1f;
+  --parch:#f3e2b8; --parch-hi:#fbf0d2; --parch-lo:#e2c894;
+  --gold:#f5b83d; --gold-hi:#ffd97a;
+  --red:#d84335; --red-hi:#ff6a52;
+  --blue:#3f8fd2; --purple:#a55bd6;
+  --grass:#6aa84f; --grass-lo:#4c8038;
+  --night:#241a12; --night-2:#33261a;
+  --ok:#5cb85c; --warn:#e8a33d;
+  --icon-preview:88px;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:86px}
+body{
+  font-family:'Yuanti SC','YouYuan','幼圆','Microsoft YaHei UI','Microsoft YaHei',sans-serif;
+  color:var(--parch);
+  background:
+    radial-gradient(1200px 500px at 80% -10%, rgba(245,184,61,.10), transparent 60%),
+    radial-gradient(900px 600px at -10% 30%, rgba(106,168,79,.10), transparent 60%),
+    linear-gradient(180deg,#2c2015 0%, var(--night) 40%, #1c140d 100%);
+  min-height:100vh;
+  overflow-x:hidden;
+}
+body::before{
+  content:"";position:fixed;inset:0;pointer-events:none;z-index:0;opacity:.5;
+  background-image:radial-gradient(rgba(255,255,255,.045) 1px, transparent 1.4px);
+  background-size:26px 26px;
+}
+::-webkit-scrollbar{width:14px;height:14px}
+::-webkit-scrollbar-track{background:#1a120b;border-left:2px solid #0d0906}
+::-webkit-scrollbar-thumb{background:linear-gradient(180deg,var(--wood-hi),var(--wood-lo));border:3px solid #1a120b;border-radius:8px}
+::-webkit-scrollbar-thumb:hover{background:linear-gradient(180deg,var(--gold),var(--wood))}
+img{user-select:none;-webkit-user-drag:none}
+button{font-family:inherit;cursor:pointer}
+
+.hud{
+  position:fixed;top:0;left:0;right:0;z-index:50;
+  display:flex;align-items:center;gap:14px;flex-wrap:wrap;
+  padding:10px 22px;
+  background:linear-gradient(180deg,#7a4e2b 0%, #5f3c1f 70%, #4a2f18 100%);
+  border-bottom:4px solid var(--ink);
+  box-shadow:0 4px 0 rgba(0,0,0,.35), inset 0 2px 0 rgba(255,220,160,.25);
+}
+.brand{display:flex;align-items:center;gap:10px;margin-right:auto}
+.brand img{width:40px;height:40px;filter:drop-shadow(0 2px 0 rgba(0,0,0,.4))}
+.brand h1{font-size:20px;font-weight:900;letter-spacing:2px;color:var(--gold-hi);
+  text-shadow:0 2px 0 var(--ink), 0 0 14px rgba(245,184,61,.35)}
+.brand small{display:block;font-size:11px;letter-spacing:3px;color:var(--parch-lo);font-weight:700}
+.seg{display:flex;border:3px solid var(--ink);border-radius:12px;overflow:hidden;background:#2a1c10;box-shadow:inset 0 2px 6px rgba(0,0,0,.5)}
+.seg button{
+  border:0;background:transparent;color:var(--parch-lo);font-weight:800;font-size:13px;
+  padding:8px 14px;letter-spacing:1px;transition:background .18s,color .18s;
+}
+.seg button + button{border-left:2px solid var(--ink)}
+.seg button.on{background:linear-gradient(180deg,var(--gold-hi),var(--gold));color:var(--ink);text-shadow:0 1px 0 rgba(255,255,255,.4)}
+.seg button:not(.on):hover{background:#3d2a18;color:var(--parch)}
+.btn{
+  border:3px solid var(--ink);border-radius:12px;font-weight:900;letter-spacing:1px;
+  padding:9px 18px;font-size:14px;color:var(--ink);
+  background:linear-gradient(180deg,var(--gold-hi),var(--gold) 55%,#d99a26);
+  box-shadow:0 4px 0 var(--ink), inset 0 2px 0 rgba(255,255,255,.5);
+  transition:transform .12s, box-shadow .12s, filter .18s;
+  text-decoration:none;display:inline-flex;align-items:center;gap:8px;
+}
+.btn:hover{filter:brightness(1.08)}
+.btn:active{transform:translateY(3px);box-shadow:0 1px 0 var(--ink), inset 0 2px 0 rgba(255,255,255,.5)}
+.btn.green{background:linear-gradient(180deg,#8ed070,var(--grass) 55%,var(--grass-lo));color:#fff;text-shadow:0 1px 0 rgba(0,0,0,.35)}
+.btn.wood{background:linear-gradient(180deg,var(--wood-hi),var(--wood) 60%,var(--wood-lo));color:var(--parch-hi);text-shadow:0 1px 0 rgba(0,0,0,.4)}
+.btn.small{padding:6px 12px;font-size:12px;border-width:2px;border-radius:9px;box-shadow:0 3px 0 var(--ink)}
+
+main{position:relative;z-index:1;max-width:1180px;margin:0 auto;padding:104px 22px 60px}
+.hero{text-align:center;padding:26px 0 8px}
+.ribbon{
+  display:inline-block;position:relative;padding:14px 54px;
+  background:linear-gradient(180deg,#c0392b,#8e2a1e);
+  border:4px solid var(--ink);border-radius:10px;
+  box-shadow:0 5px 0 rgba(0,0,0,.4), inset 0 2px 0 rgba(255,255,255,.25);
+}
+.ribbon::before,.ribbon::after{
+  content:"";position:absolute;top:12px;width:34px;height:calc(100% - 8px);
+  background:linear-gradient(180deg,#a93226,#7b241a);border:4px solid var(--ink);z-index:-1;
+}
+.ribbon::before{left:-26px;clip-path:polygon(0 0,100% 0,100% 100%,0 100%,40% 50%)}
+.ribbon::after{right:-26px;clip-path:polygon(0 0,100% 0,60% 50%,100% 100%,0 100%)}
+.ribbon h2{font-size:clamp(22px,4vw,34px);font-weight:900;letter-spacing:6px;color:var(--gold-hi);
+  text-shadow:0 3px 0 var(--ink), 0 0 18px rgba(245,184,61,.4)}
+.hero p{margin:18px auto 0;max-width:640px;color:var(--parch-lo);font-size:14px;line-height:1.9;font-weight:600}
+.chips{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:18px}
+.chip{
+  display:inline-flex;align-items:center;gap:7px;padding:6px 14px;border-radius:999px;
+  border:2px solid var(--ink);background:linear-gradient(180deg,#4d3520,#3a2716);
+  font-size:12px;font-weight:800;color:var(--parch);box-shadow:inset 0 1px 0 rgba(255,220,160,.2);
+}
+.chip img{width:18px;height:18px}
+.chip b{color:var(--gold-hi)}
+
+section{margin-top:52px}
+.sec-head{display:flex;align-items:center;gap:14px;margin-bottom:6px}
+.sec-no{
+  flex:0 0 auto;width:44px;height:44px;display:grid;place-items:center;
+  background:linear-gradient(180deg,var(--wood-hi),var(--wood-lo));
+  border:3px solid var(--ink);border-radius:12px;font-weight:900;font-size:17px;color:var(--gold-hi);
+  text-shadow:0 2px 0 var(--ink);box-shadow:0 3px 0 rgba(0,0,0,.4);
+}
+.sec-head h3{font-size:22px;font-weight:900;letter-spacing:3px;color:var(--parch-hi);text-shadow:0 2px 0 var(--ink)}
+.sec-head .rule{flex:1;height:4px;border-radius:2px;background:linear-gradient(90deg,var(--wood),transparent);border-top:1px solid rgba(255,220,160,.15)}
+.sec-sub{color:var(--parch-lo);font-size:13px;font-weight:600;margin:0 0 18px 58px;line-height:1.8}
+
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(196px,1fr));gap:16px}
+.card{
+  border:3px solid var(--ink);border-radius:16px;overflow:hidden;
+  background:linear-gradient(180deg,#4d3520,#382615);
+  box-shadow:0 5px 0 rgba(0,0,0,.35), inset 0 1px 0 rgba(255,220,160,.18);
+  transition:transform .18s, box-shadow .18s;
+}
+.card:hover{transform:translateY(-4px);box-shadow:0 9px 0 rgba(0,0,0,.35), 0 0 22px rgba(245,184,61,.15), inset 0 1px 0 rgba(255,220,160,.18)}
+.preview{
+  height:168px;display:grid;place-items:center;padding:14px;position:relative;
+  border-bottom:3px solid var(--ink);transition:background .25s;
+}
+.preview img{max-width:100%;max-height:100%;filter:drop-shadow(0 3px 3px rgba(0,0,0,.35));transition:width .2s,height .2s}
+body.bg-checker .preview{background:repeating-conic-gradient(#c9c4bb 0% 25%, #efece6 0% 50%) 0 0/22px 22px}
+body.bg-grass .preview{background:radial-gradient(140px 90px at 30% 20%, rgba(255,255,255,.14), transparent 70%), linear-gradient(180deg,#79b45c,#5d9443 60%,#4c8038)}
+body.bg-night .preview{background:radial-gradient(160px 100px at 70% 10%, rgba(245,184,61,.12), transparent 70%), linear-gradient(180deg,#2b2118,#191009)}
+.card .meta{padding:10px 12px 12px}
+.card .meta .cn{font-size:15px;font-weight:900;color:var(--parch-hi);letter-spacing:1px}
+.card .meta .fn{font-family:Consolas,'Courier New',monospace;font-size:11px;color:var(--gold);margin-top:3px;word-break:break-all}
+.card .row{display:flex;align-items:center;justify-content:space-between;margin-top:9px;gap:8px}
+.dim{font-size:11px;font-weight:800;color:var(--parch-lo);background:#2a1c10;border:2px solid var(--ink);border-radius:7px;padding:3px 8px}
+.icon-card .preview img{width:var(--icon-preview);height:var(--icon-preview);object-fit:contain}
+
+.lab{
+  margin-top:18px;border:3px solid var(--ink);border-radius:18px;overflow:hidden;
+  background:linear-gradient(180deg,#42301d,#312213);
+  box-shadow:0 5px 0 rgba(0,0,0,.35), inset 0 1px 0 rgba(255,220,160,.15);
+}
+.lab-head{
+  display:flex;align-items:center;gap:10px;padding:10px 16px;
+  background:linear-gradient(180deg,var(--wood-hi),var(--wood-lo));border-bottom:3px solid var(--ink);
+  font-weight:900;letter-spacing:2px;color:var(--gold-hi);text-shadow:0 2px 0 var(--ink);font-size:15px;
+}
+.lab-head img{width:22px;height:22px}
+.lab-body{display:grid;grid-template-columns:1fr 292px;gap:0}
+.lab-stage{padding:22px;display:grid;place-items:center;min-height:280px;
+  background:repeating-conic-gradient(#c9c4bb 0% 25%, #efece6 0% 50%) 0 0/22px 22px;border-right:3px solid var(--ink)}
+body.bg-grass .lab-stage{background:radial-gradient(200px 120px at 40% 20%, rgba(255,255,255,.14), transparent 70%), linear-gradient(180deg,#79b45c,#4c8038)}
+body.bg-night .lab-stage{background:linear-gradient(180deg,#2b2118,#191009)}
+.lab-ctrl{padding:18px 16px;display:flex;flex-direction:column;gap:14px;background:linear-gradient(180deg,#3a2a19,#2c1f12)}
+.ctrl label{display:flex;justify-content:space-between;font-size:12px;font-weight:800;color:var(--parch-lo);letter-spacing:1px;margin-bottom:6px}
+.ctrl label output{color:var(--gold-hi);font-family:Consolas,monospace}
+input[type=range]{width:100%;appearance:none;height:12px;border-radius:7px;border:2px solid var(--ink);
+  background:linear-gradient(180deg,#241a10,#3a2a18);outline:none}
+input[type=range]::-webkit-slider-thumb{appearance:none;width:22px;height:22px;border-radius:50%;
+  background:radial-gradient(circle at 35% 30%,var(--gold-hi),var(--gold) 60%,#c07f16);
+  border:3px solid var(--ink);box-shadow:0 2px 0 rgba(0,0,0,.4);cursor:grab}
+input[type=range]::-moz-range-thumb{width:18px;height:18px;border-radius:50%;background:var(--gold);border:3px solid var(--ink);cursor:grab}
+select{
+  width:100%;padding:8px 10px;border:3px solid var(--ink);border-radius:10px;font-family:inherit;font-weight:800;
+  background:linear-gradient(180deg,#5a3f26,#42301d);color:var(--parch-hi);font-size:13px;outline:none;
+}
+.nineslice-demo{border-style:solid;border-color:transparent;border-image-repeat:stretch;transition:width .1s,height .1s}
+.lab-note{font-size:11.5px;color:var(--parch-lo);line-height:1.8;font-weight:600}
+.lab-note code{color:var(--gold);font-family:Consolas,monospace;font-size:11px}
+
+.bar-stage-wrap{padding:26px 22px;display:flex;flex-direction:column;align-items:center;gap:16px;
+  background:radial-gradient(300px 140px at 50% 0%, rgba(255,255,255,.12), transparent 70%), linear-gradient(180deg,#79b45c,#4c8038);border-right:3px solid var(--ink)}
+body.bg-night .bar-stage-wrap{background:linear-gradient(180deg,#2b2118,#191009)}
+body.bg-checker .bar-stage-wrap{background:repeating-conic-gradient(#c9c4bb 0% 25%, #efece6 0% 50%) 0 0/22px 22px}
+.bar-scale{transform-origin:center top}
+.bar{position:relative;width:480px;height:60px}
+.bar img{position:absolute;left:0;top:0;pointer-events:none}
+.bar .fill-clip{position:absolute;overflow:hidden;left:17px;top:13px;height:32px}
+.bar .fill-clip img{position:relative;left:0;top:0}
+.bar .hp-text{
+  position:absolute;inset:0;display:grid;place-items:center;font-weight:900;font-size:17px;color:#fff;
+  text-shadow:0 2px 0 rgba(0,0,0,.65), 0 0 6px rgba(0,0,0,.5);letter-spacing:1px;font-family:Consolas,'Microsoft YaHei',monospace;
+}
+.bar-hit{animation:barShake .3s}
+@keyframes barShake{0%,100%{transform:translateX(0)}25%{transform:translateX(-5px)}60%{transform:translateX(4px)}}
+.float-layer{position:absolute;inset:0;pointer-events:none;overflow:visible}
+.float-num{position:absolute;animation:floatUp 1s ease-out forwards;filter:drop-shadow(0 3px 2px rgba(0,0,0,.4))}
+@keyframes floatUp{
+  0%{transform:translate(-50%,0) scale(.5);opacity:0}
+  14%{transform:translate(-50%,-12px) scale(1.18);opacity:1}
+  30%{transform:translate(-50%,-22px) scale(1)}
+  100%{transform:translate(-50%,-96px) scale(.96);opacity:0}
+}
+.float-num.crit{animation:floatCrit 1.15s ease-out forwards}
+@keyframes floatCrit{
+  0%{transform:translate(-50%,0) scale(.4) rotate(-8deg);opacity:0}
+  12%{transform:translate(-50%,-14px) scale(1.3) rotate(3deg);opacity:1}
+  28%{transform:translate(-50%,-26px) scale(1.05) rotate(0)}
+  100%{transform:translate(-50%,-110px) scale(1);opacity:0}
+}
+
+.cards-demo{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:22px;justify-items:center;align-items:start;padding:28px 18px 30px;
+  background:radial-gradient(400px 200px at 50% 0%, rgba(245,184,61,.10), transparent 70%), linear-gradient(180deg,#33261a,#241a12);border-right:3px solid var(--ink)}
+.rcard{position:relative;width:min(212px,100%);aspect-ratio:212/354;cursor:pointer;transition:transform .2s, filter .2s;border:0;background:transparent;padding:0}
+.rcard img.frame{position:absolute;inset:0;width:100%;height:100%}
+.rcard:hover{transform:translateY(-8px) scale(1.03)}
+.rcard .rlabel{position:absolute;top:4.2%;left:0;right:0;text-align:center;font-size:14px;font-weight:900;letter-spacing:3px;text-shadow:0 1px 0 rgba(0,0,0,.4)}
+.rcard .inner{position:absolute;left:13%;right:13%;top:15%;bottom:9%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;text-align:center}
+.rcard .inner img{width:74px;height:74px;filter:drop-shadow(0 3px 2px rgba(0,0,0,.35))}
+.rcard .inner .t{font-size:18px;font-weight:900;letter-spacing:2px}
+.rcard .inner .d{font-size:12px;line-height:1.7;font-weight:700;color:#6b4a2a}
+.rcard.common .rlabel{color:#e8e4da}.rcard.common .inner .t{color:#4c4a45}
+.rcard.common .inner{background:linear-gradient(180deg,#f3e2b8,#e2c894);border-radius:8px}
+.rcard.rare .rlabel{color:#eaf6ff}.rcard.rare .inner .t{color:#1d5c96}
+.rcard.rare .inner{background:linear-gradient(180deg,#eaf4fb,#cfe3f2);border-radius:8px}
+.rcard.epic .rlabel{color:#f6ecff}.rcard.epic .inner .t{color:#7a2ea8}
+.rcard.epic .inner{background:linear-gradient(180deg,#f7ecff,#e6d2f5);border-radius:8px}
+.rcard.common:hover{filter:drop-shadow(0 0 14px rgba(220,215,200,.5))}
+.rcard.rare:hover{filter:drop-shadow(0 0 16px rgba(63,143,210,.65))}
+.rcard.epic:hover{filter:drop-shadow(0 0 18px rgba(165,91,214,.75))}
+.rcard.selected{transform:translateY(-8px) scale(1.05)}
+.rcard.selected::after{
+  content:"已选择";position:absolute;bottom:-14px;left:50%;transform:translateX(-50%);
+  background:linear-gradient(180deg,#8ed070,var(--grass));color:#fff;border:3px solid var(--ink);
+  border-radius:999px;font-size:12px;font-weight:900;padding:3px 14px;letter-spacing:2px;text-shadow:0 1px 0 rgba(0,0,0,.35);
+}
+
+.battle{
+  position:relative;height:320px;overflow:hidden;cursor:none;border-right:3px solid var(--ink);
+  background:
+    radial-gradient(220px 120px at 78% 30%, rgba(255,255,255,.13), transparent 70%),
+    radial-gradient(160px 90px at 20% 75%, rgba(0,0,0,.12), transparent 70%),
+    linear-gradient(180deg,#79b45c 0%, #5d9443 55%, #4c8038 100%);
+}
+.battle .path{position:absolute;left:0;right:0;top:56%;height:52px;background:linear-gradient(180deg,#c9a36a,#b08c55);border-top:3px solid rgba(59,36,22,.35);border-bottom:3px solid rgba(59,36,22,.35);opacity:.8}
+.battle .tower{position:absolute;left:34px;bottom:26px;width:86px;height:86px;filter:drop-shadow(0 4px 3px rgba(0,0,0,.35))}
+.battle .enemy{position:absolute;width:44px;height:44px;border-radius:50% 50% 46% 46%;
+  background:radial-gradient(circle at 35% 30%, #9db56a, #6d8544 65%, #55693a);border:3px solid var(--ink);
+  box-shadow:inset 0 -6px 0 rgba(0,0,0,.18);animation:bob 1.6s ease-in-out infinite}
+.battle .enemy::before,.battle .enemy::after{content:"";position:absolute;top:14px;width:7px;height:9px;border-radius:50%;background:#2c1c10}
+.battle .enemy::before{left:9px}.battle .enemy::after{right:9px}
+@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+.battle .cross{position:absolute;width:52px;height:52px;pointer-events:none;transform:translate(-50%,-50%);transition:opacity .15s;filter:drop-shadow(0 2px 2px rgba(0,0,0,.4))}
+.battle .aim{position:absolute;height:14px;pointer-events:none;transform-origin:0 50%;opacity:.85;image-rendering:auto}
+.battle .hint{position:absolute;top:10px;left:12px;font-size:12px;font-weight:800;color:#fff;background:rgba(40,26,14,.72);border:2px solid var(--ink);border-radius:9px;padding:5px 10px;letter-spacing:1px;cursor:default}
+.battle .pulse{animation:crossPulse .25s}
+@keyframes crossPulse{0%{transform:translate(-50%,-50%) scale(1)}40%{transform:translate(-50%,-50%) scale(.78)}100%{transform:translate(-50%,-50%) scale(1)}}
+
+.code-wrap{padding:18px;border-right:3px solid var(--ink);background:#20160e}
+pre{
+  font-family:Consolas,'Courier New',monospace;font-size:12.5px;line-height:1.85;color:#e8d9b0;
+  background:#170f08;border:3px solid var(--ink);border-radius:12px;padding:16px 18px;overflow-x:auto;
+  box-shadow:inset 0 3px 10px rgba(0,0,0,.6);
+}
+pre .k{color:#ff9d5c}pre .s{color:#9fd07a}pre .n{color:#f5b83d}pre .c{color:#8a7a5f}
+.code-side{padding:18px 16px;display:flex;flex-direction:column;gap:12px;background:linear-gradient(180deg,#3a2a19,#2c1f12)}
+.code-side p{font-size:12.5px;line-height:1.9;color:var(--parch-lo);font-weight:600}
+.code-side p b{color:var(--gold-hi)}
+
+.toast{
+  position:fixed;left:50%;bottom:26px;transform:translate(-50%,80px);z-index:80;
+  background:linear-gradient(180deg,var(--parch-hi),var(--parch));color:var(--ink);
+  border:3px solid var(--ink);border-radius:12px;padding:10px 22px;font-weight:900;letter-spacing:1px;font-size:14px;
+  box-shadow:0 5px 0 rgba(0,0,0,.4);transition:transform .3s cubic-bezier(.34,1.56,.64,1);pointer-events:none;
+}
+.toast.show{transform:translate(-50%,0)}
+footer{margin-top:64px;text-align:center;color:var(--parch-lo);font-size:12px;font-weight:700;letter-spacing:2px;line-height:2}
+footer b{color:var(--gold)}
+.reveal{opacity:0;transform:translateY(26px);transition:opacity .6s ease, transform .6s ease}
+.reveal.in{opacity:1;transform:none}
+@media (max-width:900px){
+  .lab-body{grid-template-columns:1fr}
+  .lab-stage,.bar-stage-wrap,.cards-demo,.battle,.code-wrap{border-right:0;border-bottom:3px solid var(--ink)}
+  .sec-sub{margin-left:0}
+  main{padding-top:132px}
+}
+@media (max-width:560px){
+  .cards-demo{grid-template-columns:1fr}
+  .rcard{width:min(212px,80%)}
+  .hud{padding:8px 12px;gap:8px}
+  .brand h1{font-size:16px}
+  .seg button{padding:7px 10px;font-size:12px}
+}
+</style>
+</head>
+<body class="bg-checker">
+
+<header class="hud">
+  <div class="brand">
+    <img src="assets/ui/icon_base.png" alt="基地">
+    <div><h1>守卫前哨 · UI 素材库</h1><small>波次防守 · ROGUELITE · 第一批交付</small></div>
+  </div>
+  <div class="seg" id="bgSeg" role="group" aria-label="预览背景">
+    <button data-bg="bg-checker" class="on">棋盘格</button>
+    <button data-bg="bg-grass">草地</button>
+    <button data-bg="bg-night">夜幕</button>
+  </div>
+  <a class="btn" id="zipBtn" href="守卫前哨-UI素材.zip" download>下载全部 ZIP</a>
+</header>
+
+<main>
+  <div class="hero reveal in">
+    <div class="ribbon"><h2>UI 素材交付验收</h2></div>
+    <p>依照样例风格图手绘质感制作：厚描边、羊皮纸与木质底板、糖果光泽。全部为带透明通道的 PNG，
+       按 960×540 设计分辨率定尺寸，面板支持九宫格拉伸，可直接接入 Phaser 3 工程。</p>
+    <div class="chips">
+      <span class="chip"><img src="assets/ui/icon_coin.png" alt=""><b>21</b> 个素材</span>
+      <span class="chip"><img src="assets/ui/icon_wave.png" alt=""><b>6</b> 个分类</span>
+      <span class="chip"><img src="assets/ui/icon_heart.png" alt="">透明 PNG</span>
+      <span class="chip"><img src="assets/ui/icon_time.png" alt="">960×540 适配</span>
+      <span class="chip"><img src="assets/ui/icon_atkspeed.png" alt="">Phaser 3 就绪</span>
+    </div>
+  </div>
+
+  <section id="s9" class="reveal">
+    <div class="sec-head"><span class="sec-no">09</span><h3>面板类</h3><span class="rule"></span></div>
+    <p class="sec-sub">通用面板底板（九宫格）与通用小面板底板。四角与四边厚度一致，拉伸时只缩放中心区域，角饰不变形。</p>
+    <div class="grid" data-cards="panel"></div>
+    <div class="lab" id="nsLab">
+      <div class="lab-head"><img src="assets/ui/icon_damage.png" alt="">九宫格拉伸实验台</div>
+      <div class="lab-body">
+        <div class="lab-stage"><div class="nineslice-demo" id="nsDemo"></div></div>
+        <div class="lab-ctrl">
+          <div class="ctrl"><label>面板<select id="nsPanel"><option value="main">通用面板底板</option><option value="small">通用小面板底板</option></select></label></div>
+          <div class="ctrl"><label>宽度 <output id="nsWOut">460px</output></label><input type="range" id="nsW" min="200" max="720" value="460"></div>
+          <div class="ctrl"><label>高度 <output id="nsHOut">280px</output></label><input type="range" id="nsH" min="120" max="400" value="280"></div>
+          <div class="ctrl"><label>角区绘制厚度 <output id="nsTOut">52px</output></label><input type="range" id="nsT" min="16" max="105" value="52"></div>
+          <p class="lab-note">拖动滑杆实时拉伸：四角保持原始比例，仅中心羊皮纸区域伸缩。接入代码 <code>add.nineslice(x,y,key,null,w,h,64,64,64,64)</code>。</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="s10" class="reveal">
+    <div class="sec-head"><span class="sec-no">10</span><h3>进度条类</h3><span class="rule"></span></div>
+    <p class="sec-sub">底槽、填充、边框三层分离：底槽垫底、填充按血量比例裁切、镂空边框盖顶，任意血量都不会露出毛边。</p>
+    <div class="grid" data-cards="bar"></div>
+    <div class="lab" id="barLab">
+      <div class="lab-head"><img src="assets/ui/icon_heart.png" alt="">血条组装演示</div>
+      <div class="lab-body">
+        <div class="bar-stage-wrap">
+          <div class="bar-scale" id="barScale">
+            <div class="bar" id="barDemo">
+              <img src="assets/ui/bar_trough.png" width="480" height="60" alt="底槽">
+              <div class="fill-clip" id="fillClip" style="width:447px"><img src="assets/ui/bar_fill.png" width="447" height="32" alt="填充"></div>
+              <img src="assets/ui/bar_frame.png" width="480" height="60" alt="边框">
+              <div class="hp-text" id="hpText">1000 / 1000</div>
+              <div class="float-layer" id="barFloats"></div>
+            </div>
+          </div>
+          <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap;justify-content:center">
+            <img src="assets/ui/icon_heart.png" width="34" height="34" alt="生命">
+            <span style="font-weight:900;color:#fff;text-shadow:0 2px 0 rgba(0,0,0,.5);letter-spacing:1px">基地生命值</span>
+          </div>
+        </div>
+        <div class="lab-ctrl">
+          <div class="ctrl"><label>血量比例 <output id="hpOut">100%</output></label><input type="range" id="hpRange" min="0" max="100" value="100"></div>
+          <button class="btn green" id="hitBtn">模拟受击 -120</button>
+          <button class="btn wood" id="healBtn">回复满血</button>
+          <p class="lab-note">填充层偏移 <code>(17, 13)</code>，尺寸 <code>447×32</code>；Phaser 中用 <code>fill.setCrop(0,0,447*ratio,32)</code> 即可按比例缩血。</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="s11" class="reveal">
+    <div class="sec-head"><span class="sec-no">11</span><h3>通用图标</h3><span class="rule"></span></div>
+    <p class="sec-sub">金币、基地 / 心形、伤害、攻速、时间、波次，另附防御盾图标备用。统一 128×128 透明画布，HUD 中缩至 32–48px 依旧清晰。</p>
+    <div class="grid" data-cards="icon"></div>
+    <div class="lab">
+      <div class="lab-head"><img src="assets/ui/icon_coin.png" alt="">HUD 尺寸预览</div>
+      <div class="lab-body">
+        <div class="lab-stage" style="display:flex;gap:22px;align-items:center;flex-wrap:wrap;justify-content:center" id="hudPreview"></div>
+        <div class="lab-ctrl">
+          <div class="ctrl"><label>图标显示尺寸 <output id="iconSizeOut">88px</output></label><input type="range" id="iconSize" min="28" max="128" value="88"></div>
+          <p class="lab-note">滑杆同时作用于上方图标卡片与 HUD 模拟行，检查小尺寸下的描边与辨识度。推荐 HUD 用 <code>36px</code>、结算界面用 <code>64px</code>。</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="s12" class="reveal">
+    <div class="sec-head"><span class="sec-no">12</span><h3>稀有度相关</h3><span class="rule"></span></div>
+    <p class="sec-sub">普通 / 稀有 / 史诗三档卡牌边框，中心镂空、顶部留空白铭牌，游戏内自行叠加图标与文字即可组成强化卡。</p>
+    <div class="grid" data-cards="rarity"></div>
+    <div class="lab" id="cardsLab">
+      <div class="lab-head"><img src="assets/ui/icon_atkspeed.png" alt="">强化卡组装演示 · 点击选择</div>
+      <div class="lab-body">
+        <div class="cards-demo" id="cardsDemo"></div>
+        <div class="lab-ctrl">
+          <p class="lab-note" style="font-size:13px">边框为纯框体素材：铭牌文字、卡面底色与图标均由代码层叠加，换文案不用改图。</p>
+          <p class="lab-note">史诗框自带紫色辉光，稀有框带冷蓝辉光，普通框无辉光——与样例图的三档视觉层级一致。点击卡片试试选择反馈。</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="s13" class="reveal">
+    <div class="sec-head"><span class="sec-no">13</span><h3>战斗反馈</h3><span class="rule"></span></div>
+    <p class="sec-sub">普通伤害飘字（暖白）、暴击飘字（金橙放大 + 火花）、受击飘字（红色下行）。在下方演武场移动鼠标瞄准、点击射击查看飘字手感。</p>
+    <div class="grid" data-cards="dmg"></div>
+    <div class="lab" id="battleLab">
+      <div class="lab-head"><img src="assets/ui/icon_wave.png" alt="">演武场 · 瞄准与飘字</div>
+      <div class="lab-body">
+        <div class="battle" id="battle">
+          <div class="path"></div>
+          <img class="tower" src="assets/ui/icon_base.png" alt="基地塔">
+          <div class="enemy" style="left:56%;top:34%"></div>
+          <div class="enemy" style="left:70%;top:58%;animation-delay:.4s"></div>
+          <div class="enemy" style="left:84%;top:30%;animation-delay:.8s"></div>
+          <img class="aim" id="aimLine" src="assets/ui/aim_line.png" alt="" style="opacity:0">
+          <img class="cross" id="cross" src="assets/ui/crosshair.png" alt="" style="opacity:0">
+          <div class="float-layer" id="battleFloats"></div>
+          <div class="hint">移动瞄准 · 点击射击</div>
+        </div>
+        <div class="lab-ctrl">
+          <button class="btn green" id="volleyBtn">模拟一轮齐射</button>
+          <button class="btn wood" id="takenBtn">基地受击演示</button>
+          <p class="lab-note">准星跟随鼠标并隐藏系统光标；瞄准线自塔身指向准星，可旋转复用。飘字上浮 + 先放大后回落的弹性曲线，暴击带旋转抖动。</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="s14" class="reveal">
+    <div class="sec-head"><span class="sec-no">14</span><h3>其他功能性图片</h3><span class="rule"></span></div>
+    <p class="sec-sub">准星图（128×128，缩至 48px 使用）与瞄准线图（可选，256×24 虚线渐隐 + 箭头，朝目标方向旋转摆放）。</p>
+    <div class="grid" data-cards="func"></div>
+  </section>
+
+  <section id="sCode" class="reveal">
+    <div class="sec-head"><span class="sec-no">＋</span><h3>Phaser 3 接入指南</h3><span class="rule"></span></div>
+    <p class="sec-sub">素材目录结构与工程约定一致：整体拷入 <code style="color:var(--gold)">assets/ui/</code> 即可，manifest.json 内含全部尺寸与九宫格参数。</p>
+    <div class="lab">
+      <div class="lab-head"><img src="assets/ui/icon_time.png" alt="">复制即用代码</div>
+      <div class="lab-body">
+        <div class="code-wrap"><pre id="codeBlock"><span class="c">// Preload 场景：按 manifest 批量加载</span>
+<span class="k">for</span> (<span class="k">const</span> [key, info] <span class="k">of</span> Object.entries(manifest.assets))
+  <span class="k">this</span>.load.image(key, info.file);
+
+<span class="c">// 面板：九宫格拉伸，角饰不变形</span>
+<span class="k">this</span>.add.nineslice(<span class="n">480</span>, <span class="n">270</span>, <span class="s">'panel_main'</span>, <span class="k">null</span>, <span class="n">640</span>, <span class="n">360</span>, <span class="n">64</span>, <span class="n">64</span>, <span class="n">64</span>, <span class="n">64</span>);
+<span class="k">this</span>.add.nineslice(x, y, <span class="s">'panel_small'</span>, <span class="k">null</span>, w, h, <span class="n">16</span>, <span class="n">16</span>, <span class="n">16</span>, <span class="n">16</span>);
+
+<span class="c">// 血条：三层组装，填充按比例裁切</span>
+<span class="k">const</span> trough = <span class="k">this</span>.add.image(x, y, <span class="s">'bar_trough'</span>).setOrigin(<span class="n">0</span>);
+<span class="k">const</span> fill   = <span class="k">this</span>.add.image(x + <span class="n">17</span>, y + <span class="n">13</span>, <span class="s">'bar_fill'</span>).setOrigin(<span class="n">0</span>);
+<span class="k">const</span> frame  = <span class="k">this</span>.add.image(x, y, <span class="s">'bar_frame'</span>).setOrigin(<span class="n">0</span>);
+<span class="k">const</span> setHp = r =&gt; fill.setCrop(<span class="n">0</span>, <span class="n">0</span>, <span class="n">447</span> * r, <span class="n">32</span>);
+
+<span class="c">// 飘字：上浮 + 弹性缩放后销毁</span>
+<span class="k">const</span> t = <span class="k">this</span>.add.image(ex, ey, crit ? <span class="s">'dmg_crit'</span> : <span class="s">'dmg_normal'</span>);
+<span class="k">this</span>.tweens.add({ targets: t, y: ey - <span class="n">90</span>, scale: { from: <span class="n">.6</span>, to: <span class="n">1</span> },
+  alpha: { from: <span class="n">1</span>, to: <span class="n">0</span> }, duration: <span class="n">900</span>, ease: <span class="s">'Cubic.Out'</span>,
+  onComplete: () =&gt; t.destroy() });</pre></div>
+        <div class="code-side">
+          <button class="btn" id="copyBtn">复制代码</button>
+          <a class="btn wood" href="manifest.json" download>下载 manifest.json</a>
+          <p><b>命名约定</b>：文件名即纹理 key，与 manifest 一一对应，三人协作时不要改名。</p>
+          <p><b>缩放建议</b>：图标源 128px，HUD 显示 36px；面板源 512px，按九宫格参数拉伸到任意尺寸。</p>
+          <p><b>飘字</b>：素材为样式样板（128 / 512! / -20），实战数字建议用同款描边字体动态渲染，风格保持一致。</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <b>守卫前哨</b> · 波次防守 Roguelite · 2026 Qoder 高校创造力大赛<br>
+    第一批 UI 素材 · 2026-11-16 · 共 21 项 · 风格对齐样例图 v1.0
+  </footer>
+</main>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const ASSETS = {
+  panel: [
+    ['panel_main','通用面板底板','512×512 · 九宫格 64'],
+    ['panel_small','通用小面板底板','256×256 · 九宫格 16'],
+  ],
+  bar: [
+    ['bar_trough','进度条底槽','480×60'],
+    ['bar_fill','进度条填充','447×32 · 偏移(17,13)'],
+    ['bar_frame','进度条边框','480×60 · 镂空'],
+  ],
+  icon: [
+    ['icon_coin','金币图标','128×128'],
+    ['icon_heart','心形图标','128×128'],
+    ['icon_base','基地图标','128×128'],
+    ['icon_damage','伤害图标','128×128'],
+    ['icon_atkspeed','攻速图标','128×128'],
+    ['icon_time','时间图标','128×128'],
+    ['icon_wave','波次图标','128×128'],
+    ['icon_defense','防御图标(附)','128×128'],
+  ],
+  rarity: [
+    ['rarity_common','普通稀有度边框','307×512'],
+    ['rarity_rare','稀有稀有度边框','315×512'],
+    ['rarity_epic','史诗稀有度边框','293×512'],
+  ],
+  dmg: [
+    ['dmg_normal','普通伤害飘字','155×80'],
+    ['dmg_crit','暴击伤害飘字','193×128'],
+    ['dmg_taken','受击飘字','132×80'],
+  ],
+  func: [
+    ['crosshair','准星图','128×128'],
+    ['aim_line','瞄准线图(可选)','256×24'],
+  ],
+};
+const $ = s => document.querySelector(s);
+const toastEl = $('#toast');
+let toastTimer;
+function toast(msg){
+  toastEl.textContent = msg;
+  toastEl.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(()=>toastEl.classList.remove('show'), 1800);
+}
+
+document.querySelectorAll('[data-cards]').forEach(grid=>{
+  const group = grid.dataset.cards;
+  grid.innerHTML = ASSETS[group].map(([key,cn,dim])=>`
+    <div class="card ${group==='icon'?'icon-card':''}">
+      <div class="preview"><img src="assets/ui/${key}.png" alt="${cn}" loading="lazy"></div>
+      <div class="meta">
+        <div class="cn">${cn}</div>
+        <div class="fn">${key}.png</div>
+        <div class="row"><span class="dim">${dim}</span>
+          <a class="btn small wood" href="assets/ui/${key}.png" download="${key}.png">下载</a></div>
+      </div>
+    </div>`).join('');
+});
+
+$('#bgSeg').addEventListener('click', e=>{
+  const b = e.target.closest('button'); if(!b) return;
+  document.body.classList.remove('bg-checker','bg-grass','bg-night');
+  document.body.classList.add(b.dataset.bg);
+  document.querySelectorAll('#bgSeg button').forEach(x=>x.classList.toggle('on', x===b));
+});
+
+const NS = {main:{file:'panel_main',slice:64}, small:{file:'panel_small',slice:16}};
+function nsUpdate(){
+  const p = NS[$('#nsPanel').value];
+  const w = +$('#nsW').value, h = +$('#nsH').value, t = +$('#nsT').value;
+  const d = $('#nsDemo');
+  d.style.width = w+'px'; d.style.height = h+'px';
+  d.style.borderWidth = t+'px';
+  d.style.borderImageSource = `url(assets/ui/${p.file}.png)`;
+  d.style.borderImageSlice = `${p.slice} fill`;
+  $('#nsWOut').textContent = w+'px';
+  $('#nsHOut').textContent = h+'px';
+  $('#nsTOut').textContent = t+'px';
+}
+['nsPanel','nsW','nsH','nsT'].forEach(id=>$('#'+id).addEventListener('input', nsUpdate));
+nsUpdate();
+
+const HP_MAX = 1000;
+let hp = HP_MAX;
+function hpUpdate(shake){
+  const r = hp / HP_MAX;
+  $('#fillClip').style.width = Math.round(447*r)+'px';
+  $('#hpText').textContent = `${hp} / ${HP_MAX}`;
+  $('#hpOut').textContent = Math.round(r*100)+'%';
+  $('#hpRange').value = Math.round(r*100);
+  if(shake){
+    const b = $('#barDemo');
+    b.classList.remove('bar-hit'); void b.offsetWidth; b.classList.add('bar-hit');
+  }
+}
+$('#hpRange').addEventListener('input', e=>{ hp = Math.round(HP_MAX*e.target.value/100); hpUpdate(false); });
+function spawnFloat(layer, key, x, y, crit){
+  const img = document.createElement('img');
+  img.src = `assets/ui/${key}.png`;
+  img.className = 'float-num' + (crit?' crit':'');
+  img.style.left = x+'px'; img.style.top = y+'px';
+  const h = key==='dmg_crit'? 74 : 46;
+  img.style.height = h+'px';
+  layer.appendChild(img);
+  img.addEventListener('animationend', ()=>img.remove());
+}
+$('#hitBtn').addEventListener('click', ()=>{
+  hp = Math.max(0, hp-120); hpUpdate(true);
+  spawnFloat($('#barFloats'), 'dmg_taken', 240+Math.random()*60-30, -6);
+  if(hp===0) toast('基地陷落！点击「回复满血」重整旗鼓');
+});
+$('#healBtn').addEventListener('click', ()=>{ hp = HP_MAX; hpUpdate(false); toast('基地已回复满血'); });
+hpUpdate(false);
+
+function fitBar(){
+  const wrap = $('.bar-stage-wrap');
+  const s = Math.min(1, (wrap.clientWidth-44)/480);
+  $('#barScale').style.transform = `scale(${s})`;
+  $('#barScale').style.height = (60*s+8)+'px';
+}
+window.addEventListener('resize', fitBar); fitBar();
+
+const hudKeys = ['icon_heart','icon_coin','icon_wave','icon_time','icon_damage','icon_atkspeed'];
+$('#hudPreview').innerHTML = hudKeys.map(k=>`<img src="assets/ui/${k}.png" style="width:var(--icon-preview);height:var(--icon-preview);object-fit:contain;filter:drop-shadow(0 3px 2px rgba(0,0,0,.35))" alt="">`).join('');
+$('#iconSize').addEventListener('input', e=>{
+  document.documentElement.style.setProperty('--icon-preview', e.target.value+'px');
+  $('#iconSizeOut').textContent = e.target.value+'px';
+});
+
+const CARDS = [
+  ['common','rarity_common','普通','icon_damage','攻击强化','攻击力提升 20%'],
+  ['rare','rarity_rare','稀有','icon_atkspeed','攻速提升','攻击速度提升 30%'],
+  ['epic','rarity_epic','史诗','icon_coin','爆炸射击','攻击有 25% 概率造成范围伤害'],
+];
+$('#cardsDemo').innerHTML = CARDS.map(([r,f,label,icon,t,d],i)=>`
+  <button class="rcard ${r}" data-i="${i}">
+    <img class="frame" src="assets/ui/${f}.png" alt="${label}边框">
+    <span class="rlabel">${label}</span>
+    <span class="inner"><img src="assets/ui/${icon}.png" alt=""><span class="t">${t}</span><span class="d">${d}</span></span>
+  </button>`).join('');
+$('#cardsDemo').addEventListener('click', e=>{
+  const c = e.target.closest('.rcard'); if(!c) return;
+  document.querySelectorAll('.rcard').forEach(x=>x.classList.toggle('selected', x===c));
+  toast(`已选择强化：${CARDS[+c.dataset.i][4]}`);
+});
+
+const battle = $('#battle'), cross = $('#cross'), aim = $('#aimLine');
+const TOWER = ()=>({x: 34+43, y: battle.clientHeight-26-43});
+battle.addEventListener('mousemove', e=>{
+  const r = battle.getBoundingClientRect();
+  const x = e.clientX-r.left, y = e.clientY-r.top;
+  cross.style.opacity = 1; cross.style.left = x+'px'; cross.style.top = y+'px';
+  const t = TOWER();
+  const dx = x-t.x, dy = y-t.y;
+  const dist = Math.min(Math.hypot(dx,dy), 420);
+  aim.style.opacity = .85;
+  aim.style.left = t.x+'px'; aim.style.top = (t.y-7)+'px';
+  aim.style.width = dist+'px';
+  aim.style.transform = `rotate(${Math.atan2(dy,dx)}rad)`;
+});
+battle.addEventListener('mouseleave', ()=>{ cross.style.opacity = 0; aim.style.opacity = 0; });
+battle.addEventListener('click', e=>{
+  if(e.target.closest('.hint')) return;
+  const r = battle.getBoundingClientRect();
+  const x = e.clientX-r.left, y = e.clientY-r.top;
+  const crit = Math.random() < .28;
+  spawnFloat($('#battleFloats'), crit?'dmg_crit':'dmg_normal', x, y-14, crit);
+  cross.classList.remove('pulse'); void cross.offsetWidth; cross.classList.add('pulse');
+});
+$('#volleyBtn').addEventListener('click', ()=>{
+  const spots = [[.58,.36],[.72,.60],[.86,.32],[.63,.45],[.78,.52],[.68,.38]];
+  spots.forEach(([fx,fy],i)=>{
+    setTimeout(()=>{
+      const crit = i%3===2;
+      spawnFloat($('#battleFloats'), crit?'dmg_crit':'dmg_normal',
+        battle.clientWidth*fx, battle.clientHeight*fy-10, crit);
+    }, i*160);
+  });
+  toast('齐射！6 发命中，含 2 发暴击');
+});
+$('#takenBtn').addEventListener('click', ()=>{
+  const t = TOWER();
+  spawnFloat($('#battleFloats'), 'dmg_taken', t.x, t.y-40);
+  hp = Math.max(0, hp-20); hpUpdate(true);
+});
+
+$('#copyBtn').addEventListener('click', async ()=>{
+  const text = $('#codeBlock').innerText;
+  try{ await navigator.clipboard.writeText(text); toast('接入代码已复制'); }
+  catch{
+    const ta = document.createElement('textarea');
+    ta.value = text; document.body.appendChild(ta); ta.select();
+    document.execCommand('copy'); ta.remove(); toast('接入代码已复制');
+  }
+});
+
+const io = new IntersectionObserver(es=>es.forEach(en=>{
+  if(en.isIntersecting){ en.target.classList.add('in'); io.unobserve(en.target); }
+}), {threshold:.08});
+document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+</script>
+</body>
+</html>

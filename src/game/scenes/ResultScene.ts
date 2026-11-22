@@ -6,7 +6,7 @@ import { audio } from '../systems/AudioSystem';
 import { formatTime, submitWin } from '../utils/BestRecord';
 import { createForestBackground } from '../ui/ForestBackground';
 import { createArtButton } from '../ui/Button';
-import { createPanel, inkStyle, Palette } from '../ui/Theme';
+import { createPanel, inkStyle, Palette, prefersReducedMotion } from '../ui/Theme';
 import { createUpgradeSummary } from '../ui/UpgradePanel';
 
 /**
@@ -29,13 +29,13 @@ export class ResultScene extends Phaser.Scene {
     createForestBackground(this);
 
     const cx = DESIGN_SIZE.width / 2;
-    createPanel(this, cx, 238, 720, 400);
+    createPanel(this, cx, 228, 720, 420);
     const title = this.add
-      .text(cx, 92, this.summary.win ? '守卫成功！' : '基地陷落…', inkStyle(40, true))
+      .text(cx, 96, this.summary.win ? '守卫成功！' : '基地陷落…', inkStyle(40, true))
       .setOrigin(0.5);
     title.setColor(this.summary.win ? Palette.leaf : Palette.danger);
     this.add
-      .text(cx, 132, `${DIFFICULTY_CONFIGS[getRunState().difficulty].label}难度 · ${this.summary.win ? '五波全清' : `止步第 ${Math.max(1, this.summary.wave + 1)} 波`}`, {
+      .text(cx, 134, `${DIFFICULTY_CONFIGS[getRunState().difficulty].label}难度 · ${this.summary.win ? '五波全清' : `止步第 ${Math.max(1, this.summary.wave + 1)} 波`}`, {
         ...inkStyle(15),
         color: Palette.inkSoft
       })
@@ -55,7 +55,7 @@ export class ResultScene extends Phaser.Scene {
       this.add.text(x + 150, y, value, inkStyle(17, true)).setOrigin(0, 0.5);
     });
 
-    const summary = createUpgradeSummary(this, cx - 250, 286, 500, this.summary.takenRewardIds);
+    const summary = createUpgradeSummary(this, cx - 250, 272, 500, this.summary.takenRewardIds);
     summary.setDepth(2);
 
     if (this.summary.win) {
@@ -65,12 +65,14 @@ export class ResultScene extends Phaser.Scene {
           .text(cx + 250, 92, '新纪录！', { ...inkStyle(20, true), color: Palette.gold })
           .setOrigin(0.5)
           .setAngle(-8);
-        this.tweens.add({ targets: badge, scale: 1.15, duration: 600, yoyo: true, repeat: -1, ease: 'Sine.easeInOut' });
+        if (!prefersReducedMotion()) {
+          this.tweens.add({ targets: badge, scale: 1.15, duration: 600, yoyo: true, repeat: -1, ease: 'Sine.easeInOut' });
+        }
       }
     }
 
-    createArtButton(this, cx - 130, 486, '再来一局', () => this.restart(), { width: 240, fontSize: 20 });
-    createArtButton(this, cx + 130, 486, '返回主菜单', () => this.toMenu(), { width: 240, fontSize: 20 });
+    createArtButton(this, cx - 130, 490, '再来一局', () => this.restart(), { width: 240, height: 50, fontSize: 20 });
+    createArtButton(this, cx + 130, 490, '返回主菜单', () => this.toMenu(), { width: 240, height: 50, fontSize: 20 });
 
     this.input.keyboard?.on('keydown-ESC', this.toMenu, this);
     this.input.keyboard?.on('keydown-ENTER', this.restart, this);

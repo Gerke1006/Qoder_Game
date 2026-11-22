@@ -1,0 +1,166 @@
+{
+  "checks": [
+    {
+      "name": "主菜单资源加载",
+      "passed": true
+    },
+    {
+      "name": "菜单点击进入战斗",
+      "passed": true
+    },
+    {
+      "name": "真实技能启动冷却",
+      "passed": true
+    },
+    {
+      "name": "暂停冻结冷却并隐藏准星",
+      "passed": true
+    },
+    {
+      "name": "ESC恢复战斗",
+      "passed": true
+    },
+    {
+      "name": "清波奖励自动显示",
+      "passed": true
+    },
+    {
+      "name": "鼠标点选卡片命中",
+      "passed": true
+    },
+    {
+      "name": "选卡动画防重复跳过",
+      "passed": true
+    },
+    {
+      "name": "奖励关闭恢复准星",
+      "passed": true
+    },
+    {
+      "name": "ESC跳过推进且不误暂停",
+      "passed": true
+    },
+    {
+      "name": "空白点击跳过推进",
+      "passed": true
+    },
+    {
+      "name": "数字键选择强化",
+      "passed": true
+    },
+    {
+      "name": "基地血条跟随真实状态",
+      "passed": true
+    },
+    {
+      "name": "维修强化重算血条比例",
+      "passed": true
+    },
+    {
+      "name": "第五波进度条满格",
+      "passed": true
+    },
+    {
+      "name": "箭头尖端跟随指针",
+      "passed": true
+    },
+    {
+      "name": "近距离隐藏引导线",
+      "passed": true
+    },
+    {
+      "name": "飘字派生素材与动态数字同时存在",
+      "passed": true
+    },
+    {
+      "name": "暴击上浮和受击下沉",
+      "passed": true
+    },
+    {
+      "name": "飘字生命周期自动清理",
+      "passed": true
+    },
+    {
+      "name": "减少动态效果仍保持数字完整尺寸",
+      "passed": true
+    },
+    {
+      "name": "敌人撞基地触发失败",
+      "passed": true
+    },
+    {
+      "name": "失败结算场景可达",
+      "passed": true
+    },
+    {
+      "details": [
+        307,
+        329,
+        351,
+        373
+      ],
+      "name": "四项强化均在面板安全底边内",
+      "passed": true
+    },
+    {
+      "name": "结算按钮返回主菜单",
+      "passed": true
+    },
+    {
+      "name": "玩法说明可打开",
+      "passed": true
+    },
+    {
+      "name": "玩法说明ESC关闭",
+      "passed": true
+    },
+    {
+      "name": "重新开局清理旧奖励与金币",
+      "passed": true
+    },
+    {
+      "details": {
+        "elapsedMs": 71757,
+        "gold": 391,
+        "kills": 52,
+        "takenRewardIds": [
+          "war-horn",
+          "oak-heart",
+          "dragon-hoard",
+          "gold-cache"
+        ],
+        "totalWaves": 5,
+        "wave": 4,
+        "win": true
+      },
+      "name": "实际射击技能完成五波并胜利",
+      "passed": true
+    },
+    {
+      "details": {
+        "bottom": 459.375,
+        "height": 219.375,
+        "left": 0,
+        "right": 390,
+        "top": 240,
+        "width": 390,
+        "x": 0,
+        "y": 240
+      },
+      "name": "390x700竖屏FIT居中且无裁切",
+      "passed": true
+    },
+    {
+      "name": "窄屏资源与菜单完整加载",
+      "passed": true
+    },
+    {
+      "name": "窄屏缩放后按钮命中正确",
+      "passed": true
+    }
+  ],
+  "environment": "Qoder embedded Chromium, real MouseEvent/KeyboardEvent; hidden browser frames and Phaser tween clock stepped explicitly",
+  "failed": 0,
+  "fullRun": "Unmodified gameplay state on easy difficulty; actual shooting and skill controls completed all five waves with 52 kills and four reward choices; edge cases use targeted state fixtures",
+  "passed": 32
+}

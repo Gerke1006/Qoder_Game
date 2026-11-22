@@ -1,0 +1,132 @@
+{
+  "design_resolution": [
+    960,
+    540
+  ],
+  "assets": {
+    "panel_main": {
+      "file": "assets/ui/panel_main.png",
+      "width": 512,
+      "height": 512,
+      "nine_slice": 64,
+      "usage": "Phaser: this.add.nineslice(x,y,\"panel_main\",null,w,h,64,64,64,64)"
+    },
+    "panel_small": {
+      "file": "assets/ui/panel_small.png",
+      "width": 256,
+      "height": 256,
+      "nine_slice": 16,
+      "usage": "Phaser: this.add.nineslice(x,y,\"panel_small\",null,w,h,16,16,16,16)"
+    },
+    "icon_coin": {
+      "file": "assets/ui/icon_coin.png",
+      "width": 128,
+      "height": 128
+    },
+    "icon_heart": {
+      "file": "assets/ui/icon_heart.png",
+      "width": 128,
+      "height": 128
+    },
+    "icon_base": {
+      "file": "assets/ui/icon_base.png",
+      "width": 128,
+      "height": 128
+    },
+    "icon_damage": {
+      "file": "assets/ui/icon_damage.png",
+      "width": 128,
+      "height": 128
+    },
+    "icon_atkspeed": {
+      "file": "assets/ui/icon_atkspeed.png",
+      "width": 128,
+      "height": 128
+    },
+    "icon_time": {
+      "file": "assets/ui/icon_time.png",
+      "width": 128,
+      "height": 128
+    },
+    "icon_wave": {
+      "file": "assets/ui/icon_wave.png",
+      "width": 128,
+      "height": 128
+    },
+    "icon_defense": {
+      "file": "assets/ui/icon_defense.png",
+      "width": 128,
+      "height": 128
+    },
+    "rarity_common": {
+      "file": "assets/ui/rarity_common.png",
+      "width": 307,
+      "height": 512,
+      "usage": "card frame overlay; place icon+text inside the empty center"
+    },
+    "rarity_rare": {
+      "file": "assets/ui/rarity_rare.png",
+      "width": 316,
+      "height": 512,
+      "usage": "card frame overlay; place icon+text inside the empty center"
+    },
+    "rarity_epic": {
+      "file": "assets/ui/rarity_epic.png",
+      "width": 292,
+      "height": 512,
+      "usage": "card frame overlay; place icon+text inside the empty center"
+    },
+    "bar_trough": {
+      "file": "assets/ui/bar_trough.png",
+      "width": 480,
+      "height": 60,
+      "usage": "bottom layer of HP bar"
+    },
+    "bar_frame": {
+      "file": "assets/ui/bar_frame.png",
+      "width": 480,
+      "height": 60,
+      "usage": "top layer of HP bar, hollow center"
+    },
+    "bar_fill": {
+      "file": "assets/ui/bar_fill.png",
+      "width": 447,
+      "height": 32,
+      "fill_offset": [
+        17,
+        13
+      ],
+      "usage": "middle layer; crop width by hp ratio: fill.setCrop(0,0,w*ratio,h)"
+    },
+    "dmg_normal": {
+      "file": "assets/ui/dmg_normal.png",
+      "width": 155,
+      "height": 80,
+      "usage": "floating combat text sprite"
+    },
+    "dmg_crit": {
+      "file": "assets/ui/dmg_crit.png",
+      "width": 193,
+      "height": 128,
+      "usage": "floating combat text sprite"
+    },
+    "dmg_taken": {
+      "file": "assets/ui/dmg_taken.png",
+      "width": 132,
+      "height": 80,
+      "usage": "floating combat text sprite"
+    },
+    "crosshair": {
+      "file": "assets/ui/crosshair.png",
+      "width": 256,
+      "height": 256,
+      "usage": "aim cursor; hide system cursor over battle canvas"
+    },
+    "aim_line": {
+      "file": "assets/ui/aim_line.png",
+      "width": 256,
+      "height": 24,
+      "usage": "optional aiming guide; tile/rotate toward target"
+    }
+  }
+}

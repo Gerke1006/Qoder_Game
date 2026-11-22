@@ -82,7 +82,7 @@ export const REWARD_OFFER_COUNT = 3;
 export function rewardIcon(effect: UpgradeEffect): UiKey {
   switch (effect.kind) {
     case 'baseHp':
-      return UiKeys.IconHeart;
+      return UiKeys.IconDefense;
     case 'gold':
       return UiKeys.IconGold;
     case 'damage':

@@ -1,5 +1,6 @@
 import * as Phaser from 'phaser';
 import { AssetKeys, DESIGN_SIZE } from '../types';
+import { prefersReducedMotion } from './Theme';
 
 /**
  * 林地背景：草地平铺 + 斜射光柱 + 暗角 + 飘落树叶。
@@ -18,7 +19,7 @@ export function createForestBackground(scene: Phaser.Scene, withLeaves = true): 
   scene.add.image(DESIGN_SIZE.width / 2, DESIGN_SIZE.height / 2, 'tex-vignette').setDepth(40);
   root.add([ground, rays]);
 
-  if (withLeaves) {
+  if (withLeaves && !prefersReducedMotion()) {
     const leaves = scene.add.particles(0, 0, AssetKeys.Leaf, {
       x: { min: 0, max: DESIGN_SIZE.width },
       y: -20,

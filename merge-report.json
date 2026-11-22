@@ -1,0 +1,585 @@
+{
+  "date": "2026-11-22",
+  "baseArchive": "Qoder_Game_fused_2026-11-21_ready.zip",
+  "baseArchiveSha256": "365f68281cc75f9074296b879c5cc493e9337f8f662419f202078b228aca0769",
+  "sourceProject": "36c4b6e0 UI assets, original UI backup, and existing desktop integration",
+  "originalFilesPreserved": true,
+  "latestFix": {
+    "summary": "Reward cards and background dismissal require a new pointer-down after the panel appears, so releasing sustained fire cannot skip or select a reward.",
+    "file": "src/game/ui/RewardPanel.ts",
+    "typecheck": "passed",
+    "productionBuild": "passed",
+    "regression": {
+      "beforeFixReproduced": true,
+      "checks": [
+        {
+          "name": "清波时仍保持物理按下",
+          "passed": true
+        },
+        {
+          "name": "空白立即松手不会误跳过或误选卡",
+          "passed": true
+        },
+        {
+          "name": "空白立即松手后新点击正常响应",
+          "passed": true
+        },
+        {
+          "name": "清波时仍保持物理按下",
+          "passed": true
+        },
+        {
+          "name": "空白动画后松手不会误跳过或误选卡",
+          "passed": true
+        },
+        {
+          "name": "空白动画后松手后新点击正常响应",
+          "passed": true
+        },
+        {
+          "name": "清波时仍保持物理按下",
+          "passed": true
+        },
+        {
+          "name": "卡片立即松手不会误跳过或误选卡",
+          "passed": true
+        },
+        {
+          "name": "卡片立即松手后新点击正常响应",
+          "passed": true
+        },
+        {
+          "name": "清波时仍保持物理按下",
+          "passed": true
+        },
+        {
+          "name": "卡片动画后松手不会误跳过或误选卡",
+          "passed": true
+        },
+        {
+          "name": "卡片动画后松手后新点击正常响应",
+          "passed": true
+        },
+        {
+          "name": "清波时仍保持物理按下",
+          "passed": true
+        },
+        {
+          "name": "数字键选卡和动画锁正常",
+          "passed": true
+        },
+        {
+          "name": "清波时仍保持物理按下",
+          "passed": true
+        },
+        {
+          "name": "ESC明确跳过且不触发暂停",
+          "passed": true
+        },
+        {
+          "details": {
+            "kills": 5,
+            "loops": 101
+          },
+          "name": "一次持续按下实际射击清完第一波",
+          "passed": true
+        },
+        {
+          "name": "持续长按不会让面板自动消失",
+          "passed": true
+        },
+        {
+          "name": "真实长按清波后松手仍等待选卡",
+          "passed": true
+        },
+        {
+          "name": "真实清波后可以正常选择强化",
+          "passed": true
+        }
+      ],
+      "date": "2026-11-22",
+      "environment": "Real Chromium MouseEvent/KeyboardEvent input; hidden browser frames and Phaser tween clock stepped explicitly. Includes continuous-fire first-wave completion with no repeated mousedown.",
+      "failed": 0,
+      "passed": 20,
+      "regression": "Holding fire across wave clear must not dismiss or choose a reward on release"
+    },
+    "consoleErrors": 0
+  },
+  "features": [
+    "nine-slice panels and buttons",
+    "crop-based base-health and wave bars",
+    "eight semantic icons",
+    "rarity reward cards",
+    "critical burst and base-hit arrow with dynamic numbers",
+    "segmented crosshair and tiled aiming line",
+    "real skill cooldown veil",
+    "reward background/ESC dismissal integrated with next-wave flow"
+  ],
+  "compatibility": [
+    "Player health bar is not added because the target player cannot take damage.",
+    "Target entities, systems, state and gameplay tuning are preserved.",
+    "Target bitmap-font numbers are retained alongside original UI decorations.",
+    "ESC reward dismissal is handled only by the battle scene to prevent opening pause simultaneously."
+  ],
+  "validation": {
+    "typecheck": "passed",
+    "productionBuild": "passed",
+    "browser": {
+      "checks": [
+        {
+          "name": "主菜单资源加载",
+          "passed": true
+        },
+        {
+          "name": "菜单点击进入战斗",
+          "passed": true
+        },
+        {
+          "name": "真实技能启动冷却",
+          "passed": true
+        },
+        {
+          "name": "暂停冻结冷却并隐藏准星",
+          "passed": true
+        },
+        {
+          "name": "ESC恢复战斗",
+          "passed": true
+        },
+        {
+          "name": "清波奖励自动显示",
+          "passed": true
+        },
+        {
+          "name": "鼠标点选卡片命中",
+          "passed": true
+        },
+        {
+          "name": "选卡动画防重复跳过",
+          "passed": true
+        },
+        {
+          "name": "奖励关闭恢复准星",
+          "passed": true
+        },
+        {
+          "name": "ESC跳过推进且不误暂停",
+          "passed": true
+        },
+        {
+          "name": "空白点击跳过推进",
+          "passed": true
+        },
+        {
+          "name": "数字键选择强化",
+          "passed": true
+        },
+        {
+          "name": "基地血条跟随真实状态",
+          "passed": true
+        },
+        {
+          "name": "维修强化重算血条比例",
+          "passed": true
+        },
+        {
+          "name": "第五波进度条满格",
+          "passed": true
+        },
+        {
+          "name": "箭头尖端跟随指针",
+          "passed": true
+        },
+        {
+          "name": "近距离隐藏引导线",
+          "passed": true
+        },
+        {
+          "name": "飘字派生素材与动态数字同时存在",
+          "passed": true
+        },
+        {
+          "name": "暴击上浮和受击下沉",
+          "passed": true
+        },
+        {
+          "name": "飘字生命周期自动清理",
+          "passed": true
+        },
+        {
+          "name": "减少动态效果仍保持数字完整尺寸",
+          "passed": true
+        },
+        {
+          "name": "敌人撞基地触发失败",
+          "passed": true
+        },
+        {
+          "name": "失败结算场景可达",
+          "passed": true
+        },
+        {
+          "details": [
+            307,
+            329,
+            351,
+            373
+          ],
+          "name": "四项强化均在面板安全底边内",
+          "passed": true
+        },
+        {
+          "name": "结算按钮返回主菜单",
+          "passed": true
+        },
+        {
+          "name": "玩法说明可打开",
+          "passed": true
+        },
+        {
+          "name": "玩法说明ESC关闭",
+          "passed": true
+        },
+        {
+          "name": "重新开局清理旧奖励与金币",
+          "passed": true
+        },
+        {
+          "details": {
+            "elapsedMs": 71757,
+            "gold": 391,
+            "kills": 52,
+            "takenRewardIds": [
+              "war-horn",
+              "oak-heart",
+              "dragon-hoard",
+              "gold-cache"
+            ],
+            "totalWaves": 5,
+            "wave": 4,
+            "win": true
+          },
+          "name": "实际射击技能完成五波并胜利",
+          "passed": true
+        },
+        {
+          "details": {
+            "bottom": 459.375,
+            "height": 219.375,
+            "left": 0,
+            "right": 390,
+            "top": 240,
+            "width": 390,
+            "x": 0,
+            "y": 240
+          },
+          "name": "390x700竖屏FIT居中且无裁切",
+          "passed": true
+        },
+        {
+          "name": "窄屏资源与菜单完整加载",
+          "passed": true
+        },
+        {
+          "name": "窄屏缩放后按钮命中正确",
+          "passed": true
+        }
+      ],
+      "environment": "Qoder embedded Chromium, real MouseEvent/KeyboardEvent; hidden browser frames and Phaser tween clock stepped explicitly",
+      "failed": 0,
+      "fullRun": "Unmodified gameplay state on easy difficulty; actual shooting and skill controls completed all five waves with 52 kills and four reward choices; edge cases use targeted state fixtures",
+      "passed": 32
+    },
+    "consoleErrors": 0,
+    "buildWarnings": [
+      "Phaser bundle exceeds the default 500 kB chunk-size warning threshold."
+    ]
+  },
+  "authoringMaterials": "project-materials contains the complete ui-assets and vibe_images folders, unchanged work log and original Python helpers.",
+  "omittedFromDelivery": [
+    "node_modules",
+    "portable Node runtime",
+    "duplicate backup_Qoder_Game-main_ui_2026-11-22 and fused_incoming trees",
+    "temporary runtime logs"
+  ],
+  "commands": {
+    "install": "npm ci",
+    "development": "npm run dev",
+    "build": "npm run build",
+    "preview": "npm run preview"
+  },
+  "changedFromBase": [
+    "public/assets/images/ui/bar-fill.png",
+    "public/assets/images/ui/bar-frame.png",
+    "public/assets/images/ui/bar-trough.png",
+    "public/assets/images/ui/frame-common.png",
+    "public/assets/images/ui/frame-epic.png",
+    "public/assets/images/ui/frame-rare.png",
+    "public/assets/images/ui/icon-base.png",
+    "public/assets/images/ui/icon-damage.png",
+    "public/assets/images/ui/icon-gold.png",
+    "public/assets/images/ui/icon-heart.png",
+    "public/assets/images/ui/icon-speed.png",
+    "public/assets/images/ui/icon-time.png",
+    "public/assets/images/ui/icon-wave.png",
+    "public/assets/images/ui/panel-large.png",
+    "public/assets/images/ui/panel-small.png",
+    "public/assets/images/ui/ui-cooldown.png",
+    "public/assets/images/ui/ui-crosshair.png",
+    "src/game/data/RewardConfig.ts",
+    "src/game/scenes/BattleScene.ts",
+    "src/game/scenes/MainMenuScene.ts",
+    "src/game/scenes/PreloadScene.ts",
+    "src/game/scenes/ResultScene.ts",
+    "src/game/types/index.ts",
+    "src/game/ui/Bar.ts",
+    "src/game/ui/Button.ts",
+    "src/game/ui/FloatingText.ts",
+    "src/game/ui/HUD.ts",
+    "src/game/ui/PausePanel.ts",
+    "src/game/ui/RewardPanel.ts",
+    "src/game/ui/Theme.ts",
+    "src/game/ui/UpgradePanel.ts"
+  ],
+  "unchangedFromBase": [
+    ".gitignore",
+    "DELIVERY.md",
+    "index.html",
+    "package-lock.json",
+    "package.json",
+    "README.md",
+    "tsconfig.json",
+    "vite.config.ts",
+    "public/assets/audio/.gitkeep",
+    "public/assets/fonts/.gitkeep",
+    "public/assets/fonts/dmg-crit.xml",
+    "public/assets/fonts/dmg-hit.xml",
+    "public/assets/fonts/dmg-normal.xml",
+    "public/assets/images/.gitkeep",
+    "public/assets/images/preload/bar-fill.png",
+    "public/assets/images/preload/bar-frame.png",
+    "public/assets/images/preload/bar-track.png",
+    "public/assets/images/preload/loading-icon.png",
+    "public/assets/images/ui/dmg-crit.png",
+    "public/assets/images/ui/dmg-hit.png",
+    "public/assets/images/ui/dmg-normal.png",
+    "public/assets/images/ui/ui-aimline.png",
+    "src/main.ts",
+    "src/game/config/gameConfig.ts",
+    "src/game/data/DifficultyConfig.ts",
+    "src/game/data/EnemyConfig.ts",
+    "src/game/data/PlayerConfig.ts",
+    "src/game/data/WaveConfig.ts",
+    "src/game/entities/Boss.ts",
+    "src/game/entities/Enemy.ts",
+    "src/game/entities/Player.ts",
+    "src/game/entities/Projectile.ts",
+    "src/game/scenes/BootScene.ts",
+    "src/game/state/GameState.ts",
+    "src/game/systems/AudioSystem.ts",
+    "src/game/systems/CombatSystem.ts",
+    "src/game/systems/RewardSystem.ts",
+    "src/game/systems/UpgradeSystem.ts",
+    "src/game/systems/WaveSystem.ts",
+    "src/game/ui/ForestBackground.ts",
+    "src/game/ui/LoadingBar.ts",
+    "src/game/utils/assetUrl.ts",
+    "src/game/utils/BestRecord.ts",
+    "src/game/utils/GeneratedTextures.ts",
+    "src/styles/main.css"
+  ],
+  "addedToBase": [
+    "dist/assets/audio/.gitkeep",
+    "dist/assets/fonts/.gitkeep",
+    "dist/assets/fonts/dmg-crit.xml",
+    "dist/assets/fonts/dmg-hit.xml",
+    "dist/assets/fonts/dmg-normal.xml",
+    "dist/assets/images/.gitkeep",
+    "dist/assets/images/preload/bar-fill.png",
+    "dist/assets/images/preload/bar-frame.png",
+    "dist/assets/images/preload/bar-track.png",
+    "dist/assets/images/preload/loading-icon.png",
+    "dist/assets/images/ui/bar-fill.png",
+    "dist/assets/images/ui/bar-frame.png",
+    "dist/assets/images/ui/bar-trough.png",
+    "dist/assets/images/ui/dmg-crit.png",
+    "dist/assets/images/ui/dmg-hit.png",
+    "dist/assets/images/ui/dmg-normal.png",
+    "dist/assets/images/ui/dmg_crit_burst.png",
+    "dist/assets/images/ui/dmg_taken_arrow.png",
+    "dist/assets/images/ui/frame-common.png",
+    "dist/assets/images/ui/frame-epic.png",
+    "dist/assets/images/ui/frame-rare.png",
+    "dist/assets/images/ui/icon-base.png",
+    "dist/assets/images/ui/icon-damage.png",
+    "dist/assets/images/ui/icon-gold.png",
+    "dist/assets/images/ui/icon-heart.png",
+    "dist/assets/images/ui/icon-speed.png",
+    "dist/assets/images/ui/icon-time.png",
+    "dist/assets/images/ui/icon-wave.png",
+    "dist/assets/images/ui/icon_defense.png",
+    "dist/assets/images/ui/panel-large.png",
+    "dist/assets/images/ui/panel-small.png",
+    "dist/assets/images/ui/ui-aim-dash.png",
+    "dist/assets/images/ui/ui-aim-tip.png",
+    "dist/assets/images/ui/ui-aimline.png",
+    "dist/assets/images/ui/ui-cooldown.png",
+    "dist/assets/images/ui/ui-crosshair.png",
+    "dist/index.html",
+    "dist/static/index-BnF3DiEc.css",
+    "dist/static/index-DIQHcYS8.js",
+    "project-materials/.tools/make_live_gif.py",
+    "project-materials/.tools/make_run_sheet.py",
+    "project-materials/.tools/patch_hud.py",
+    "project-materials/.tools/patch_layout.py",
+    "project-materials/.tools/shot_receiver.py",
+    "project-materials/ui-assets/assets/ui/aim_line.png",
+    "project-materials/ui-assets/assets/ui/bar_fill.png",
+    "project-materials/ui-assets/assets/ui/bar_frame.png",
+    "project-materials/ui-assets/assets/ui/bar_trough.png",
+    "project-materials/ui-assets/assets/ui/cooldown_veil.png",
+    "project-materials/ui-assets/assets/ui/crosshair.png",
+    "project-materials/ui-assets/assets/ui/crosshair_v1.png",
+    "project-materials/ui-assets/assets/ui/dmg_crit.png",
+    "project-materials/ui-assets/assets/ui/dmg_normal.png",
+    "project-materials/ui-assets/assets/ui/dmg_taken.png",
+    "project-materials/ui-assets/assets/ui/icon_atkspeed.png",
+    "project-materials/ui-assets/assets/ui/icon_base.png",
+    "project-materials/ui-assets/assets/ui/icon_coin.png",
+    "project-materials/ui-assets/assets/ui/icon_damage.png",
+    "project-materials/ui-assets/assets/ui/icon_defense.png",
+    "project-materials/ui-assets/assets/ui/icon_heart.png",
+    "project-materials/ui-assets/assets/ui/icon_time.png",
+    "project-materials/ui-assets/assets/ui/icon_wave.png",
+    "project-materials/ui-assets/assets/ui/panel_main.png",
+    "project-materials/ui-assets/assets/ui/panel_small.png",
+    "project-materials/ui-assets/assets/ui/rarity_common.png",
+    "project-materials/ui-assets/assets/ui/rarity_epic.png",
+    "project-materials/ui-assets/assets/ui/rarity_rare.png",
+    "project-materials/ui-assets/contact_sheet.jpg",
+    "project-materials/ui-assets/index.html",
+    "project-materials/ui-assets/manifest.json",
+    "project-materials/ui-assets/preview/_crit_burst.png",
+    "project-materials/ui-assets/preview/_taken_arrow.png",
+    "project-materials/ui-assets/preview/aim_dash.png",
+    "project-materials/ui-assets/preview/aim_derived_sheet.png",
+    "project-materials/ui-assets/preview/aim_tip.png",
+    "project-materials/ui-assets/preview/bar_battle.png",
+    "project-materials/ui-assets/preview/bar_change.gif",
+    "project-materials/ui-assets/preview/bar_live.gif",
+    "project-materials/ui-assets/preview/bar_live_states.png",
+    "project-materials/ui-assets/preview/bar_states.png",
+    "project-materials/ui-assets/preview/cd_30.png",
+    "project-materials/ui-assets/preview/cd_75.png",
+    "project-materials/ui-assets/preview/cooldown_veil_sheet.png",
+    "project-materials/ui-assets/preview/crosshair.png",
+    "project-materials/ui-assets/preview/crosshair_aim.png",
+    "project-materials/ui-assets/preview/crosshair_aim2.png",
+    "project-materials/ui-assets/preview/crosshair_aim3.png",
+    "project-materials/ui-assets/preview/crosshair_gold_keyed.png",
+    "project-materials/ui-assets/preview/crosshair_new.png",
+    "project-materials/ui-assets/preview/crosshair_runic_keyed.png",
+    "project-materials/ui-assets/preview/crosshair_segmented_keyed.png",
+    "project-materials/ui-assets/preview/crosshair_variants.png",
+    "project-materials/ui-assets/preview/dbg_after.png",
+    "project-materials/ui-assets/preview/dbg_battle.png",
+    "project-materials/ui-assets/preview/dbg_cards.png",
+    "project-materials/ui-assets/preview/dbg_dismiss_hint.png",
+    "project-materials/ui-assets/preview/dbg_reward_entry.png",
+    "project-materials/ui-assets/preview/dbgbtn_final.png",
+    "project-materials/ui-assets/preview/dbgbtn_hover.png",
+    "project-materials/ui-assets/preview/dbgbtn_hover2.png",
+    "project-materials/ui-assets/preview/dbgbtn_normal.png",
+    "project-materials/ui-assets/preview/dmg_click_1.png",
+    "project-materials/ui-assets/preview/dmg_click_2.png",
+    "project-materials/ui-assets/preview/dmg_derived_sheet.png",
+    "project-materials/ui-assets/preview/dmg_f00.png",
+    "project-materials/ui-assets/preview/dmg_f01.png",
+    "project-materials/ui-assets/preview/dmg_f02.png",
+    "project-materials/ui-assets/preview/dmg_f03.png",
+    "project-materials/ui-assets/preview/dmg_f04.png",
+    "project-materials/ui-assets/preview/dmg_f05.png",
+    "project-materials/ui-assets/preview/dmg_f06.png",
+    "project-materials/ui-assets/preview/dmg_f07.png",
+    "project-materials/ui-assets/preview/dmg_f08.png",
+    "project-materials/ui-assets/preview/dmg_f09.png",
+    "project-materials/ui-assets/preview/dmg_f10.png",
+    "project-materials/ui-assets/preview/dmg_f11.png",
+    "project-materials/ui-assets/preview/dmg_integration.png",
+    "project-materials/ui-assets/preview/dmg_live.gif",
+    "project-materials/ui-assets/preview/dmg_live_1.png",
+    "project-materials/ui-assets/preview/dmg_live_2.png",
+    "project-materials/ui-assets/preview/dmg_sheet.png",
+    "project-materials/ui-assets/preview/f0.png",
+    "project-materials/ui-assets/preview/f1.png",
+    "project-materials/ui-assets/preview/f2.png",
+    "project-materials/ui-assets/preview/f3.png",
+    "project-materials/ui-assets/preview/f4.png",
+    "project-materials/ui-assets/preview/f5.png",
+    "project-materials/ui-assets/preview/f6.png",
+    "project-materials/ui-assets/preview/f7.png",
+    "project-materials/ui-assets/preview/f8.png",
+    "project-materials/ui-assets/preview/fused_panel_check.png",
+    "project-materials/ui-assets/preview/g0.png",
+    "project-materials/ui-assets/preview/g1.png",
+    "project-materials/ui-assets/preview/g2.png",
+    "project-materials/ui-assets/preview/g3.png",
+    "project-materials/ui-assets/preview/g4.png",
+    "project-materials/ui-assets/preview/g5.png",
+    "project-materials/ui-assets/preview/icon_battle.png",
+    "project-materials/ui-assets/preview/icon_integration.png",
+    "project-materials/ui-assets/preview/icon_result.png",
+    "project-materials/ui-assets/preview/icon_reward.png",
+    "project-materials/ui-assets/preview/icon_sheet.png",
+    "project-materials/ui-assets/preview/incoming_float_sheet.png",
+    "project-materials/ui-assets/preview/rarity_cards_final.png",
+    "project-materials/ui-assets/preview/rarity_hover.png",
+    "project-materials/ui-assets/preview/rarity_integration.png",
+    "project-materials/ui-assets/preview/rarity_reward.png",
+    "project-materials/ui-assets/preview/rarity_reward2.png",
+    "project-materials/ui-assets/preview/rarity_sheet.png",
+    "project-materials/ui-assets/preview/run0_menu.png",
+    "project-materials/ui-assets/preview/run1_battle_full.png",
+    "project-materials/ui-assets/preview/run2_battle_mid.png",
+    "project-materials/ui-assets/preview/run3_result.png",
+    "project-materials/ui-assets/preview/run4_menu_again.png",
+    "project-materials/ui-assets/preview/run5_after.png",
+    "project-materials/ui-assets/preview/run5_battle.png",
+    "project-materials/ui-assets/preview/run5_cards.png",
+    "project-materials/ui-assets/preview/run5_hover.png",
+    "project-materials/ui-assets/preview/run5_loop.gif",
+    "project-materials/ui-assets/preview/run5_menu.png",
+    "project-materials/ui-assets/preview/run5_result.png",
+    "project-materials/ui-assets/preview/run5_sheet.png",
+    "project-materials/ui-assets/preview/run_loop.gif",
+    "project-materials/ui-assets/preview/run_sheet.png",
+    "project-materials/ui-assets/process_assets.py",
+    "project-materials/ui-assets/守卫前哨-UI素材.zip",
+    "project-materials/vibe_images/crosshair-raw_1794840466049_09d74867.png",
+    "project-materials/vibe_images/crosshair_bold_segmented_1795253506813_10f2310b.png",
+    "project-materials/vibe_images/crosshair_gold_ring_1795253472718_d1182414.png",
+    "project-materials/vibe_images/crosshair_runic_glow_1795253489594_6b7813a5.png",
+    "project-materials/vibe_images/damage-numbers-raw_1794840450233_8af20af7.png",
+    "project-materials/vibe_images/healthbar-parts-raw_1794840404694_3575ac31.png",
+    "project-materials/vibe_images/icons-sheet-raw_1794840360767_91bd0651.png",
+    "project-materials/vibe_images/panel-main-raw_1794840281508_d6f1a92c.png",
+    "project-materials/vibe_images/panel-main-v2-raw_1794842546751_07063c57.png",
+    "project-materials/vibe_images/panel-small-raw_1794840300052_a4e49f81.png",
+    "project-materials/vibe_images/panel-small-v2-raw_1794842569067_db55dbe8.png",
+    "project-materials/vibe_images/rarity-frames-raw_1794840382201_17bb7472.png",
+    "project-materials/工作记录.md",
+    "public/assets/images/ui/dmg_crit_burst.png",
+    "public/assets/images/ui/dmg_taken_arrow.png",
+    "public/assets/images/ui/icon_defense.png",
+    "public/assets/images/ui/ui-aim-dash.png",
+    "public/assets/images/ui/ui-aim-tip.png",
+    "src/game/ui/Crosshair.ts",
+    "validation/browser-checks.json",
+    "validation/menu.png",
+    "validation/production.png",
+    "validation/result.png",
+    "validation/reward-gesture-checks.json",
+    "validation/reward.png",
+    "validation/win.png"
+  ]
+}

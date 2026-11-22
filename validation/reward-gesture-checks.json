@@ -1,0 +1,94 @@
+{
+  "beforeFixReproduced": true,
+  "checks": [
+    {
+      "name": "清波时仍保持物理按下",
+      "passed": true
+    },
+    {
+      "name": "空白立即松手不会误跳过或误选卡",
+      "passed": true
+    },
+    {
+      "name": "空白立即松手后新点击正常响应",
+      "passed": true
+    },
+    {
+      "name": "清波时仍保持物理按下",
+      "passed": true
+    },
+    {
+      "name": "空白动画后松手不会误跳过或误选卡",
+      "passed": true
+    },
+    {
+      "name": "空白动画后松手后新点击正常响应",
+      "passed": true
+    },
+    {
+      "name": "清波时仍保持物理按下",
+      "passed": true
+    },
+    {
+      "name": "卡片立即松手不会误跳过或误选卡",
+      "passed": true
+    },
+    {
+      "name": "卡片立即松手后新点击正常响应",
+      "passed": true
+    },
+    {
+      "name": "清波时仍保持物理按下",
+      "passed": true
+    },
+    {
+      "name": "卡片动画后松手不会误跳过或误选卡",
+      "passed": true
+    },
+    {
+      "name": "卡片动画后松手后新点击正常响应",
+      "passed": true
+    },
+    {
+      "name": "清波时仍保持物理按下",
+      "passed": true
+    },
+    {
+      "name": "数字键选卡和动画锁正常",
+      "passed": true
+    },
+    {
+      "name": "清波时仍保持物理按下",
+      "passed": true
+    },
+    {
+      "name": "ESC明确跳过且不触发暂停",
+      "passed": true
+    },
+    {
+      "details": {
+        "kills": 5,
+        "loops": 101
+      },
+      "name": "一次持续按下实际射击清完第一波",
+      "passed": true
+    },
+    {
+      "name": "持续长按不会让面板自动消失",
+      "passed": true
+    },
+    {
+      "name": "真实长按清波后松手仍等待选卡",
+      "passed": true
+    },
+    {
+      "name": "真实清波后可以正常选择强化",
+      "passed": true
+    }
+  ],
+  "date": "2026-11-22",
+  "environment": "Real Chromium MouseEvent/KeyboardEvent input; hidden browser frames and Phaser tween clock stepped explicitly. Includes continuous-fire first-wave completion with no repeated mousedown.",
+  "failed": 0,
+  "passed": 20,
+  "regression": "Holding fire across wave clear must not dismiss or choose a reward on release"
+}
