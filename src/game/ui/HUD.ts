@@ -1,5 +1,5 @@
 import * as Phaser from 'phaser';
-import { DESIGN_SIZE, UiKeys } from '../types';
+import { DESIGN_SIZE, TitleKeys, UiKeys, type TitleKey, type RewardOption } from '../types';
 import { getRunState } from '../state/GameState';
 import { PLAYER_CONFIG } from '../data/PlayerConfig';
 import { TOTAL_WAVES } from '../data/WaveConfig';
@@ -7,7 +7,8 @@ import { formatTime } from '../utils/BestRecord';
 import { audio } from '../systems/AudioSystem';
 import { createBar, type Bar } from './Bar';
 import { createTopButton, type ArtButton } from './Button';
-import { creamStyle, prefersReducedMotion } from './Theme';
+import { createArtHeading, createPlaque, creamStyle, Palette, prefersReducedMotion } from './Theme';
+import { rewardIcon } from '../data/RewardConfig';
 
 /**
  * 战斗 HUD：基地血条 / 波次 / 金币 / 用时 / 攻击与射速 / 箭雨冷却 / 静音与暂停。
@@ -33,6 +34,7 @@ export class HUD {
   private timeText: Phaser.GameObjects.Text;
   private damageText: Phaser.GameObjects.Text;
   private speedText: Phaser.GameObjects.Text;
+  private defenseText: Phaser.GameObjects.Text;
   private muteButton: ArtButton;
   private skillVeil: Phaser.GameObjects.Image;
   private skillShade: Phaser.GameObjects.Graphics;
@@ -40,6 +42,10 @@ export class HUD {
   private skillCount: Phaser.GameObjects.Text;
   private skillRoot: Phaser.GameObjects.Container;
   private banner: Phaser.GameObjects.Container | null = null;
+  private upgradeToast: Phaser.GameObjects.Container | null = null;
+  private bossRoot: Phaser.GameObjects.Container;
+  private bossBar: Bar;
+  private bossHpText: Phaser.GameObjects.Text;
   private cache = new Map<string, string>();
   private skillWasCooling = false;
   private enemiesLeft = 0;
@@ -79,7 +85,9 @@ export class HUD {
     this.damageText = scene.add.text(52, 512, '', creamStyle(15, true)).setOrigin(0, 0.5);
     const spdIcon = scene.add.image(120, 512, UiKeys.IconSpeed).setDisplaySize(34, 34);
     this.speedText = scene.add.text(142, 512, '', creamStyle(15, true)).setOrigin(0, 0.5);
-    this.root.add([dmgIcon, this.damageText, spdIcon, this.speedText]);
+    const defIcon = scene.add.image(214, 512, UiKeys.IconDefense).setDisplaySize(34, 34);
+    this.defenseText = scene.add.text(236, 512, '', creamStyle(15, true)).setOrigin(0, 0.5);
+    this.root.add([dmgIcon, this.damageText, spdIcon, this.speedText, defIcon, this.defenseText]);
 
     const skillX = DESIGN_SIZE.width - 54;
     const skillY = DESIGN_SIZE.height - 54;
@@ -106,6 +114,15 @@ export class HUD {
     this.skillRoot.on(Phaser.Input.Events.POINTER_DOWN, () => callbacks.onSkill());
     this.root.add(this.skillRoot);
 
+    this.root.add(scene.add.text(340, 512, '按住左键射击 · 空格箭雨 · ESC 暂停', creamStyle(12)).setOrigin(0, 0.5));
+    for (const [x, label] of [[52, '攻击'], [142, '射速'], [236, '防御']] as const) {
+      this.root.add(scene.add.text(x, 487, label, creamStyle(10)).setAlpha(0.8));
+    }
+    this.bossBar = createBar(scene, 0, 15, 330, 14);
+    this.bossHpText = scene.add.text(0, -7, '', creamStyle(13, true)).setOrigin(0.5);
+    const bossBacking = createPlaque(scene, 0, 4, 368, 52).setTint(0xc5b2d9);
+    this.bossRoot = scene.add.container(DESIGN_SIZE.width / 2, 100, [bossBacking, this.bossBar.container, this.bossHpText]).setVisible(false);
+    this.root.add(this.bossRoot);
     this.refresh();
   }
 
@@ -118,7 +135,7 @@ export class HUD {
 
   syncMuteLabel(): void {
     const muted = audio.isMuted();
-    this.muteButton.setLabel(muted ? '♪ 已静音' : '♪ 音效开');
+    this.muteButton.setLabel(muted ? '♪ 声音关' : '♪ 声音开');
   }
 
   refresh(): void {
@@ -132,6 +149,7 @@ export class HUD {
     this.setText('time', this.timeText, formatTime(s.elapsedMs));
     this.setText('dmg', this.damageText, `${PLAYER_CONFIG.baseDamage + s.attackDamageBonus}`);
     this.setText('spd', this.speedText, `${(PLAYER_CONFIG.fireRate + s.fireRateBonus).toFixed(1)}/s`);
+    this.setText('def', this.defenseText, `${s.baseDefense}`);
   }
 
   setEnemiesLeft(count: number): void {
@@ -154,9 +172,8 @@ export class HUD {
       this.skillWasCooling = true;
     } else {
       this.skillLabel.setVisible(true);
-      this.skillCount.setText('');
+      this.skillCount.setText('就绪');
       if (this.skillWasCooling && !prefersReducedMotion()) {
-        this.skillWasCooling = false;
         this.root.scene.tweens.add({
           targets: this.skillRoot,
           scale: 1.18,
@@ -165,10 +182,44 @@ export class HUD {
           ease: 'Quad.easeOut'
         });
       }
+      this.skillWasCooling = false;
     }
   }
 
-  showBanner(title: string, subtitle = ''): void {
+  setBossHealth(hp: number, maxHp: number): void {
+    this.bossRoot.setVisible(hp > 0);
+    if (hp <= 0) return;
+    this.bossBar.setRatio(hp / maxHp);
+    this.bossHpText.setText(`史莱姆王 · ${Math.ceil(hp)} / ${maxHp}`);
+  }
+
+  showUpgrade(reward: RewardOption): void {
+    this.upgradeToast?.destroy();
+    const scene = this.root.scene;
+    const toast = scene.add.container(520, 421).setName('upgrade-toast');
+    toast.add([
+      createPlaque(scene, 0, 0, 340, 88),
+      scene.add.image(-132, 0, rewardIcon(reward.effect)).setDisplaySize(46, 46),
+      createArtHeading(scene, 10, -18, TitleKeys.Upgrade, 154, 40),
+      scene.add.text(18, 17, `${reward.title} · 强化已生效`, creamStyle(14, true)).setOrigin(0.5)
+    ]);
+    this.root.add(toast);
+    this.upgradeToast = toast;
+    const text = { baseHp: this.hpText, damage: this.damageText, speed: this.speedText, defense: this.defenseText, gold: this.goldText }[reward.effect.kind];
+    text.setColor(Palette.gold);
+    if (!prefersReducedMotion()) {
+      toast.setAlpha(0);
+      scene.tweens.add({ targets: toast, alpha: 1, duration: 180 });
+    }
+    scene.time.delayedCall(2600, () => {
+      if (this.upgradeToast !== toast) return;
+      text.setColor(Palette.cream);
+      toast.destroy();
+      this.upgradeToast = null;
+    });
+  }
+
+  showBanner(title: string, subtitle = '', artKey?: TitleKey): void {
     this.banner?.destroy();
     const scene = this.root.scene;
     const reducedMotion = prefersReducedMotion();
@@ -183,10 +234,9 @@ export class HUD {
     ribbon.lineStyle(1, 0xf6e7c8, 0.5).strokeRoundedRect(-239, -43, 478, subtitle ? 86 : 56, 12);
     ribbon.fillStyle(0x6fae4e, 1).fillTriangle(-250, -14, -286, -34, -250, -38);
     ribbon.fillStyle(0x6fae4e, 1).fillTriangle(250, -14, 286, -34, 250, -38);
-    const heading = scene.add.text(0, subtitle ? -21 : 0, title, {
-      ...creamStyle(38, true),
-      align: 'center'
-    }).setOrigin(0.5);
+    const heading = artKey
+      ? createArtHeading(scene, 0, subtitle ? -17 : 0, artKey, 270, 66)
+      : scene.add.text(0, subtitle ? -21 : 0, title, { ...creamStyle(38, true), align: 'center' }).setOrigin(0.5);
     banner.add([ribbon, heading]);
     if (subtitle) {
       banner.add(scene.add.text(0, 27, subtitle, { ...creamStyle(17, true), color: '#f0c96f' }).setOrigin(0.5));
@@ -218,6 +268,11 @@ export class HUD {
 
   flashBase(): void {
     const scene = this.root.scene;
+    if (prefersReducedMotion()) {
+      this.hpText.setColor(Palette.danger);
+      scene.time.delayedCall(320, () => this.hpText.setColor(Palette.cream));
+      return;
+    }
     const flash = scene.add
       .rectangle(DESIGN_SIZE.width / 2, DESIGN_SIZE.height / 2, DESIGN_SIZE.width, DESIGN_SIZE.height, 0xe04a3a, 0.22)
       .setDepth(45);
@@ -228,6 +283,8 @@ export class HUD {
   destroy(): void {
     this.banner?.destroy();
     this.banner = null;
+    this.upgradeToast?.destroy();
+    this.upgradeToast = null;
     this.root.destroy();
   }
 }

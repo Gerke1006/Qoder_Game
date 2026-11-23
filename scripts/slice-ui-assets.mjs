@@ -11,6 +11,7 @@
 import { readFileSync, writeFileSync, mkdirSync } from 'node:fs';
 import { inflateSync, deflateSync } from 'node:zlib';
 import path from 'node:path';
+import { pathToFileURL } from 'node:url';
 
 const SHEET_DIR = 'C:/Users/黄成源/.qoder/tmp/D--main-NKU-----Qoder-Game/images/830e7ae3-658d-4e64-813e-e8fe07f1ccc4';
 const OUT_IMG = 'public/assets/images/ui';
@@ -200,17 +201,18 @@ export function crop(img, box, pad = 2) {
 
 /* ---------------- 主流程 ---------------- */
 
-const mode = process.argv[2] ?? 'slice';
-
-if (mode === 'inspect') {
-  for (const [name, file] of Object.entries(SHEETS)) {
-    const img = decodePng(readFileSync(path.join(SHEET_DIR, file)));
-    console.log(`\n=== ${name} ${img.width}x${img.height} colorType=${img.color} ===`);
-    const boxes = components(img);
-    boxes.forEach((b, i) => console.log(`#${i} x=${b.x} y=${b.y} w=${b.w} h=${b.h} area=${b.area}`));
+if (process.argv[1] && import.meta.url === pathToFileURL(path.resolve(process.argv[1])).href) {
+  const mode = process.argv[2] ?? 'slice';
+  if (mode === 'inspect') {
+    for (const [name, file] of Object.entries(SHEETS)) {
+      const img = decodePng(readFileSync(path.join(SHEET_DIR, file)));
+      console.log(`\n=== ${name} ${img.width}x${img.height} colorType=${img.color} ===`);
+      const boxes = components(img);
+      boxes.forEach((b, i) => console.log(`#${i} x=${b.x} y=${b.y} w=${b.w} h=${b.h} area=${b.area}`));
+    }
+  } else {
+    runSlicePlan();
   }
-} else {
-  runSlicePlan();
 }
 
 /* 命名与分组计划：inspect 之后按包围盒序号填写。 */

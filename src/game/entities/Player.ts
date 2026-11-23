@@ -1,5 +1,6 @@
 import * as Phaser from 'phaser';
 import { AssetKeys } from '../types';
+import { prefersReducedMotion } from '../ui/Theme';
 
 /**
  * 玩家实体：林地弓手。
@@ -26,6 +27,7 @@ export class Player extends Phaser.GameObjects.Container {
   }
 
   recoil(): void {
+    if (prefersReducedMotion()) return;
     this.scene.tweens.add({
       targets: this.sprite,
       x: -5,
@@ -36,6 +38,6 @@ export class Player extends Phaser.GameObjects.Container {
   }
 
   idle(timeMs: number): void {
-    this.y = this.baseY + Math.sin(timeMs * 0.0022) * 2.5;
+    this.y = this.baseY + (prefersReducedMotion() ? 0 : Math.sin(timeMs * 0.0022) * 2.5);
   }
 }

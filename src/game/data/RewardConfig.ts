@@ -72,6 +72,20 @@ export const REWARD_CONFIGS: RewardOption[] = [
     description: '所有攻击伤害 +22。',
     rarity: 'epic',
     effect: { kind: 'damage', value: 22 }
+  },
+  {
+    id: 'bark-guard',
+    title: '树皮护甲',
+    description: '基地防御 +1，每次受伤减少 1 点，最低 1 点。',
+    rarity: 'common',
+    effect: { kind: 'defense', value: 1 }
+  },
+  {
+    id: 'iron-bark',
+    title: '铁木壁垒',
+    description: '基地防御 +2，每次受伤减少 2 点，最低 1 点。',
+    rarity: 'rare',
+    effect: { kind: 'defense', value: 2 }
   }
 ];
 
@@ -82,6 +96,8 @@ export const REWARD_OFFER_COUNT = 3;
 export function rewardIcon(effect: UpgradeEffect): UiKey {
   switch (effect.kind) {
     case 'baseHp':
+      return UiKeys.IconHeart;
+    case 'defense':
       return UiKeys.IconDefense;
     case 'gold':
       return UiKeys.IconGold;

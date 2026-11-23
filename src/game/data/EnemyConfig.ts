@@ -36,6 +36,13 @@ export const ENEMY_CONFIGS: Record<EnemyType, EnemyStats> = {
   }
 };
 
+export const BOSS_CONFIG = {
+  summonIntervalMs: 6500,
+  summonOffsetX: 30,
+  summonOffsetY: 46,
+  baseAttackIntervalMs: 2000
+} as const;
+
 export function getEnemyStats(type: EnemyType): EnemyStats {
   return ENEMY_CONFIGS[type];
 }

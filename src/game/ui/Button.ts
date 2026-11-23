@@ -1,7 +1,7 @@
 import * as Phaser from 'phaser';
 import type { UiKey } from '../types';
 import { audio } from '../systems/AudioSystem';
-import { createPlaque, creamStyle, inkStyle, Palette } from './Theme';
+import { createPlaque, creamStyle, prefersReducedMotion } from './Theme';
 
 /**
  * 美术按钮：交付素材的深色木底 plaque + 羊皮纸亮字（木底用亮字、纸底用墨字）。
@@ -38,7 +38,7 @@ export function createArtButton(
   const fontSize = options.fontSize ?? 20;
   const plaque = createPlaque(scene, 0, 0, width, height);
 
-  const container = scene.add.container(x, y, [plaque]);
+  const container = scene.add.container(x, y, [plaque]).setName(label);
   container.setSize(width, height);
 
   const text = scene.add
@@ -59,7 +59,7 @@ export function createArtButton(
 
   const applyState = (): void => {
     container.setAlpha(disabled ? 0.55 : 1);
-    const scale = disabled ? 1 : hovering ? 1.045 : 1;
+    const scale = disabled || prefersReducedMotion() ? 1 : pressed ? 0.97 : hovering ? 1.045 : 1;
     container.setScale(scale);
     plaque.setTint(disabled ? 0xffffff : selected ? 0xffdf9e : hovering ? 0xfff4dc : 0xffffff);
   };
@@ -79,7 +79,7 @@ export function createArtButton(
       return;
     }
     pressed = true;
-    container.setScale(0.97);
+    applyState();
     audio.play('click');
   });
   container.on(Phaser.Input.Events.POINTER_UP, () => {
@@ -101,9 +101,11 @@ export function createArtButton(
     container,
     setLabel(next: string): void {
       text.setText(next);
+      container.setName(next);
     },
     setDisabled(next: boolean): void {
       disabled = next;
+      if (disabled) pressed = false;
       applyState();
     },
     setSelected(next: boolean): void {
@@ -126,20 +128,4 @@ export function createTopButton(
   width = 116
 ): ArtButton {
   return createArtButton(scene, x, y, label, onClick, { width, height: 34, fontSize: 15 });
-}
-
-/** 标题文字：羊皮纸上的大号墨字，带轻微投影。 */
-export function createTitleText(
-  scene: Phaser.Scene,
-  x: number,
-  y: number,
-  label: string,
-  size = 40
-): Phaser.GameObjects.Text {
-  return scene.add
-    .text(x, y, label, {
-      ...inkStyle(size, true),
-      shadow: { offsetX: 0, offsetY: 2, color: Palette.parchmentDark, blur: 0, fill: true }
-    })
-    .setOrigin(0.5);
 }

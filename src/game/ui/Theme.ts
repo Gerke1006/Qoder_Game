@@ -1,5 +1,5 @@
 import * as Phaser from 'phaser';
-import { UiKeys } from '../types';
+import { UiKeys, type TitleKey } from '../types';
 
 /**
  * 视觉语言：林地 + 羊皮纸 + 木框。
@@ -93,6 +93,18 @@ export function createPlaque(
   return scene.add
     .nineslice(x, y, key, undefined, width, height, b.left, b.right, b.top, b.bottom)
     .setOrigin(0.5);
+}
+
+export function createArtHeading(
+  scene: Phaser.Scene,
+  x: number,
+  y: number,
+  key: TitleKey,
+  maxWidth: number,
+  maxHeight: number
+): Phaser.GameObjects.Image {
+  const image = scene.add.image(x, y, key).setName(key);
+  return image.setScale(Math.min(maxWidth / image.width, maxHeight / image.height));
 }
 
 export const RARITY_COLOR: Record<'common' | 'rare' | 'epic', string> = {

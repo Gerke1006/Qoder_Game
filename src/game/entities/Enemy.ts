@@ -1,6 +1,7 @@
 import * as Phaser from 'phaser';
 import { AssetKeys, type Damageable, type EnemyStats } from '../types';
 import { BASE_LINE_X } from '../data/PlayerConfig';
+import { prefersReducedMotion } from '../ui/Theme';
 
 /**
  * 敌人实体：外观 + 生命 + 向基地推进。
@@ -61,13 +62,17 @@ export class Enemy extends Phaser.GameObjects.Container implements Damageable {
       return;
     }
     this.x -= (this.speed * deltaMs) / 1000;
-    const wobble = Math.sin(timeMs * 0.005 + this.seed);
+    const wobble = prefersReducedMotion() ? 0 : Math.sin(timeMs * 0.005 + this.seed);
     this.y = this.baseY + wobble * 5;
     this.sprite.setScale(this.baseScaleX * (1 + wobble * 0.05), this.baseScaleY * (1 - wobble * 0.05));
     if (this.x <= BASE_LINE_X) {
-      this.reachedBase = true;
-      this.alive = false;
+      this.reachBase();
     }
+  }
+
+  protected reachBase(): void {
+    this.reachedBase = true;
+    this.alive = false;
   }
 
   takeDamage(amount: number): void {
@@ -76,7 +81,8 @@ export class Enemy extends Phaser.GameObjects.Container implements Damageable {
     }
     this.hp = Math.max(0, this.hp - amount);
     this.drawHpBar();
-    this.sprite.setTintFill(0xffffff);
+    if (prefersReducedMotion()) this.sprite.setTint(0xf0b429);
+    else this.sprite.setTintFill(0xffffff);
     this.scene.time.delayedCall(60, () => {
       if (this.sprite.active) {
         this.sprite.clearTint();
@@ -104,6 +110,11 @@ export class Enemy extends Phaser.GameObjects.Container implements Damageable {
 
   private playDeath(): void {
     this.hpBar.clear();
+    if (prefersReducedMotion()) {
+      this.sprite.setAlpha(0.35);
+      this.scene.time.delayedCall(200, () => this.destroy());
+      return;
+    }
     const tint = this.stats.type === 'boss' ? 0x9b4fd6 : this.stats.type === 'runner' ? 0x3fb8af : 0x6fae4e;
     const burst = this.scene.add.particles(this.x, this.y, AssetKeys.Spark, {
       speed: { min: 50, max: 170 },

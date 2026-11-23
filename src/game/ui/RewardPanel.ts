@@ -1,8 +1,9 @@
 import * as Phaser from 'phaser';
-import { DESIGN_SIZE, type RewardOption } from '../types';
+import { DESIGN_SIZE, TitleKeys, type RewardOption } from '../types';
 import { RARITY_LABEL, rarityFrame, rewardIcon } from '../data/RewardConfig';
-import { audio } from '../systems/AudioSystem';
-import { inkStyle, Palette, prefersReducedMotion, RARITY_COLOR } from './Theme';
+import { createArtHeading, creamStyle, inkStyle, Palette, prefersReducedMotion, RARITY_COLOR } from './Theme';
+import { getRunState } from '../state/GameState';
+import { PLAYER_CONFIG } from '../data/PlayerConfig';
 
 /**
  * 波次结算奖励面板：遮罩 + 三张稀有度卡框。
@@ -44,17 +45,7 @@ export class RewardPanel {
       this.scene.tweens.add({ targets: scrim, fillAlpha: 0.66, duration: 240 });
     }
 
-    const title = this.scene.add
-      .text(DESIGN_SIZE.width / 2, 74, '波次告捷 · 选择一项强化', {
-        fontFamily: '"Microsoft YaHei", "PingFang SC", system-ui, sans-serif',
-        fontSize: '32px',
-        fontStyle: 'bold',
-        color: Palette.cream,
-        stroke: Palette.forestDeep,
-        strokeThickness: 5
-      })
-      .setOrigin(0.5)
-      .setAlpha(0);
+    const title = createArtHeading(this.scene, DESIGN_SIZE.width / 2, 65, TitleKeys.Reward, 320, 76).setAlpha(0);
     const hint = this.scene.add
       .text(DESIGN_SIZE.width / 2, 108, onDismiss ? '点击卡片或按 1 / 2 / 3 选择 · 点击空白或按 ESC 跳过' : '点击卡片或按 1 / 2 / 3 选择', {
         fontFamily: '"Microsoft YaHei", "PingFang SC", system-ui, sans-serif',
@@ -77,6 +68,10 @@ export class RewardPanel {
     rewards.forEach((reward, i) => {
       const x = DESIGN_SIZE.width / 2 + (i - (rewards.length - 1) / 2) * gap;
       const card = this.buildCard(reward, cardW, cardH);
+      card.setData('rewardId', reward.id);
+      const badge = this.scene.add.circle(-62, -114, 13, 0x4a2f1b, 0.94);
+      const shortcut = this.scene.add.text(-62, -114, `${i + 1}`, creamStyle(14, true)).setOrigin(0.5);
+      card.add([badge, shortcut]);
       card.setPosition(x, 306);
       card.setAlpha(reducedMotion ? 1 : 0).setScale(reducedMotion ? 1 : 0.7);
       root.add(card);
@@ -98,7 +93,7 @@ export class RewardPanel {
         }
         picked = true;
         this.locked = true;
-        audio.play('reward');
+        this.scene.tweens.killTweensOf(card);
         if (reducedMotion) {
           card.setScale(1).setAlpha(0);
           onPick(reward);
@@ -119,8 +114,11 @@ export class RewardPanel {
         if (picked || this.locked) {
           return;
         }
-        if (reducedMotion) card.setY(296).setScale(1.06);
-        else this.scene.tweens.add({ targets: card, y: 296, scale: 1.06, duration: 140, ease: 'Quad.easeOut' });
+        if (!reducedMotion) {
+          this.scene.tweens.killTweensOf(card);
+          card.setAlpha(1);
+          this.scene.tweens.add({ targets: card, y: 296, scale: 1.06, duration: 140, ease: 'Quad.easeOut' });
+        }
         const glow = card.getByName('glow') as Phaser.GameObjects.Image;
         if (reducedMotion) glow.setAlpha(0.5);
         else this.scene.tweens.add({ targets: glow, alpha: 0.5, duration: 140 });
@@ -129,15 +127,17 @@ export class RewardPanel {
         if (picked || this.locked) {
           return;
         }
-        if (reducedMotion) card.setY(306).setScale(1);
-        else this.scene.tweens.add({ targets: card, y: 306, scale: 1, duration: 140, ease: 'Quad.easeOut' });
+        if (!reducedMotion) {
+          this.scene.tweens.killTweensOf(card);
+          this.scene.tweens.add({ targets: card, y: 306, scale: 1, duration: 140, ease: 'Quad.easeOut' });
+        }
         const glow = card.getByName('glow') as Phaser.GameObjects.Image;
         if (reducedMotion) glow.setAlpha(0);
         else this.scene.tweens.add({ targets: glow, alpha: 0, duration: 140 });
       });
       card.on(Phaser.Input.Events.POINTER_DOWN, () => {
         if (!picked && !this.locked) {
-          card.setScale(0.98);
+          if (!reducedMotion) card.setScale(0.98);
           choose();
         }
       });
@@ -173,12 +173,21 @@ export class RewardPanel {
       .text(0, -22, reward.description, { ...inkStyle(13), color: Palette.inkSoft, align: 'center', wordWrap: { width: w - 56 } })
       .setOrigin(0.5, 0);
     const rarity = this.scene.add
-      .text(0, h / 2 - 34, RARITY_LABEL[reward.rarity], {
+      .text(0, h / 2 - 54, RARITY_LABEL[reward.rarity], {
         ...inkStyle(13, true),
         color: RARITY_COLOR[reward.rarity]
       })
       .setOrigin(0.5);
-    const container = this.scene.add.container(0, 0, [glow, fill, frame, icon, title, desc, rarity]);
+    const state = getRunState();
+    const { kind, value } = reward.effect;
+    const current = { baseHp: state.baseMaxHp, gold: state.gold, damage: PLAYER_CONFIG.baseDamage + state.attackDamageBonus,
+      speed: PLAYER_CONFIG.fireRate + state.fireRateBonus, defense: state.baseDefense }[kind];
+    const label = { baseHp: '生命上限', gold: '金币', damage: '攻击力', speed: '每秒射击', defense: '基地防御' }[kind];
+    const format = (number: number): string => kind === 'speed' ? number.toFixed(1) : `${number}`;
+    const preview = this.scene.add.text(0, 68, `${label}\n${format(current)} → ${format(current + value)}`, {
+      ...inkStyle(16, true), align: 'center', lineSpacing: 5
+    }).setOrigin(0.5).setName('reward-preview');
+    const container = this.scene.add.container(0, 0, [glow, fill, frame, icon, title, desc, preview, rarity]);
     container.setSize(w, h);
     return container;
   }

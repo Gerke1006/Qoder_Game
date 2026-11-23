@@ -1,6 +1,7 @@
 import type { RewardOption } from '../types';
 import {
   addAttackDamageBonus,
+  addBaseDefense,
   addFireRateBonus,
   addGold,
   getRunState,
@@ -16,7 +17,10 @@ import {
  * RewardSystem 负责挑，UpgradePanel 负责问，UpgradeSystem 负责改状态；
  * 新增 effect 类型时只需在这里补一个分支，不要散落到场景或 UI 中。
  */
-export function applyReward(reward: RewardOption): void {
+export function applyReward(reward: RewardOption): boolean {
+  if (getRunState().takenRewardIds.includes(reward.id)) {
+    return false;
+  }
   const { effect } = reward;
 
   switch (effect.kind) {
@@ -37,7 +41,12 @@ export function applyReward(reward: RewardOption): void {
       addFireRateBonus(effect.value);
       break;
     }
+    case 'defense': {
+      addBaseDefense(effect.value);
+      break;
+    }
   }
 
   recordReward(reward.id);
+  return true;
 }

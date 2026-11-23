@@ -11,6 +11,10 @@ import { getRunState } from '../state/GameState';
 export const CRIT_CHANCE = 0.15;
 export const CRIT_MULTIPLIER = 2;
 
+export function resolveBaseDamage(baseDamage: number): number {
+  return Math.max(1, Math.round(baseDamage - getRunState().baseDefense));
+}
+
 export interface DamageRoll {
   amount: number;
   crit: boolean;

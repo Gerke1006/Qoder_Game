@@ -1,0 +1,1885 @@
+{
+  "checks": [
+    {
+      "name": "G2-09: actual browser viewport and renderer",
+      "pass": true,
+      "viewport": [
+        1280,
+        800
+      ],
+      "renderer": 2
+    },
+    {
+      "name": "G2-01: menu start control exists",
+      "pass": true
+    },
+    {
+      "name": "G2-01: mouse starts real battle",
+      "pass": true
+    },
+    {
+      "name": "G2-01/03: easy HP and delta-based movement",
+      "pass": true,
+      "baseHp": 130,
+      "enemyHp": 23,
+      "movement": 3.57000000000005
+    },
+    {
+      "name": "G2-01/03: normal HP and delta-based movement",
+      "pass": true,
+      "baseHp": 100,
+      "enemyHp": 30,
+      "movement": 4.2000000000000455
+    },
+    {
+      "name": "G2-01/03: hard HP and delta-based movement",
+      "pass": true,
+      "baseHp": 80,
+      "enemyHp": 41,
+      "movement": 4.830000000000041
+    },
+    {
+      "name": "G2-02: no premature spawn in preparation",
+      "pass": true
+    },
+    {
+      "name": "G2-02: first enemy and remaining queue",
+      "pass": true
+    },
+    {
+      "name": "G2-02: spawn interval respected",
+      "pass": true
+    },
+    {
+      "name": "G2-02: second timed spawn",
+      "pass": true
+    },
+    {
+      "name": "G2-04: lock nearest living target to cursor",
+      "pass": true
+    },
+    {
+      "name": "G2-04: empty aim stays unlocked",
+      "pass": true
+    },
+    {
+      "name": "G2-04: homing turns toward living target without changing speed",
+      "pass": true
+    },
+    {
+      "name": "G2-04: dead lock continues straight",
+      "pass": true
+    },
+    {
+      "name": "G2-04/05: swept hit catches fast grazing arrow at 48ms",
+      "pass": true,
+      "hp": 6
+    },
+    {
+      "name": "G2-04: first collision wins, not spawn-array order",
+      "pass": true
+    },
+    {
+      "name": "G2-04: hit before out-of-bounds cleanup",
+      "pass": true
+    },
+    {
+      "name": "G2-04: missed offscreen arrow removed",
+      "pass": true
+    },
+    {
+      "name": "G2-04: tangent, overlap, miss and segment bounds",
+      "pass": true
+    },
+    {
+      "name": "G2-04: stationary segment does not divide by zero",
+      "pass": true
+    },
+    {
+      "name": "G2-05/06: normal hit updates HP and feedback",
+      "pass": true
+    },
+    {
+      "name": "G2-05/06: critical overkill, single reward, no corpse movement",
+      "pass": true
+    },
+    {
+      "name": "G2-06: death animation disposes entity",
+      "pass": true
+    },
+    {
+      "name": "G2-07: base hit once, no kill reward, HUD synchronized",
+      "pass": true
+    },
+    {
+      "name": "G2-04: right mouse does not shoot",
+      "pass": true
+    },
+    {
+      "name": "G2-04/06: real held-left input fires and kills",
+      "pass": true,
+      "kills": 1,
+      "pointerHeld": false,
+      "enemyHp": []
+    },
+    {
+      "name": "G2-04: HUD click does not arm basic attack",
+      "pass": true
+    },
+    {
+      "name": "G2-04: releasing outside canvas stops fire",
+      "pass": true
+    },
+    {
+      "name": "G2-04: focus loss stops held fire",
+      "pass": true
+    },
+    {
+      "name": "G2-04: skill creates configured arrows and starts cooldown",
+      "pass": true
+    },
+    {
+      "name": "G2-04: skill cannot bypass cooldown",
+      "pass": true
+    },
+    {
+      "name": "G2-08: pause freezes movement, HP, elapsed, spawning and cooldown",
+      "pass": true
+    },
+    {
+      "name": "G2-08: resume restores combat",
+      "pass": true
+    },
+    {
+      "name": "G2-02: living boss summons two enemies",
+      "pass": true
+    },
+    {
+      "name": "G2-08: reward selection freezes combat time",
+      "pass": true
+    },
+    {
+      "name": "G2-08: reward only applied once and does not fire through modal",
+      "pass": true,
+      "rewards": [
+        "wind-feather"
+      ],
+      "wave": 1,
+      "held": false,
+      "visible": false,
+      "mode": "break"
+    },
+    {
+      "name": "G2-08: reward skip preserves partner gesture behavior",
+      "pass": true
+    },
+    {
+      "name": "G2-07/08: fatal contact stops same-frame damage and rewards",
+      "pass": true
+    },
+    {
+      "name": "G2-08: terminal state is immutable to later frames",
+      "pass": true
+    },
+    {
+      "name": "G2-08: loss snapshot matches terminal state",
+      "pass": true
+    },
+    {
+      "name": "G2-08: scene shutdown removes inputs",
+      "pass": true
+    },
+    {
+      "name": "G2-08: Enter restarts fresh run",
+      "pass": true
+    },
+    {
+      "name": "G2-08: pause restart 1 has one set of listeners",
+      "pass": true
+    },
+    {
+      "name": "G2-08: pause restart 2 has one set of listeners",
+      "pass": true
+    },
+    {
+      "name": "G2-08: pause restart 3 has one set of listeners",
+      "pass": true
+    },
+    {
+      "name": "G3-01: empty field does not end a wave with pending spawns",
+      "pass": true
+    },
+    {
+      "name": "G3-01: empty spawn queue does not end a wave with living enemies",
+      "pass": true
+    },
+    {
+      "name": "G3-01: death animation finishes before reward settlement",
+      "pass": true
+    },
+    {
+      "name": "G3-01/04: cleared wave settles once and discards leftover projectiles",
+      "pass": true
+    },
+    {
+      "name": "G3-04: repeated clear cannot reroll an open reward panel",
+      "pass": true
+    },
+    {
+      "name": "G3-05: sharpened-tips can be rolled into a rendered card",
+      "pass": true
+    },
+    {
+      "name": "G3-06/07/08: sharpened-tips selection applies its effect and refreshes HUD",
+      "pass": true,
+      "state": {
+        "phase": "battle",
+        "difficulty": "normal",
+        "currentWave": 0,
+        "totalWaves": 5,
+        "baseHp": 80,
+        "baseMaxHp": 100,
+        "baseDefense": 0,
+        "gold": 0,
+        "kills": 0,
+        "elapsedMs": 416.6666666666668,
+        "attackDamageBonus": 6,
+        "fireRateBonus": 0,
+        "takenRewardIds": [
+          "sharpened-tips"
+        ]
+      },
+      "hud": "18"
+    },
+    {
+      "name": "G3-07: selected damage upgrade increases real basic projectile damage",
+      "pass": true
+    },
+    {
+      "name": "G3-07: the same damage upgrade also increases every skill arrow",
+      "pass": true
+    },
+    {
+      "name": "G3-05: quick-draw can be rolled into a rendered card",
+      "pass": true
+    },
+    {
+      "name": "G3-06/07/08: quick-draw selection applies its effect and refreshes HUD",
+      "pass": true,
+      "state": {
+        "phase": "battle",
+        "difficulty": "normal",
+        "currentWave": 0,
+        "totalWaves": 5,
+        "baseHp": 80,
+        "baseMaxHp": 100,
+        "baseDefense": 0,
+        "gold": 0,
+        "kills": 0,
+        "elapsedMs": 400.0000000000001,
+        "attackDamageBonus": 0,
+        "fireRateBonus": 0.6,
+        "takenRewardIds": [
+          "quick-draw"
+        ]
+      },
+      "hud": "3.0/s"
+    },
+    {
+      "name": "G3-07: selected fire-rate upgrade shortens the real firing interval",
+      "pass": true
+    },
+    {
+      "name": "G3-07: upgraded fire still respects its cooldown",
+      "pass": true
+    },
+    {
+      "name": "G3-07: upgraded attack fires again before the original interval",
+      "pass": true
+    },
+    {
+      "name": "G3-05: repair-plate can be rolled into a rendered card",
+      "pass": true
+    },
+    {
+      "name": "G3-06/07/08: repair-plate selection applies its effect and refreshes HUD",
+      "pass": true,
+      "state": {
+        "phase": "battle",
+        "difficulty": "normal",
+        "currentWave": 0,
+        "totalWaves": 5,
+        "baseHp": 105,
+        "baseMaxHp": 125,
+        "baseDefense": 0,
+        "gold": 0,
+        "kills": 0,
+        "elapsedMs": 416.6666666666668,
+        "attackDamageBonus": 0,
+        "fireRateBonus": 0,
+        "takenRewardIds": [
+          "repair-plate"
+        ]
+      },
+      "hud": "基地 105 / 125"
+    },
+    {
+      "name": "G3-05: gold-cache can be rolled into a rendered card",
+      "pass": true
+    },
+    {
+      "name": "G3-06/07/08: gold-cache selection applies its effect and refreshes HUD",
+      "pass": true,
+      "state": {
+        "phase": "battle",
+        "difficulty": "normal",
+        "currentWave": 0,
+        "totalWaves": 5,
+        "baseHp": 80,
+        "baseMaxHp": 100,
+        "baseDefense": 0,
+        "gold": 40,
+        "kills": 0,
+        "elapsedMs": 416.6666666666668,
+        "attackDamageBonus": 0,
+        "fireRateBonus": 0,
+        "takenRewardIds": [
+          "gold-cache"
+        ]
+      },
+      "hud": "40"
+    },
+    {
+      "name": "G3-05: bark-guard can be rolled into a rendered card",
+      "pass": true
+    },
+    {
+      "name": "G3-06/07/08: bark-guard selection applies its effect and refreshes HUD",
+      "pass": true,
+      "state": {
+        "phase": "battle",
+        "difficulty": "normal",
+        "currentWave": 0,
+        "totalWaves": 5,
+        "baseHp": 80,
+        "baseMaxHp": 100,
+        "baseDefense": 1,
+        "gold": 0,
+        "kills": 0,
+        "elapsedMs": 416.6666666666668,
+        "attackDamageBonus": 0,
+        "fireRateBonus": 0,
+        "takenRewardIds": [
+          "bark-guard"
+        ]
+      },
+      "hud": "1"
+    },
+    {
+      "name": "G3-07: selected defense reduces real base contact and HP display",
+      "pass": true
+    },
+    {
+      "name": "G3-01: rest after wave 1 uses the cleared wave's duration",
+      "pass": true,
+      "duration": 4000,
+      "nextWave": 1
+    },
+    {
+      "name": "G3-01: wave 2 cannot skip its preparation",
+      "pass": true
+    },
+    {
+      "name": "G3-01/02: wave 2 starts automatically after rest",
+      "pass": true
+    },
+    {
+      "name": "G3-01: rest after wave 2 uses the cleared wave's duration",
+      "pass": true,
+      "duration": 4000,
+      "nextWave": 2
+    },
+    {
+      "name": "G3-01: wave 3 cannot skip its preparation",
+      "pass": true
+    },
+    {
+      "name": "G3-01/02: wave 3 starts automatically after rest",
+      "pass": true
+    },
+    {
+      "name": "G3-01: rest after wave 3 uses the cleared wave's duration",
+      "pass": true,
+      "duration": 4500,
+      "nextWave": 3
+    },
+    {
+      "name": "G3-01: wave 4 cannot skip its preparation",
+      "pass": true
+    },
+    {
+      "name": "G3-01/02: wave 4 starts automatically after rest",
+      "pass": true
+    },
+    {
+      "name": "G3-01: rest after wave 4 uses the cleared wave's duration",
+      "pass": true,
+      "duration": 5000,
+      "nextWave": 4
+    },
+    {
+      "name": "G3-01: wave 5 cannot skip its preparation",
+      "pass": true
+    },
+    {
+      "name": "G3-01/02: wave 5 starts automatically after rest",
+      "pass": true
+    },
+    {
+      "name": "G3-09: boss reaching the base remains alive and attacks with defense mitigation",
+      "pass": true
+    },
+    {
+      "name": "G3-09: boss does not deal contact damage every frame",
+      "pass": true
+    },
+    {
+      "name": "G3-09: pausing also freezes the boss siege timer",
+      "pass": true
+    },
+    {
+      "name": "G3-09: configured siege interval deals a second hit, not a false victory",
+      "pass": true,
+      "interval": 2000,
+      "hp": 62
+    },
+    {
+      "name": "G3-09/10: surviving boss destroys the base and produces defeat",
+      "pass": true
+    },
+    {
+      "name": "G3-07/10: restart resets defense, every upgrade and resources",
+      "pass": true
+    },
+    {
+      "name": "G3-09: dead boss pays once but its surviving summons still block victory",
+      "pass": true
+    },
+    {
+      "name": "G3-04/08/09: clearing boss and summons wins without an extra reward round",
+      "pass": true
+    },
+    {
+      "name": "G3-01/02: unarmed run wave 1 has configured spawns",
+      "pass": true
+    },
+    {
+      "name": "G3-05: unarmed run wave 1 offers three unique unowned cards",
+      "pass": true
+    },
+    {
+      "name": "G3-01/02: unarmed run wave 2 has configured spawns",
+      "pass": true
+    },
+    {
+      "name": "G3-05: unarmed run wave 2 offers three unique unowned cards",
+      "pass": true
+    },
+    {
+      "name": "G3-01/02: unarmed run wave 3 has configured spawns",
+      "pass": true
+    },
+    {
+      "name": "G2-09: unarmed run reaches result",
+      "pass": true,
+      "frame": 4939,
+      "wave": 2,
+      "mode": "over"
+    },
+    {
+      "name": "G3-04/08: unarmed run result matches kill and reward gold ledger",
+      "pass": true,
+      "killGold": 0,
+      "rewardGold": 0,
+      "kills": 0
+    },
+    {
+      "name": "G2-09: natural enemy waves exhaust base and lose without state cheats",
+      "pass": true,
+      "win": false,
+      "wave": 2,
+      "totalWaves": 5,
+      "kills": 0,
+      "gold": 0,
+      "elapsedMs": 80700.0000000006,
+      "takenRewardIds": [
+        "war-horn",
+        "sharpened-tips"
+      ],
+      "baseHp": 0,
+      "bossKilled": false,
+      "frames": 4939,
+      "waveStarts": [
+        0,
+        1,
+        2
+      ],
+      "rewardRounds": [
+        {
+          "wave": 0,
+          "candidates": [
+            "oak-heart",
+            "wind-feather",
+            "war-horn"
+          ]
+        },
+        {
+          "wave": 1,
+          "candidates": [
+            "dragon-hoard",
+            "oak-heart",
+            "sharpened-tips"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "G3-01/02: armed run wave 1 has configured spawns",
+      "pass": true
+    },
+    {
+      "name": "G3-05: armed run wave 1 offers three unique unowned cards",
+      "pass": true
+    },
+    {
+      "name": "G3-01/02: armed run wave 2 has configured spawns",
+      "pass": true
+    },
+    {
+      "name": "G3-05: armed run wave 2 offers three unique unowned cards",
+      "pass": true
+    },
+    {
+      "name": "G3-01/02: armed run wave 3 has configured spawns",
+      "pass": true
+    },
+    {
+      "name": "G3-05: armed run wave 3 offers three unique unowned cards",
+      "pass": true
+    },
+    {
+      "name": "G3-01/02: armed run wave 4 has configured spawns",
+      "pass": true
+    },
+    {
+      "name": "G3-05: armed run wave 4 offers three unique unowned cards",
+      "pass": true
+    },
+    {
+      "name": "G3-01/02: armed run wave 5 has configured spawns",
+      "pass": true
+    },
+    {
+      "name": "G2-09: armed run reaches result",
+      "pass": true,
+      "frame": 4212,
+      "wave": 4,
+      "mode": "over"
+    },
+    {
+      "name": "G3-04/08: armed run result matches kill and reward gold ledger",
+      "pass": true,
+      "killGold": 231,
+      "rewardGold": 0,
+      "kills": 52
+    },
+    {
+      "name": "G2-09: real attacks clear five waves, kill boss, and win",
+      "pass": true,
+      "win": true,
+      "wave": 4,
+      "totalWaves": 5,
+      "kills": 52,
+      "gold": 231,
+      "elapsedMs": 68516.66666666372,
+      "takenRewardIds": [
+        "sun-blessing",
+        "sharpened-tips",
+        "war-horn",
+        "wind-feather"
+      ],
+      "baseHp": 100,
+      "bossKilled": true,
+      "frames": 4212,
+      "waveStarts": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ],
+      "rewardRounds": [
+        {
+          "wave": 0,
+          "candidates": [
+            "quick-draw",
+            "sun-blessing",
+            "oak-heart"
+          ]
+        },
+        {
+          "wave": 1,
+          "candidates": [
+            "dragon-hoard",
+            "sharpened-tips",
+            "bark-guard"
+          ]
+        },
+        {
+          "wave": 2,
+          "candidates": [
+            "repair-plate",
+            "war-horn",
+            "wind-feather"
+          ]
+        },
+        {
+          "wave": 3,
+          "candidates": [
+            "gold-cache",
+            "wind-feather",
+            "quick-draw"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "G3-01/06/10: consecutive waves and four distinct upgrades lead to boss victory",
+      "pass": true
+    },
+    {
+      "name": "visual: live 960x540 Phaser game",
+      "pass": true
+    },
+    {
+      "name": "audio: real AudioContext unlocks under CDP user gesture",
+      "pass": true,
+      "state": "running",
+      "userActivation": true
+    },
+    {
+      "name": "audio: native context and independent ambience are live",
+      "pass": true
+    },
+    {
+      "name": "assets: Game title is a decoded image",
+      "pass": true,
+      "key": "title-game",
+      "size": [
+        1492,
+        398
+      ]
+    },
+    {
+      "name": "assets: Reward title is a decoded image",
+      "pass": true,
+      "key": "title-reward",
+      "size": [
+        1487,
+        430
+      ]
+    },
+    {
+      "name": "assets: Victory title is a decoded image",
+      "pass": true,
+      "key": "title-victory",
+      "size": [
+        1487,
+        399
+      ]
+    },
+    {
+      "name": "assets: Defeat title is a decoded image",
+      "pass": true,
+      "key": "title-defeat",
+      "size": [
+        1400,
+        355
+      ]
+    },
+    {
+      "name": "assets: Pause title is a decoded image",
+      "pass": true,
+      "key": "title-pause",
+      "size": [
+        1487,
+        388
+      ]
+    },
+    {
+      "name": "assets: Help title is a decoded image",
+      "pass": true,
+      "key": "title-help",
+      "size": [
+        1407,
+        398
+      ]
+    },
+    {
+      "name": "assets: Upgrade title is a decoded image",
+      "pass": true,
+      "key": "title-upgrade",
+      "size": [
+        1488,
+        403
+      ]
+    },
+    {
+      "name": "assets: Boss title is a decoded image",
+      "pass": true,
+      "key": "title-boss",
+      "size": [
+        1431,
+        433
+      ]
+    },
+    {
+      "name": "assets: Record title is a decoded image",
+      "pass": true,
+      "key": "title-record",
+      "size": [
+        1227,
+        402
+      ]
+    },
+    {
+      "name": "assets: all nine distinct AI title keys are present",
+      "pass": true
+    },
+    {
+      "name": "audio: menu scene uses its real looping buffer",
+      "pass": true,
+      "mood": "menu",
+      "state": "running",
+      "duration": 10.909083333333333
+    },
+    {
+      "name": "audio: repeated menu mood retains source",
+      "pass": true
+    },
+    {
+      "name": "visual: visible, aspect-preserving title-game",
+      "pass": true,
+      "type": "Image",
+      "texture": "title-game",
+      "size": [
+        560,
+        149.38337801608577
+      ]
+    },
+    {
+      "name": "menu: title is centered above controls",
+      "pass": true
+    },
+    {
+      "name": "menu: key 1 selects easy and updates explanation",
+      "pass": true
+    },
+    {
+      "name": "menu: key 2 selects normal and updates explanation",
+      "pass": true
+    },
+    {
+      "name": "menu: key 3 selects hard and updates explanation",
+      "pass": true
+    },
+    {
+      "name": "menu: held/repeated difficulty key is ignored",
+      "pass": true
+    },
+    {
+      "name": "snapshot: visual-menu contains rendered canvas pixels",
+      "pass": true,
+      "canvas": [
+        960,
+        540
+      ],
+      "colors": 495
+    },
+    {
+      "name": "visual: visible, aspect-preserving title-help",
+      "pass": true,
+      "type": "Image",
+      "texture": "title-help",
+      "size": [
+        219.18090452261308,
+        62
+      ]
+    },
+    {
+      "name": "help: real instructions are legible within the canvas",
+      "pass": true
+    },
+    {
+      "name": "help: modal blocks menu Enter and difficulty shortcuts",
+      "pass": true
+    },
+    {
+      "name": "snapshot: visual-help contains rendered canvas pixels",
+      "pass": true,
+      "canvas": [
+        960,
+        540
+      ],
+      "colors": 313
+    },
+    {
+      "name": "help: ESC destroys modal and unregisters its handler",
+      "pass": true
+    },
+    {
+      "name": "menu: Enter starts a fresh normal battle",
+      "pass": true
+    },
+    {
+      "name": "audio: battle scene uses its real looping buffer",
+      "pass": true,
+      "mood": "battle",
+      "state": "running",
+      "duration": 8.571416666666666
+    },
+    {
+      "name": "audio: repeated battle mood retains source",
+      "pass": true
+    },
+    {
+      "name": "snapshot: visual-battle contains rendered canvas pixels",
+      "pass": true,
+      "canvas": [
+        960,
+        540
+      ],
+      "colors": 253
+    },
+    {
+      "name": "audio: normal music level settles",
+      "pass": true
+    },
+    {
+      "name": "visual: visible, aspect-preserving title-pause",
+      "pass": true,
+      "type": "Image",
+      "texture": "title-pause",
+      "size": [
+        229.94845360824743,
+        60
+      ]
+    },
+    {
+      "name": "pause: real HUD pointer freezes simulation and blocks shooting",
+      "pass": true
+    },
+    {
+      "name": "audio: pause lowers music without replacing its source",
+      "pass": true,
+      "paused": true,
+      "gain": 0.18214939534664154
+    },
+    {
+      "name": "audio: battle scene uses its real looping buffer",
+      "pass": true,
+      "mood": "battle",
+      "state": "running",
+      "duration": 8.571416666666666
+    },
+    {
+      "name": "audio: repeated battle mood retains source",
+      "pass": true
+    },
+    {
+      "name": "snapshot: visual-pause contains rendered canvas pixels",
+      "pass": true,
+      "canvas": [
+        960,
+        540
+      ],
+      "colors": 312
+    },
+    {
+      "name": "audio: pause mute silences master and all voices",
+      "pass": true
+    },
+    {
+      "name": "pause: mute label tracks actual audio state",
+      "pass": true
+    },
+    {
+      "name": "audio: unmute restores master gain",
+      "pass": true
+    },
+    {
+      "name": "pause: ESC resumes movement and destroys overlay",
+      "pass": true
+    },
+    {
+      "name": "audio: resume restores full music level",
+      "pass": true
+    },
+    {
+      "name": "input: rendered button 继续战斗",
+      "pass": true
+    },
+    {
+      "name": "pause: canvas continue button resumes without firing through",
+      "pass": true
+    },
+    {
+      "name": "battle: HUD mute is interactive and does not shoot",
+      "pass": true
+    },
+    {
+      "name": "battle: HUD unmute is interactive",
+      "pass": true
+    },
+    {
+      "name": "effects: recoil actually displaces the player sprite",
+      "pass": true
+    },
+    {
+      "name": "effects: recoil returns to its original position",
+      "pass": true
+    },
+    {
+      "name": "effects: critical hit emits living particles",
+      "pass": true
+    },
+    {
+      "name": "effects: nonfatal damage flashes the real enemy",
+      "pass": true
+    },
+    {
+      "name": "effects: hit tint is cleared after its lifetime",
+      "pass": true
+    },
+    {
+      "name": "effects: death shrinks/fades its sprite and emits particles",
+      "pass": true
+    },
+    {
+      "name": "effects: hit/death bursts and corpse clean up",
+      "pass": true
+    },
+    {
+      "name": "audio: reward scene uses its real looping buffer",
+      "pass": true,
+      "mood": "reward",
+      "state": "running",
+      "duration": 9.795916666666667
+    },
+    {
+      "name": "audio: repeated reward mood retains source",
+      "pass": true
+    },
+    {
+      "name": "visual: visible, aspect-preserving title-reward",
+      "pass": true,
+      "type": "Image",
+      "texture": "title-reward",
+      "size": [
+        262.8186046511628,
+        76
+      ]
+    },
+    {
+      "name": "rewards: key 1 round offers three real unique cards",
+      "pass": true,
+      "ids": [
+        "quick-draw",
+        "sharpened-tips",
+        "iron-bark"
+      ]
+    },
+    {
+      "name": "rewards: quick-draw has accurate visible preview and key 1",
+      "pass": true,
+      "preview": "每秒射击\n2.4 → 3.0",
+      "expectedPreview": "2.4 → 3.0"
+    },
+    {
+      "name": "rewards: sharpened-tips has accurate visible preview and key 2",
+      "pass": true,
+      "preview": "攻击力\n12 → 18",
+      "expectedPreview": "12 → 18"
+    },
+    {
+      "name": "rewards: iron-bark has accurate visible preview and key 3",
+      "pass": true,
+      "preview": "基地防御\n0 → 2",
+      "expectedPreview": "0 → 2"
+    },
+    {
+      "name": "snapshot: visual-rewards contains rendered canvas pixels",
+      "pass": true,
+      "canvas": [
+        960,
+        540
+      ],
+      "colors": 482
+    },
+    {
+      "name": "rewards: repeated 1 cannot select",
+      "pass": true
+    },
+    {
+      "name": "rewards: 1 locks immediately but waits for selection animation",
+      "pass": true
+    },
+    {
+      "name": "rewards: 1 applies exactly its effect once despite competing inputs",
+      "pass": true,
+      "expected": {
+        "baseHp": 80,
+        "baseMaxHp": 100,
+        "baseDefense": 0,
+        "gold": 0,
+        "attackDamageBonus": 0,
+        "fireRateBonus": 0.6,
+        "takenRewardIds": [
+          "quick-draw"
+        ]
+      },
+      "actual": {
+        "baseHp": 80,
+        "baseMaxHp": 100,
+        "baseDefense": 0,
+        "gold": 0,
+        "attackDamageBonus": 0,
+        "fireRateBonus": 0.6,
+        "takenRewardIds": [
+          "quick-draw"
+        ]
+      }
+    },
+    {
+      "name": "audio: successful reward 1 plays once, not once per competing input",
+      "pass": true
+    },
+    {
+      "name": "audio: battle scene uses its real looping buffer",
+      "pass": true,
+      "mood": "battle",
+      "state": "running",
+      "duration": 8.571416666666666
+    },
+    {
+      "name": "audio: repeated battle mood retains source",
+      "pass": true
+    },
+    {
+      "name": "visual: visible, aspect-preserving title-upgrade",
+      "pass": true,
+      "type": "Image",
+      "texture": "title-upgrade",
+      "size": [
+        147.6923076923077,
+        40
+      ]
+    },
+    {
+      "name": "upgrade: quick-draw is shown in the actual HUD toast",
+      "pass": true
+    },
+    {
+      "name": "snapshot: visual-upgrade contains rendered canvas pixels",
+      "pass": true,
+      "canvas": [
+        960,
+        540
+      ],
+      "colors": 289
+    },
+    {
+      "name": "upgrade: toast remains visible before its 2600ms expiry",
+      "pass": true
+    },
+    {
+      "name": "upgrade: toast and its children are destroyed after expiry",
+      "pass": true
+    },
+    {
+      "name": "audio: reward scene uses its real looping buffer",
+      "pass": true,
+      "mood": "reward",
+      "state": "running",
+      "duration": 9.795916666666667
+    },
+    {
+      "name": "audio: repeated reward mood retains source",
+      "pass": true
+    },
+    {
+      "name": "visual: visible, aspect-preserving title-reward",
+      "pass": true,
+      "type": "Image",
+      "texture": "title-reward",
+      "size": [
+        262.8186046511628,
+        76
+      ]
+    },
+    {
+      "name": "rewards: key 2 round offers three real unique cards",
+      "pass": true,
+      "ids": [
+        "gold-cache",
+        "sun-blessing",
+        "bark-guard"
+      ]
+    },
+    {
+      "name": "rewards: gold-cache has accurate visible preview and key 1",
+      "pass": true,
+      "preview": "金币\n0 → 40",
+      "expectedPreview": "0 → 40"
+    },
+    {
+      "name": "rewards: sun-blessing has accurate visible preview and key 2",
+      "pass": true,
+      "preview": "攻击力\n12 → 34",
+      "expectedPreview": "12 → 34"
+    },
+    {
+      "name": "rewards: bark-guard has accurate visible preview and key 3",
+      "pass": true,
+      "preview": "基地防御\n0 → 1",
+      "expectedPreview": "0 → 1"
+    },
+    {
+      "name": "rewards: repeated 2 cannot select",
+      "pass": true
+    },
+    {
+      "name": "rewards: 2 locks immediately but waits for selection animation",
+      "pass": true
+    },
+    {
+      "name": "rewards: 2 applies exactly its effect once despite competing inputs",
+      "pass": true,
+      "expected": {
+        "baseHp": 80,
+        "baseMaxHp": 100,
+        "baseDefense": 0,
+        "gold": 0,
+        "attackDamageBonus": 22,
+        "fireRateBonus": 0,
+        "takenRewardIds": [
+          "sun-blessing"
+        ]
+      },
+      "actual": {
+        "baseHp": 80,
+        "baseMaxHp": 100,
+        "baseDefense": 0,
+        "gold": 0,
+        "attackDamageBonus": 22,
+        "fireRateBonus": 0,
+        "takenRewardIds": [
+          "sun-blessing"
+        ]
+      }
+    },
+    {
+      "name": "audio: successful reward 2 plays once, not once per competing input",
+      "pass": true
+    },
+    {
+      "name": "audio: battle scene uses its real looping buffer",
+      "pass": true,
+      "mood": "battle",
+      "state": "running",
+      "duration": 8.571416666666666
+    },
+    {
+      "name": "audio: repeated battle mood retains source",
+      "pass": true
+    },
+    {
+      "name": "visual: visible, aspect-preserving title-upgrade",
+      "pass": true,
+      "type": "Image",
+      "texture": "title-upgrade",
+      "size": [
+        147.6923076923077,
+        40
+      ]
+    },
+    {
+      "name": "upgrade: sun-blessing is shown in the actual HUD toast",
+      "pass": true
+    },
+    {
+      "name": "audio: reward scene uses its real looping buffer",
+      "pass": true,
+      "mood": "reward",
+      "state": "running",
+      "duration": 9.795916666666667
+    },
+    {
+      "name": "audio: repeated reward mood retains source",
+      "pass": true
+    },
+    {
+      "name": "visual: visible, aspect-preserving title-reward",
+      "pass": true,
+      "type": "Image",
+      "texture": "title-reward",
+      "size": [
+        262.8186046511628,
+        76
+      ]
+    },
+    {
+      "name": "rewards: key 3 round offers three real unique cards",
+      "pass": true,
+      "ids": [
+        "dragon-hoard",
+        "repair-plate",
+        "sharpened-tips"
+      ]
+    },
+    {
+      "name": "rewards: dragon-hoard has accurate visible preview and key 1",
+      "pass": true,
+      "preview": "金币\n0 → 120",
+      "expectedPreview": "0 → 120"
+    },
+    {
+      "name": "rewards: repair-plate has accurate visible preview and key 2",
+      "pass": true,
+      "preview": "生命上限\n100 → 125",
+      "expectedPreview": "100 → 125"
+    },
+    {
+      "name": "rewards: sharpened-tips has accurate visible preview and key 3",
+      "pass": true,
+      "preview": "攻击力\n12 → 18",
+      "expectedPreview": "12 → 18"
+    },
+    {
+      "name": "rewards: repeated 3 cannot select",
+      "pass": true
+    },
+    {
+      "name": "rewards: 3 locks immediately but waits for selection animation",
+      "pass": true
+    },
+    {
+      "name": "rewards: 3 applies exactly its effect once despite competing inputs",
+      "pass": true,
+      "expected": {
+        "baseHp": 80,
+        "baseMaxHp": 100,
+        "baseDefense": 0,
+        "gold": 0,
+        "attackDamageBonus": 6,
+        "fireRateBonus": 0,
+        "takenRewardIds": [
+          "sharpened-tips"
+        ]
+      },
+      "actual": {
+        "baseHp": 80,
+        "baseMaxHp": 100,
+        "baseDefense": 0,
+        "gold": 0,
+        "attackDamageBonus": 6,
+        "fireRateBonus": 0,
+        "takenRewardIds": [
+          "sharpened-tips"
+        ]
+      }
+    },
+    {
+      "name": "audio: successful reward 3 plays once, not once per competing input",
+      "pass": true
+    },
+    {
+      "name": "audio: battle scene uses its real looping buffer",
+      "pass": true,
+      "mood": "battle",
+      "state": "running",
+      "duration": 8.571416666666666
+    },
+    {
+      "name": "audio: repeated battle mood retains source",
+      "pass": true
+    },
+    {
+      "name": "visual: visible, aspect-preserving title-upgrade",
+      "pass": true,
+      "type": "Image",
+      "texture": "title-upgrade",
+      "size": [
+        147.6923076923077,
+        40
+      ]
+    },
+    {
+      "name": "upgrade: sharpened-tips is shown in the actual HUD toast",
+      "pass": true
+    },
+    {
+      "name": "rewards: blank skips without award, pause or firing through",
+      "pass": true
+    },
+    {
+      "name": "rewards: blank leaves no stale selection callback",
+      "pass": true
+    },
+    {
+      "name": "rewards: Escape skips without award, pause or firing through",
+      "pass": true
+    },
+    {
+      "name": "rewards: Escape leaves no stale selection callback",
+      "pass": true
+    },
+    {
+      "name": "audio: boss scene uses its real looping buffer",
+      "pass": true,
+      "mood": "boss",
+      "state": "running",
+      "duration": 7.619041666666667
+    },
+    {
+      "name": "audio: repeated boss mood retains source",
+      "pass": true
+    },
+    {
+      "name": "visual: visible, aspect-preserving title-boss",
+      "pass": true,
+      "type": "Image",
+      "texture": "title-boss",
+      "size": [
+        218.12009237875287,
+        66
+      ]
+    },
+    {
+      "name": "boss: live HUD health follows actual boss damage",
+      "pass": true,
+      "hp": 285,
+      "maxHp": 380,
+      "label": "史莱姆王 · 285 / 380"
+    },
+    {
+      "name": "boss: health bar crop reflects damaged HP",
+      "pass": true
+    },
+    {
+      "name": "snapshot: visual-boss contains rendered canvas pixels",
+      "pass": true,
+      "canvas": [
+        960,
+        540
+      ],
+      "colors": 334
+    },
+    {
+      "name": "victory: actual boss death transitions into a winning result",
+      "pass": true
+    },
+    {
+      "name": "audio: victory scene uses its real looping buffer",
+      "pass": true,
+      "mood": "victory",
+      "state": "running",
+      "duration": 8.888875
+    },
+    {
+      "name": "audio: repeated victory mood retains source",
+      "pass": true
+    },
+    {
+      "name": "visual: visible, aspect-preserving title-victory",
+      "pass": true,
+      "type": "Image",
+      "texture": "title-victory",
+      "size": [
+        305.5989974937343,
+        82
+      ]
+    },
+    {
+      "name": "visual: visible, aspect-preserving title-record",
+      "pass": true,
+      "type": "Image",
+      "texture": "title-record",
+      "size": [
+        105,
+        34.400977995110026
+      ]
+    },
+    {
+      "name": "victory: real celebration particles are alive",
+      "pass": true
+    },
+    {
+      "name": "snapshot: visual-victory contains rendered canvas pixels",
+      "pass": true,
+      "canvas": [
+        960,
+        540
+      ],
+      "colors": 363
+    },
+    {
+      "name": "victory: celebration emitters expire instead of accumulating",
+      "pass": true
+    },
+    {
+      "name": "result: ESC returns to menu and removes result key handlers",
+      "pass": true
+    },
+    {
+      "name": "audio: menu scene uses its real looping buffer",
+      "pass": true,
+      "mood": "menu",
+      "state": "running",
+      "duration": 10.909083333333333
+    },
+    {
+      "name": "audio: repeated menu mood retains source",
+      "pass": true
+    },
+    {
+      "name": "defeat: fatal contact transitions into a losing result",
+      "pass": true
+    },
+    {
+      "name": "audio: defeat scene uses its real looping buffer",
+      "pass": true,
+      "mood": "defeat",
+      "state": "running",
+      "duration": 13.333333333333334
+    },
+    {
+      "name": "audio: repeated defeat mood retains source",
+      "pass": true
+    },
+    {
+      "name": "visual: visible, aspect-preserving title-defeat",
+      "pass": true,
+      "type": "Image",
+      "texture": "title-defeat",
+      "size": [
+        310,
+        78.60714285714285
+      ]
+    },
+    {
+      "name": "snapshot: visual-defeat contains rendered canvas pixels",
+      "pass": true,
+      "canvas": [
+        960,
+        540
+      ],
+      "colors": 342
+    },
+    {
+      "name": "result: Enter restarts with fresh state and one input handler",
+      "pass": true
+    },
+    {
+      "name": "audio: battle scene uses its real looping buffer",
+      "pass": true,
+      "mood": "battle",
+      "state": "running",
+      "duration": 8.571416666666666
+    },
+    {
+      "name": "audio: repeated battle mood retains source",
+      "pass": true
+    },
+    {
+      "name": "reduced motion: skill still fires real projectiles",
+      "pass": true
+    },
+    {
+      "name": "reduced motion: boss, skill, hit and recoil cause no shakes, scales or bursts",
+      "pass": true
+    },
+    {
+      "name": "reduced motion: death cleans up without shrink or particles",
+      "pass": true
+    },
+    {
+      "name": "reduced motion: pause appears at full scale and opacity",
+      "pass": true
+    },
+    {
+      "name": "reduced motion: rewards are immediately readable at full scale",
+      "pass": true
+    },
+    {
+      "name": "visual: visible, aspect-preserving title-reward",
+      "pass": true,
+      "type": "Image",
+      "texture": "title-reward",
+      "size": [
+        262.8186046511628,
+        76
+      ]
+    },
+    {
+      "name": "reduced motion: card hover does not enlarge it",
+      "pass": true
+    },
+    {
+      "name": "snapshot: visual-reduced-motion contains rendered canvas pixels",
+      "pass": true,
+      "canvas": [
+        960,
+        540
+      ],
+      "colors": 673
+    },
+    {
+      "name": "reduced motion: keyboard selection applies immediately without 180ms delay",
+      "pass": true
+    },
+    {
+      "name": "reduced motion: rapid follow-up key cannot award twice",
+      "pass": true
+    },
+    {
+      "name": "visual: visible, aspect-preserving title-upgrade",
+      "pass": true,
+      "type": "Image",
+      "texture": "title-upgrade",
+      "size": [
+        147.6923076923077,
+        40
+      ]
+    },
+    {
+      "name": "reduced motion: victory omits celebration bursts but keeps its art",
+      "pass": true
+    },
+    {
+      "name": "visual: visible, aspect-preserving title-victory",
+      "pass": true,
+      "type": "Image",
+      "texture": "title-victory",
+      "size": [
+        305.5989974937343,
+        82
+      ]
+    },
+    {
+      "name": "audio: menu has a native stereo PCM loop",
+      "pass": true
+    },
+    {
+      "name": "audio: menu waveform is finite, non-silent, stereo and unclipped",
+      "pass": true,
+      "mood": "menu",
+      "frames": 261818,
+      "duration": 10.909083333333333,
+      "sampleRate": 24000,
+      "peak": 0.7910307049751282,
+      "rms": 0.15655295410266687,
+      "hash": 1548592044
+    },
+    {
+      "name": "audio: battle has a native stereo PCM loop",
+      "pass": true
+    },
+    {
+      "name": "audio: battle waveform is finite, non-silent, stereo and unclipped",
+      "pass": true,
+      "mood": "battle",
+      "frames": 205714,
+      "duration": 8.571416666666666,
+      "sampleRate": 24000,
+      "peak": 0.8199999928474426,
+      "rms": 0.1525949619141067,
+      "hash": 1365036934
+    },
+    {
+      "name": "audio: boss has a native stereo PCM loop",
+      "pass": true
+    },
+    {
+      "name": "audio: boss waveform is finite, non-silent, stereo and unclipped",
+      "pass": true,
+      "mood": "boss",
+      "frames": 182857,
+      "duration": 7.619041666666667,
+      "sampleRate": 24000,
+      "peak": 0.8199999928474426,
+      "rms": 0.14833873477890316,
+      "hash": 256280052
+    },
+    {
+      "name": "audio: reward has a native stereo PCM loop",
+      "pass": true
+    },
+    {
+      "name": "audio: reward waveform is finite, non-silent, stereo and unclipped",
+      "pass": true,
+      "mood": "reward",
+      "frames": 235102,
+      "duration": 9.795916666666667,
+      "sampleRate": 24000,
+      "peak": 0.8199999928474426,
+      "rms": 0.1504141496207554,
+      "hash": 3195316760
+    },
+    {
+      "name": "audio: victory has a native stereo PCM loop",
+      "pass": true
+    },
+    {
+      "name": "audio: victory waveform is finite, non-silent, stereo and unclipped",
+      "pass": true,
+      "mood": "victory",
+      "frames": 213333,
+      "duration": 8.888875,
+      "sampleRate": 24000,
+      "peak": 0.8199999928474426,
+      "rms": 0.1522868983275747,
+      "hash": 3856507775
+    },
+    {
+      "name": "audio: defeat has a native stereo PCM loop",
+      "pass": true
+    },
+    {
+      "name": "audio: defeat waveform is finite, non-silent, stereo and unclipped",
+      "pass": true,
+      "mood": "defeat",
+      "frames": 320000,
+      "duration": 13.333333333333334,
+      "sampleRate": 24000,
+      "peak": 0.807738721370697,
+      "rms": 0.14009185939044969,
+      "hash": 1517961693
+    },
+    {
+      "name": "audio: all six generated music loops have distinct PCM",
+      "pass": true,
+      "scope": "Waveform and lifecycle only; headless execution cannot verify auditory quality.",
+      "loops": [
+        {
+          "mood": "menu",
+          "frames": 261818,
+          "duration": 10.909083333333333,
+          "sampleRate": 24000,
+          "peak": 0.7910307049751282,
+          "rms": 0.15655295410266687,
+          "hash": 1548592044
+        },
+        {
+          "mood": "battle",
+          "frames": 205714,
+          "duration": 8.571416666666666,
+          "sampleRate": 24000,
+          "peak": 0.8199999928474426,
+          "rms": 0.1525949619141067,
+          "hash": 1365036934
+        },
+        {
+          "mood": "boss",
+          "frames": 182857,
+          "duration": 7.619041666666667,
+          "sampleRate": 24000,
+          "peak": 0.8199999928474426,
+          "rms": 0.14833873477890316,
+          "hash": 256280052
+        },
+        {
+          "mood": "reward",
+          "frames": 235102,
+          "duration": 9.795916666666667,
+          "sampleRate": 24000,
+          "peak": 0.8199999928474426,
+          "rms": 0.1504141496207554,
+          "hash": 3195316760
+        },
+        {
+          "mood": "victory",
+          "frames": 213333,
+          "duration": 8.888875,
+          "sampleRate": 24000,
+          "peak": 0.8199999928474426,
+          "rms": 0.1522868983275747,
+          "hash": 3856507775
+        },
+        {
+          "mood": "defeat",
+          "frames": 320000,
+          "duration": 13.333333333333334,
+          "sampleRate": 24000,
+          "peak": 0.807738721370697,
+          "rms": 0.14009185939044969,
+          "hash": 1517961693
+        }
+      ]
+    },
+    {
+      "name": "audio: every replaced music source has actually ended",
+      "pass": true,
+      "pendingMoods": []
+    },
+    {
+      "name": "audio: reward cue schedules real finite voices",
+      "pass": true
+    },
+    {
+      "name": "audio: completed reward voices release their nodes",
+      "pass": true
+    },
+    {
+      "name": "audio: hidden suspends context, mutes and clears voices/timer",
+      "pass": true,
+      "state": "suspended",
+      "hidden": true,
+      "gain": 0,
+      "voices": 0,
+      "birdTimer": null
+    },
+    {
+      "name": "audio: visible resumes real context without duplicating loops",
+      "pass": true
+    },
+    {
+      "name": "visual: all nine title images appeared in real scenes",
+      "pass": true
+    },
+    {
+      "name": "visual: all ten required snapshots are distinct",
+      "pass": true
+    }
+  ],
+  "naturalLoss": {
+    "win": false,
+    "wave": 2,
+    "totalWaves": 5,
+    "kills": 0,
+    "gold": 0,
+    "elapsedMs": 80700.0000000006,
+    "takenRewardIds": [
+      "war-horn",
+      "sharpened-tips"
+    ],
+    "baseHp": 0,
+    "bossKilled": false,
+    "frames": 4939,
+    "waveStarts": [
+      0,
+      1,
+      2
+    ],
+    "rewardRounds": [
+      {
+        "wave": 0,
+        "candidates": [
+          "oak-heart",
+          "wind-feather",
+          "war-horn"
+        ]
+      },
+      {
+        "wave": 1,
+        "candidates": [
+          "dragon-hoard",
+          "oak-heart",
+          "sharpened-tips"
+        ]
+      }
+    ]
+  },
+  "victory": {
+    "win": true,
+    "wave": 4,
+    "totalWaves": 5,
+    "kills": 52,
+    "gold": 231,
+    "elapsedMs": 68516.66666666372,
+    "takenRewardIds": [
+      "sun-blessing",
+      "sharpened-tips",
+      "war-horn",
+      "wind-feather"
+    ],
+    "baseHp": 100,
+    "bossKilled": true,
+    "frames": 4212,
+    "waveStarts": [
+      0,
+      1,
+      2,
+      3,
+      4
+    ],
+    "rewardRounds": [
+      {
+        "wave": 0,
+        "candidates": [
+          "quick-draw",
+          "sun-blessing",
+          "oak-heart"
+        ]
+      },
+      {
+        "wave": 1,
+        "candidates": [
+          "dragon-hoard",
+          "sharpened-tips",
+          "bark-guard"
+        ]
+      },
+      {
+        "wave": 2,
+        "candidates": [
+          "repair-plate",
+          "war-horn",
+          "wind-feather"
+        ]
+      },
+      {
+        "wave": 3,
+        "candidates": [
+          "gold-cache",
+          "wind-feather",
+          "quick-draw"
+        ]
+      }
+    ]
+  },
+  "coverage": [
+    "G2-01",
+    "G2-02",
+    "G2-03",
+    "G2-04",
+    "G2-05",
+    "G2-06",
+    "G2-07",
+    "G2-08",
+    "G2-09",
+    "G3-01",
+    "G3-02",
+    "G3-03",
+    "G3-04",
+    "G3-05",
+    "G3-06",
+    "G3-07",
+    "G3-08",
+    "G3-09",
+    "G3-10"
+  ],
+  "pass": true,
+  "errors": [],
+  "runtimeErrors": []
+}

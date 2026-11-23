@@ -39,7 +39,7 @@ export function buildSpawnQueue(waveIndex: number): EnemyType[] {
   return queue;
 }
 
-/** 本波配置的准备时间（毫秒）。 */
+/** 本波完成、领取奖励后到下一波的休整时间（毫秒）。 */
 export function getBreakMs(waveIndex: number): number {
   return WAVE_CONFIGS[waveIndex]?.breakMs ?? 0;
 }

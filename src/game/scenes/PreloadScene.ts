@@ -1,5 +1,5 @@
 import * as Phaser from 'phaser';
-import { AssetKeys, DESIGN_SIZE, FontKeys, SceneKeys, UiKeys, type AssetKey } from '../types';
+import { AssetKeys, DESIGN_SIZE, FontKeys, SceneKeys, TitleKeys, UiKeys, type AssetKey } from '../types';
 import { assetUrl } from '../utils/assetUrl';
 import { createWorldTextures } from '../utils/GeneratedTextures';
 import { LoadingBar } from '../ui/LoadingBar';
@@ -26,7 +26,12 @@ const UI_IMAGES: Array<[string, string]> = [
   [UiKeys.FrameEpic, 'frame-epic.png'], [UiKeys.Crosshair, 'ui-crosshair.png'],
   [UiKeys.AimDash, 'ui-aim-dash.png'], [UiKeys.AimTip, 'ui-aim-tip.png'], [UiKeys.Cooldown, 'ui-cooldown.png'],
   [UiKeys.IconDefense, 'icon_defense.png'], [UiKeys.DmgCritBurst, 'dmg_crit_burst.png'],
-  [UiKeys.DmgTakenArrow, 'dmg_taken_arrow.png']
+  [UiKeys.DmgTakenArrow, 'dmg_taken_arrow.png'],
+  [TitleKeys.Game, '../titles/game-v1.png'], [TitleKeys.Reward, '../titles/reward-v1.png'],
+  [TitleKeys.Victory, '../titles/victory-v1.png'], [TitleKeys.Defeat, '../titles/defeat-v1.png'],
+  [TitleKeys.Pause, '../titles/pause-v1.png'], [TitleKeys.Help, '../titles/help-v1.png'],
+  [TitleKeys.Upgrade, '../titles/upgrade-v1.png'], [TitleKeys.Boss, '../titles/boss-v1.png'],
+  [TitleKeys.Record, '../titles/record-v1.png']
 ];
 
 const UI_FONTS: Array<[string, string]> = [

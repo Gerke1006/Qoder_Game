@@ -1,0 +1,69 @@
+{
+  "generator": "ImageGen",
+  "promptSummary": "精确简体中文，横排手绘奇幻美术字；羊皮纸与古金字面、木刻棕色描边、林叶装饰；绿底色强调成长与胜利，铜红强调失败、紫色强调首领；正面可读轮廓，纯洋红背景方便去底，无额外文字或水印。",
+  "assets": [
+    {
+      "file": "game-v1.png",
+      "text": "林地守卫战",
+      "source": "vibe_images/woodland-title-v1_1795424781566_c26c1d27.png",
+      "width": 1492,
+      "height": 398
+    },
+    {
+      "file": "reward-v1.png",
+      "text": "林地馈赠",
+      "source": "vibe_images/woodland-reward-v1_1795424889816_75ca6477.png",
+      "width": 1487,
+      "height": 430
+    },
+    {
+      "file": "victory-v1.png",
+      "text": "守卫成功",
+      "source": "vibe_images/woodland-victory-v1_1795424910829_cc84ccb3.png",
+      "width": 1487,
+      "height": 399
+    },
+    {
+      "file": "defeat-v1.png",
+      "text": "基地陷落",
+      "source": "vibe_images/woodland-defeat-v1_1795424937265_0e3cec58.png",
+      "width": 1400,
+      "height": 355
+    },
+    {
+      "file": "help-v1.png",
+      "text": "守卫指南",
+      "source": "vibe_images/woodland-help-v1_1795424958902_77dfda14.png",
+      "width": 1407,
+      "height": 398
+    },
+    {
+      "file": "pause-v1.png",
+      "text": "战地休整",
+      "source": "vibe_images/woodland-pause-v1_1795425034177_666a4198.png",
+      "width": 1487,
+      "height": 388
+    },
+    {
+      "file": "upgrade-v1.png",
+      "text": "强化觉醒",
+      "source": "vibe_images/woodland-upgrade-v1_1795425066570_00e435bf.png",
+      "width": 1488,
+      "height": 403
+    },
+    {
+      "file": "boss-v1.png",
+      "text": "首领来袭",
+      "source": "vibe_images/woodland-boss-v1_1795425101229_ea9c7c8b.png",
+      "width": 1431,
+      "height": 433
+    },
+    {
+      "file": "record-v1.png",
+      "text": "新纪录",
+      "source": "vibe_images/woodland-record-v1_1795425128152_4aeabd84.png",
+      "width": 1227,
+      "height": 402
+    }
+  ]
+}

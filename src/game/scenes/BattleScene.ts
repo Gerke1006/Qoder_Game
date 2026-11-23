@@ -1,5 +1,5 @@
 import * as Phaser from 'phaser';
-import { AssetKeys, DESIGN_SIZE, SceneKeys, UiKeys, type EnemyType, type RewardOption, type RunSummary } from '../types';
+import { AssetKeys, DESIGN_SIZE, SceneKeys, TitleKeys, UiKeys, type EnemyType, type RewardOption, type RunSummary } from '../types';
 import { getEnemyStats } from '../data/EnemyConfig';
 import { PLAYER_CONFIG, BASE_POSITION } from '../data/PlayerConfig';
 import { WAVE_CONFIGS } from '../data/WaveConfig';
@@ -14,7 +14,7 @@ import {
   setPhase,
   setCurrentWave
 } from '../state/GameState';
-import { applyDamage } from '../systems/CombatSystem';
+import { applyDamage, resolveBaseDamage } from '../systems/CombatSystem';
 import { buildSpawnQueue, getBreakMs, isLastWave } from '../systems/WaveSystem';
 import { rollRewards } from '../systems/RewardSystem';
 import { applyReward } from '../systems/UpgradeSystem';
@@ -78,6 +78,8 @@ export class BattleScene extends Phaser.Scene {
     this.skillRemaining = 0;
     this.pointerHeld = false;
     this.paused = false;
+    audio.setPaused(false);
+    audio.setMood('battle');
 
     createForestBackground(this);
     this.drawBase();
@@ -115,6 +117,8 @@ export class BattleScene extends Phaser.Scene {
 
     this.input.on('pointerdown', this.onPointerDown, this);
     this.input.on('pointerup', this.onPointerUp, this);
+    this.input.on('pointerupoutside', this.onPointerUp, this);
+    this.game.events.on(Phaser.Core.Events.BLUR, this.onPointerUp, this);
     this.input.keyboard?.addCapture(['SPACE', 'ESC']);
     this.input.keyboard?.on('keydown-SPACE', this.castSkill, this);
     this.input.keyboard?.on('keydown-ESC', this.togglePause, this);
@@ -124,7 +128,7 @@ export class BattleScene extends Phaser.Scene {
   }
 
   update(time: number, delta: number): void {
-    if (this.paused || this.mode === 'over') {
+    if (this.paused || this.mode === 'over' || this.mode === 'reward') {
       return;
     }
     const step = Math.min(delta, 48);
@@ -159,6 +163,10 @@ export class BattleScene extends Phaser.Scene {
     }
 
     this.stepEnemies(step, time);
+    if (getRunState().baseHp === 0) {
+      this.hud.refresh();
+      return;
+    }
     this.stepProjectiles(step);
 
     if (this.pointerHeld && this.mode === 'fight') {
@@ -172,6 +180,8 @@ export class BattleScene extends Phaser.Scene {
     this.skillRemaining = Math.max(0, this.skillRemaining - step);
     this.hud.setSkillCooldown(this.skillRemaining);
     this.hud.setEnemiesLeft(this.spawnQueue.length + this.enemies.filter((e) => e.alive).length);
+    const boss = this.enemies.find((enemy) => enemy instanceof Boss && enemy.alive);
+    this.hud.setBossHealth(boss?.hp ?? 0, boss?.maxHp ?? 1);
     this.hud.refresh();
 
     const hpRatio = getRunState().baseHp / getRunState().baseMaxHp;
@@ -197,7 +207,10 @@ export class BattleScene extends Phaser.Scene {
     this.spawnClock = WAVE_CONFIGS[this.waveIndex].spawnIntervalMs;
     this.spawnQueue = buildSpawnQueue(this.waveIndex);
     setCurrentWave(this.waveIndex);
-    this.hud.showBanner(`第 ${this.waveIndex + 1} 波`, WAVE_CONFIGS[this.waveIndex].label);
+    audio.setMood(isLastWave(this.waveIndex) ? 'boss' : 'battle');
+    this.hud.showBanner(`第 ${this.waveIndex + 1} 波`, isLastWave(this.waveIndex)
+      ? '最终决战 · 击败首领并清空全场'
+      : '守住基地 · 清空敌人后选择强化');
     audio.play('wave');
   }
 
@@ -214,7 +227,11 @@ export class BattleScene extends Phaser.Scene {
           this.spawnEnemy('grunt', { x: Math.max(sx, 340), y: Phaser.Math.Clamp(sy, 110, 430) });
         }
       };
-      this.cameras.main.shake(220, 0.004);
+      enemy.onAttackBase = (damage) => {
+        if (this.mode === 'fight') this.hitBase(damage);
+      };
+      this.hud.showBanner('', '击败史莱姆王，并清空全场敌人', TitleKeys.Boss);
+      if (!prefersReducedMotion()) this.cameras.main.shake(220, 0.004);
     }
     this.enemies.push(enemy);
   }
@@ -223,43 +240,50 @@ export class BattleScene extends Phaser.Scene {
     for (const enemy of this.enemies) {
       enemy.step(step, time);
       if (enemy.reachedBase) {
-        damageBase(enemy.stats.damage);
-        spawnBaseHitFloat(this, BASE_POSITION.x + 40, BASE_POSITION.y - 60, enemy.stats.damage);
-        this.hud.flashBase();
-        this.cameras.main.shake(180, 0.006);
-        audio.play('hurt');
+        this.hitBase(enemy.stats.damage);
         enemy.destroy();
-        if (getRunState().baseHp <= 0) {
-          this.finish(false);
-        }
       }
+      if (getRunState().baseHp <= 0) break;
     }
     this.enemies = this.enemies.filter((enemy) => enemy.active);
+  }
+
+  private hitBase(baseDamage: number): void {
+    const damage = resolveBaseDamage(baseDamage);
+    damageBase(damage);
+    spawnBaseHitFloat(this, BASE_POSITION.x + 40, BASE_POSITION.y - 60, damage);
+    this.hud.flashBase();
+    if (!prefersReducedMotion()) this.cameras.main.shake(180, 0.006);
+    audio.play('hurt');
+    if (getRunState().baseHp <= 0) this.finish(false);
   }
 
   private stepProjectiles(step: number): void {
     for (const projectile of this.projectiles) {
       projectile.step(step);
-      if (!projectile.active) {
-        continue;
-      }
+      let target: Enemy | null = null;
+      let firstHit = Infinity;
       for (const enemy of this.enemies) {
-        if (!enemy.alive) {
-          continue;
-        }
+        if (!enemy.alive) continue;
         const radius = enemy.stats.size * 0.48 + 10;
-        if (Phaser.Math.Distance.Between(projectile.x, projectile.y, enemy.x, enemy.y) <= radius) {
-          const roll = applyDamage(enemy, projectile.damage);
-          spawnDamageFloat(this, enemy.x, enemy.y - enemy.stats.size * 0.6, roll.amount, roll.crit);
-          this.hitSpark(projectile.x, projectile.y, roll.crit);
-          audio.play(roll.crit ? 'crit' : 'hit');
-          if (!enemy.alive && !enemy.reachedBase) {
-            this.onKill(enemy);
-          }
-          projectile.destroy();
-          break;
+        const fraction = projectile.hitFraction(enemy, radius);
+        if (fraction !== null && fraction < firstHit) {
+          target = enemy;
+          firstHit = fraction;
         }
       }
+      if (target) {
+        const roll = applyDamage(target, projectile.damage);
+        spawnDamageFloat(this, target.x, target.y - target.stats.size * 0.6, roll.amount, roll.crit);
+        this.hitSpark(
+          Phaser.Math.Linear(projectile.previousX, projectile.x, firstHit),
+          Phaser.Math.Linear(projectile.previousY, projectile.y, firstHit),
+          roll.crit
+        );
+        audio.play(roll.crit ? 'crit' : 'hit');
+        if (!target.alive) this.onKill(target);
+      }
+      if (target || projectile.outOfBounds) projectile.destroy();
     }
     this.projectiles = this.projectiles.filter((projectile) => projectile.active);
   }
@@ -270,13 +294,14 @@ export class BattleScene extends Phaser.Scene {
     spawnGoldFloat(this, enemy.x, enemy.y - 26, enemy.goldReward);
     audio.play('kill');
     audio.play('coin');
-    if (enemy instanceof Boss) {
+    if (enemy instanceof Boss && !prefersReducedMotion()) {
       this.cameras.main.flash(260, 246, 231, 200);
       this.cameras.main.shake(320, 0.008);
     }
   }
 
   private hitSpark(x: number, y: number, crit: boolean): void {
+    if (prefersReducedMotion()) return;
     const burst = this.add.particles(x, y, AssetKeys.Spark, {
       speed: { min: 30, max: crit ? 160 : 90 },
       lifespan: 260,
@@ -293,7 +318,7 @@ export class BattleScene extends Phaser.Scene {
     const angle = Phaser.Math.Angle.Between(this.player.x, this.player.y, targetX, targetY);
     const projectile = new Projectile(this, this.player.x + 24, this.player.y - 8, PLAYER_CONFIG.baseDamage);
     let lock: Enemy | null = null;
-    let lockDist = 90;
+    let lockDist: number = PLAYER_CONFIG.lockRadius;
     for (const enemy of this.enemies) {
       if (!enemy.alive) {
         continue;
@@ -305,7 +330,7 @@ export class BattleScene extends Phaser.Scene {
       }
     }
     projectile.target = lock;
-    projectile.launch(angle, PLAYER_CONFIG.projectileSpeed, lock ? 3.2 : 0);
+    projectile.launch(angle, PLAYER_CONFIG.projectileSpeed, lock ? PLAYER_CONFIG.homingTurnRate : 0);
     this.projectiles.push(projectile);
     this.player.recoil();
     audio.play('shoot');
@@ -317,51 +342,60 @@ export class BattleScene extends Phaser.Scene {
     }
     this.skillRemaining = PLAYER_CONFIG.skillCooldownMs;
     audio.play('skill');
-    this.cameras.main.shake(120, 0.003);
+    if (!prefersReducedMotion()) this.cameras.main.shake(120, 0.003);
     const count = PLAYER_CONFIG.skillArrows;
     for (let i = 0; i < count; i++) {
-      const angle = -0.42 + (0.84 * i) / (count - 1);
+      const angle = -PLAYER_CONFIG.skillSpread / 2 + (PLAYER_CONFIG.skillSpread * i) / (count - 1);
       const projectile = new Projectile(this, this.player.x + 20, this.player.y - 8, PLAYER_CONFIG.skillDamage);
       projectile.launch(angle, PLAYER_CONFIG.projectileSpeed * 0.92);
       this.projectiles.push(projectile);
     }
-    const ring = this.add.particles(this.player.x, this.player.y, AssetKeys.Spark, {
-      speed: { min: 80, max: 220 },
-      lifespan: 380,
-      scale: { start: 0.8, end: 0 },
-      tint: 0xf0b429,
-      emitting: false
-    });
-    ring.setDepth(27);
-    ring.explode(18);
-    this.time.delayedCall(450, () => ring.destroy());
+    if (!prefersReducedMotion()) {
+      const ring = this.add.particles(this.player.x, this.player.y, AssetKeys.Spark, {
+        speed: { min: 80, max: 220 },
+        lifespan: 380,
+        scale: { start: 0.8, end: 0 },
+        tint: 0xf0b429,
+        emitting: false
+      });
+      ring.setDepth(27);
+      ring.explode(18);
+      this.time.delayedCall(450, () => ring.destroy());
+    }
     this.player.recoil();
   }
 
   private waveCleared(): void {
+    if (this.mode !== 'fight') return;
+    for (const projectile of this.projectiles) projectile.destroy();
+    this.projectiles = [];
     if (isLastWave(this.waveIndex)) {
       this.finish(true);
       return;
     }
     this.mode = 'reward';
     setPhase('reward');
+    audio.setMood('reward');
     this.pointerHeld = false;
     this.setAimVisible(false);
     this.rewardPanel.show(rollRewards(), (reward) => this.pickReward(reward), () => this.pickReward());
   }
 
   private pickReward(reward?: RewardOption): void {
-    if (this.mode !== 'reward') {
-      return;
-    }
-    if (reward) applyReward(reward);
+    if (this.mode !== 'reward') return;
+    const applied = reward ? applyReward(reward) : false;
     this.rewardPanel.hide();
     this.setAimVisible(true);
     this.hud.refresh();
+    if (reward && applied) {
+      audio.play('reward');
+      this.hud.showUpgrade(reward);
+    }
     setPhase('battle');
+    this.breakRemaining = getBreakMs(this.waveIndex);
     this.waveIndex += 1;
     this.mode = 'break';
-    this.breakRemaining = getBreakMs(this.waveIndex);
+    audio.setMood(isLastWave(this.waveIndex) ? 'boss' : 'battle');
   }
 
   private finish(win: boolean): void {
@@ -373,13 +407,15 @@ export class BattleScene extends Phaser.Scene {
     this.setAimVisible(false);
     setPhase('finished');
     this.breakText.setText('');
+    audio.setMood(win ? 'victory' : 'defeat');
+    audio.setPaused(false);
     audio.play(win ? 'win' : 'lose');
     if (win) {
-      this.cameras.main.flash(400, 246, 231, 200);
-      this.hud.showBanner('守卫成功！', '林地恢复了平静');
+      if (!prefersReducedMotion()) this.cameras.main.flash(400, 246, 231, 200);
+      this.hud.showBanner('', '林地恢复了平静', TitleKeys.Victory);
     } else {
-      this.cameras.main.shake(420, 0.01);
-      this.hud.showBanner('基地陷落…', '整备后再战一次');
+      if (!prefersReducedMotion()) this.cameras.main.shake(420, 0.01);
+      this.hud.showBanner('', '整备后再战一次', TitleKeys.Defeat);
     }
     const summary: RunSummary = {
       win,
@@ -402,6 +438,7 @@ export class BattleScene extends Phaser.Scene {
       return;
     }
     this.paused = !this.paused;
+    audio.setPaused(this.paused);
     this.pointerHeld = false;
     audio.play('pause');
     this.setAimVisible(!this.paused);
@@ -435,8 +472,11 @@ export class BattleScene extends Phaser.Scene {
     this.input.setDefaultCursor(shown ? 'none' : 'default');
   }
 
-  private onPointerDown(): void {
-    this.pointerHeld = true;
+  private onPointerDown(pointer: Phaser.Input.Pointer, currentlyOver: Phaser.GameObjects.GameObject[]): void {
+    if (this.paused || (this.mode !== 'fight' && this.mode !== 'break') || currentlyOver.length > 0) {
+      return;
+    }
+    this.pointerHeld = pointer.leftButtonDown();
   }
 
   private onPointerUp(): void {
@@ -446,6 +486,8 @@ export class BattleScene extends Phaser.Scene {
   private cleanUp(): void {
     this.input.off('pointerdown', this.onPointerDown, this);
     this.input.off('pointerup', this.onPointerUp, this);
+    this.input.off('pointerupoutside', this.onPointerUp, this);
+    this.game.events.off(Phaser.Core.Events.BLUR, this.onPointerUp, this);
     this.input.keyboard?.removeCapture(['SPACE', 'ESC']);
     this.input.keyboard?.off('keydown-SPACE', this.castSkill, this);
     this.input.keyboard?.off('keydown-ESC', this.togglePause, this);

@@ -1,15 +1,15 @@
 import * as Phaser from 'phaser';
-import { AssetKeys, DESIGN_SIZE, SceneKeys, UiKeys, type Difficulty } from '../types';
+import { AssetKeys, DESIGN_SIZE, SceneKeys, TitleKeys, UiKeys, type Difficulty } from '../types';
 import { DIFFICULTY_CONFIGS, DIFFICULTY_ORDER } from '../data/DifficultyConfig';
 import { getRunState, resetRun, setDifficulty, setPhase } from '../state/GameState';
 import { audio } from '../systems/AudioSystem';
 import { loadBest, formatTime } from '../utils/BestRecord';
 import { createForestBackground } from '../ui/ForestBackground';
-import { createArtButton, createTitleText, createTopButton, type ArtButton } from '../ui/Button';
-import { createPanel, inkStyle, Palette, prefersReducedMotion } from '../ui/Theme';
+import { createArtButton, createTopButton, type ArtButton } from '../ui/Button';
+import { createArtHeading, createPanel, creamStyle, inkStyle, Palette, prefersReducedMotion } from '../ui/Theme';
 
 /**
- * 主菜单：林地小景 + 标题 plaque + 难度选择 + 开始 / 玩法说明 + 最佳纪录。
+ * 主菜单：林地小景 + 美术标题 + 难度选择 + 开始 / 玩法说明 + 最佳纪录。
  * 难度选择写入 GameState，进入战斗时 resetRun 会按难度初始化基地血量。
  */
 export class MainMenuScene extends Phaser.Scene {
@@ -28,17 +28,18 @@ export class MainMenuScene extends Phaser.Scene {
     this.events.once(Phaser.Scenes.Events.SHUTDOWN, () => this.cleanUp());
     this.difficultyButtons.clear();
     this.howto = null;
+    audio.setMood('menu');
+    audio.setPaused(false);
 
     createForestBackground(this);
     this.drawDiorama();
 
-    createPanel(this, DESIGN_SIZE.width / 2, 126, 640, 236);
-    createTitleText(this, DESIGN_SIZE.width / 2, 92, '林地守卫战', 44);
+    createArtHeading(this, DESIGN_SIZE.width / 2, 106, TitleKeys.Game, 560, 150);
     this.add
-      .text(DESIGN_SIZE.width / 2, 140, 'Roguelite 波次防守 · 守住最后的城堡', inkStyle(16))
+      .text(DESIGN_SIZE.width / 2, 198, 'Roguelite 波次防守 · 守住最后的城堡', creamStyle(16))
       .setOrigin(0.5);
     this.add
-      .text(DESIGN_SIZE.width / 2, 170, '五波来袭 · 三选一强化 · 击败史莱姆王', { ...inkStyle(13), color: Palette.inkSoft })
+      .text(DESIGN_SIZE.width / 2, 222, '五波来袭 · 三选一强化 · 击败史莱姆王', creamStyle(13))
       .setOrigin(0.5);
 
     const selected = getRunState().difficulty;
@@ -59,7 +60,9 @@ export class MainMenuScene extends Phaser.Scene {
       .setOrigin(0.5);
     this.selectDifficulty(selected, true);
 
-    createArtButton(this, DESIGN_SIZE.width / 2, 360, '开始守卫', () => this.startRun(), { width: 300, fontSize: 24 });
+    const start = createArtButton(this, DESIGN_SIZE.width / 2, 360, '开始守卫', () => this.startRun(), { width: 300, fontSize: 24 });
+    start.container.setName('start-run');
+    this.add.text(DESIGN_SIZE.width / 2, 402, 'Enter 开始守卫 · 1 / 2 / 3 选择难度', creamStyle(12)).setOrigin(0.5);
     createArtButton(this, DESIGN_SIZE.width / 2, 448, '玩法说明', () => this.showHowto(), { width: 190, fontSize: 16 });
 
     const best = loadBest();
@@ -123,7 +126,7 @@ export class MainMenuScene extends Phaser.Scene {
   }
 
   private syncMute(): void {
-    this.muteButton.setLabel(audio.isMuted() ? '♪ 已静音' : '♪ 音效开');
+    this.muteButton.setLabel(audio.isMuted() ? '♪ 声音关' : '♪ 声音开');
   }
 
   private showHowto(): void {
@@ -136,24 +139,28 @@ export class MainMenuScene extends Phaser.Scene {
       .rectangle(DESIGN_SIZE.width / 2, DESIGN_SIZE.height / 2, DESIGN_SIZE.width, DESIGN_SIZE.height, 0x0c1206, 0.7)
       .setInteractive();
     const panel = createPanel(this, DESIGN_SIZE.width / 2, 272, 680, 400);
-    const title = createTitleText(this, DESIGN_SIZE.width / 2, 128, '玩法说明', 26);
+    const title = createArtHeading(this, DESIGN_SIZE.width / 2, 128, TitleKeys.Help, 250, 62);
     const lines = [
-      '按住鼠标左键：朝准星方向连续射击，暴击双倍伤害',
-      '空格 / 右下角按钮：箭雨扇形覆盖，冷却 8 秒',
-      '敌人触碰左侧城堡会扣基地血，血尽则守卫失败',
-      '每波结束三选一强化：伤害 / 射速 / 基地 / 金币',
-      '打满 5 波并击败史莱姆王即守卫成功',
-      'ESC 暂停 · 顶部按钮一键静音'
+      '按住鼠标左键：朝准星连续射击，暴击双倍伤害',
+      '空格 / 右下角按钮：箭雨扇形攻击，冷却 8 秒',
+      '敌人触城扣基地血；血量耗尽则守卫失败',
+      '防御减伤；生命上限强化提高上限并恢复等量生命',
+      '波后 1 / 2 / 3 三选一强化；ESC 或点击空白跳过奖励',
+      'Boss 到基地后会持续攻城，不能放任不管',
+      '完成五波，击败史莱姆王并清空全场敌人才算胜利',
+      '战斗中 ESC 暂停；“声音”开关同时控制音乐与音效'
     ];
     const body = this.add
       .text(DESIGN_SIZE.width / 2, 176, lines.map((line) => `· ${line}`).join('\n'), {
-        ...inkStyle(15),
-        lineSpacing: 12,
-        align: 'left'
+        ...inkStyle(14),
+        lineSpacing: 6,
+        align: 'left',
+        wordWrap: { width: 552, useAdvancedWrap: true }
       })
       .setOrigin(0.5, 0);
     const close = createArtButton(this, DESIGN_SIZE.width / 2, 412, '明白了', () => this.hideHowto(), { width: 180, height: 44, fontSize: 17 });
-    root.add([scrim, panel, title, body, close.container]);
+    const hint = this.add.text(DESIGN_SIZE.width / 2, 375, 'ESC 关闭说明', { ...inkStyle(12), color: Palette.inkSoft }).setOrigin(0.5);
+    root.add([scrim, panel, title, body, close.container, hint]);
     if (prefersReducedMotion()) {
       root.setAlpha(1);
     } else {

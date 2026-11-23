@@ -20,6 +20,7 @@ function createInitialRunState(difficulty: Difficulty): RunState {
     totalWaves: TOTAL_WAVES,
     baseHp,
     baseMaxHp: baseHp,
+    baseDefense: 0,
     gold: 0,
     kills: 0,
     elapsedMs: 0,
@@ -78,6 +79,10 @@ export function healBase(amount: number): void {
 export function setBaseMaxHp(value: number): void {
   runState.baseMaxHp = value;
   runState.baseHp = Math.min(runState.baseHp, value);
+}
+
+export function addBaseDefense(amount: number): void {
+  runState.baseDefense += amount;
 }
 
 export function addAttackDamageBonus(amount: number): void {

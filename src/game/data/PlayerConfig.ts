@@ -7,8 +7,10 @@ export const PLAYER_CONFIG = {
   baseDamage: 12,
   /** 基础射速（发/秒）。 */
   fireRate: 2.4,
-  /** 弹体速度（像素/秒）：足够快，保证指向移动目标时弹道落点仍在命中半径内。 */
   projectileSpeed: 980,
+  lockRadius: 90,
+  homingTurnRate: 3.2,
+  skillSpread: 0.84,
   /** 箭雨：扇形弹数 / 单发伤害 / 冷却毫秒。 */
   skillArrows: 10,
   skillDamage: 10,

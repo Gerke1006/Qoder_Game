@@ -1,8 +1,8 @@
 import * as Phaser from 'phaser';
-import { DESIGN_SIZE } from '../types';
+import { DESIGN_SIZE, TitleKeys } from '../types';
 import { audio } from '../systems/AudioSystem';
 import { createArtButton, type ArtButton } from './Button';
-import { createPanel, inkStyle, Palette, prefersReducedMotion } from './Theme';
+import { createArtHeading, createPanel, inkStyle, Palette, prefersReducedMotion } from './Theme';
 
 /**
  * 暂停面板：继续 / 重新开始 / 返回主菜单 / 静音开关。
@@ -40,7 +40,7 @@ export class PausePanel {
     root.add([scrim, panel]);
 
     const cx = DESIGN_SIZE.width / 2;
-    const title = this.scene.add.text(cx, 170, '暂停', inkStyle(28, true)).setOrigin(0.5);
+    const title = createArtHeading(this.scene, cx, 153, TitleKeys.Pause, 230, 60);
     const resume = createArtButton(this.scene, cx, 214, '继续战斗', callbacks.onResume, { width: 280, height: 46, fontSize: 18 });
     const restart = createArtButton(this.scene, cx, 264, '重新开始', callbacks.onRestart, { width: 280, height: 46, fontSize: 18 });
     const menu = createArtButton(this.scene, cx, 314, '返回主菜单', callbacks.onMenu, { width: 280, height: 46, fontSize: 18 });
@@ -60,7 +60,7 @@ export class PausePanel {
   }
 
   syncMute(): void {
-    this.muteButton?.setLabel(audio.isMuted() ? '♪ 音效已静音' : '♪ 音效开启');
+    this.muteButton?.setLabel(audio.isMuted() ? '♪ 声音已静音' : '♪ 声音开启');
   }
 
   hide(): void {

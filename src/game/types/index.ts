@@ -63,6 +63,20 @@ export const UiKeys = {
 
 export type UiKey = (typeof UiKeys)[keyof typeof UiKeys];
 
+export const TitleKeys = {
+  Game: 'title-game',
+  Reward: 'title-reward',
+  Victory: 'title-victory',
+  Defeat: 'title-defeat',
+  Pause: 'title-pause',
+  Help: 'title-help',
+  Upgrade: 'title-upgrade',
+  Boss: 'title-boss',
+  Record: 'title-record'
+} as const;
+
+export type TitleKey = (typeof TitleKeys)[keyof typeof TitleKeys];
+
 /** 伤害飘字 BMFont key（public/assets/fonts）。 */
 export const FontKeys = {
   Normal: 'font-dmg-normal',
@@ -126,6 +140,7 @@ export type UpgradeEffect =
   | { kind: 'baseHp'; value: number }
   | { kind: 'gold'; value: number }
   | { kind: 'damage'; value: number }
+  | { kind: 'defense'; value: number }
   | { kind: 'speed'; value: number };
 
 /** 一项可选奖励。 */
@@ -146,6 +161,7 @@ export interface RunState {
   totalWaves: number;
   baseHp: number;
   baseMaxHp: number;
+  baseDefense: number;
   gold: number;
   kills: number;
   elapsedMs: number;
